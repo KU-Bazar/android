@@ -1,4 +1,4 @@
-package com.neer.KU_Bazar
+package com.ku.bazar
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

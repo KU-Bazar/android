@@ -1,4 +1,4 @@
-package com.neer.KU_Bazar
+package com.ku.bazar
 
 import org.junit.Test
 

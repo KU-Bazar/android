@@ -4,13 +4,13 @@ plugins {
 }
 
 android {
-    namespace 'com.neer.KU_Bazar'
-    compileSdk 33
+    namespace 'com.ku.bazar'
+    compileSdk 34
 
     defaultConfig {
-        applicationId "com.neer.KU_Bazar"
+        applicationId "com.ku.bazar"
         minSdk 26
-        targetSdk 33
+        targetSdk 34
         versionCode 1
         versionName "1.0"
 
