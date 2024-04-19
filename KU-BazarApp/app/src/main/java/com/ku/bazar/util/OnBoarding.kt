@@ -11,8 +11,9 @@ import com.ku.bazar.R
 sealed class OnBoarding(
     @DrawableRes  //This tells the compiler that the return value of an integer parameter will be a drawable resource
     val image: Int,
-    val title_first: AnnotatedString,
-    val description: AnnotatedString,
+    val titleFirst: AnnotatedString,
+    val description_first: AnnotatedString,
+    val description_second: AnnotatedString,
     @DrawableRes
     val backFirst: Int,
     @DrawableRes
@@ -20,23 +21,27 @@ sealed class OnBoarding(
     @DrawableRes
     val backThird: Int,
     @DrawableRes
-    val backFourth: Int?
+    val backFourth: Int
 ){
     object First : OnBoarding(
         image = R.drawable.onboard_me,
-        title_first = buildAnnotatedString {
+        titleFirst = buildAnnotatedString {
                                            append("Easy")
+            append("\t")
             withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)){
                 append("Registration")
             }
         },
-        description = buildAnnotatedString {
+        description_first = buildAnnotatedString {
                                            append("With")
+            append("\t")
             withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)){
                 append("oAuth")
             }
+            append("\t")
             append("the registration")
-            append("\n")
+        },
+        description_second = buildAnnotatedString {
             append("would be hassle free.")
         },
         backFirst = R.drawable.wall,
