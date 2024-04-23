@@ -16,8 +16,9 @@ import com.ku.bazar.util.OnBoarding
 @Preview(showSystemUi = true, showBackground = true)
 @Composable
 fun firstScreen(){
-    Column() {
-        Row() {
+    Box(modifier = Modifier.fillMaxSize()) {
+        
+        Column(modifier = Modifier.fillMaxSize(), horizontalAlignment =  Alignment.Start) {
             Image(
                 modifier = Modifier
                     .padding(0.dp, 90.dp, 0.dp, 0.dp)
@@ -25,33 +26,34 @@ fun firstScreen(){
                 painter = painterResource(id = OnBoarding.First.backFourth),
                 contentDescription =" @string/wall_des"
             )
-            Column(modifier = Modifier ) {
-                Image(
-                    modifier = Modifier
-                        .padding(0.dp, 90.dp, 0.dp, 0.dp)
-                         .size(height = 120.dp, width = 120.dp),
-                    painter = painterResource(id = OnBoarding.First.backSecond),
-                    contentDescription =" @string/wall_des"
-                )
 
-                Image(
-                    modifier = Modifier
-                        .padding(0.dp, 0.dp, 0.dp, 0.dp)
-                        .size(height = 100.dp, width = 100.dp),
-                    painter = painterResource(id = OnBoarding.First.backThird),
-                    contentDescription = "@string/wall_des"
-                )
-            }
-
-        }
-        
-        Row(horizontalArrangement = Arrangement.Start) {
             Image(
                 modifier = Modifier
                     .padding(0.dp, 170.dp, 0.dp, 0.dp)
                     .size(height = 100.dp, width = 100.dp),
                 painter = painterResource(id = OnBoarding.First.backFirst),
-                contentDescription = "@string/wall_des")
+                contentDescription = "@string/wall_des"
+            )
+            
+        }
+
+        Column(modifier = Modifier.fillMaxSize() , horizontalAlignment = Alignment.End) {
+
+            Image(
+                modifier = Modifier
+                    .padding(0.dp, 110.dp, 0.dp, 0.dp)
+                    .size(height = 100.dp, width = 100.dp),
+                painter = painterResource(id = OnBoarding.First.backSecond),
+                contentDescription =" @string/wall_des"
+            )
+
+            Image(
+                modifier = Modifier
+                    .padding(0.dp, 140.dp, 0.dp, 0.dp)
+                    .size(height = 100.dp, width = 100.dp),
+                painter = painterResource(id = OnBoarding.First.backThird),
+                contentDescription =" @string/wall_des"
+            )
 
 
         }
