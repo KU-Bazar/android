@@ -6,6 +6,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -15,23 +16,47 @@ import com.ku.bazar.util.OnBoarding
 @Preview(showSystemUi = true, showBackground = true)
 @Composable
 fun firstScreen(){
-    Row(horizontalArrangement = Arrangement.Start) {
-        Image(
-            modifier = Modifier
-                .padding(0.dp, 90.dp, 0.dp, 0.dp)
-                .size(height = 180.dp, width = 180.dp),
-            painter = painterResource(id = OnBoarding.First.backFourth),
-            contentDescription =" @string/wall_des"
-        )
+    Column() {
+        Row() {
+            Image(
+                modifier = Modifier
+                    .padding(0.dp, 90.dp, 0.dp, 0.dp)
+                    .size(height = 180.dp, width = 180.dp),
+                painter = painterResource(id = OnBoarding.First.backFourth),
+                contentDescription =" @string/wall_des"
+            )
+            Column(modifier = Modifier ) {
+                Image(
+                    modifier = Modifier
+                        .padding(0.dp, 90.dp, 0.dp, 0.dp)
+                         .size(height = 120.dp, width = 120.dp),
+                    painter = painterResource(id = OnBoarding.First.backSecond),
+                    contentDescription =" @string/wall_des"
+                )
 
-        Image(
-            modifier = Modifier
-                .padding(0.dp, 90.dp, 0.dp, 0.dp)
-                .size(height = 180.dp, width = 180.dp),
-            painter = painterResource(id = OnBoarding.First.backSecond),
-            contentDescription =" @string/wall_des"
-        )
+                Image(
+                    modifier = Modifier
+                        .padding(0.dp, 0.dp, 0.dp, 0.dp)
+                        .size(height = 100.dp, width = 100.dp),
+                    painter = painterResource(id = OnBoarding.First.backThird),
+                    contentDescription = "@string/wall_des"
+                )
+            }
+
+        }
+        
+        Row(horizontalArrangement = Arrangement.Start) {
+            Image(
+                modifier = Modifier
+                    .padding(0.dp, 170.dp, 0.dp, 0.dp)
+                    .size(height = 100.dp, width = 100.dp),
+                painter = painterResource(id = OnBoarding.First.backFirst),
+                contentDescription = "@string/wall_des")
+
+
+        }
     }
+
 
     Column(
         modifier = Modifier
@@ -55,7 +80,7 @@ fun firstScreen(){
             modifier = Modifier.align(Alignment.CenterHorizontally)
         )
 
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(modifier = Modifier.height(30.dp))
 
         Text(
             text = OnBoarding.First.description_first,
