@@ -2,12 +2,10 @@ package com.ku.bazar.util
 
 import androidx.annotation.DrawableRes
 import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.withStyle
 import com.ku.bazar.R
 
+
+val stringObject = String()
 sealed class OnBoarding(
     @DrawableRes  //This tells the compiler that the return value of an integer parameter will be a drawable resource
     val image: Int,
@@ -25,28 +23,23 @@ sealed class OnBoarding(
 ){
     object First : OnBoarding(
         image = R.drawable.onboard_me,
-        titleFirst = buildAnnotatedString {
-                                           append("Easy")
-            append("\t")
-            withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)){
-                append("Registration")
-            }
-        },
-        description_first = buildAnnotatedString {
-                                           append("With")
-            append("\t")
-            withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)){
-                append("oAuth")
-            }
-            append("\t")
-            append("the registration")
-        },
-        description_second = buildAnnotatedString {
-            append("would be hassle free.")
-        },
+        titleFirst = stringObject.firstTitlefirst,
+        description_first = stringObject.firstDescriptionfirst,
+        description_second = stringObject.firstDescriptionsecond,
         backFirst = R.drawable.wall,
         backSecond = R.drawable.clock,
         backThird = R.drawable.another_wall,
         backFourth = R.drawable.picture
+    )
+
+    object Second : OnBoarding(
+        image = R.drawable.onboard_second,
+        titleFirst = stringObject.secondTitlefirst,
+        description_first = stringObject.secondDescriprtionFirst,
+        description_second = stringObject.secondDescriptionSecond,
+        backFirst = R.drawable.clock_second,
+        backSecond = R.drawable.picture_second,
+        backThird = R.drawable.wall,
+        backFourth = R.drawable.another_wall
     )
 }
