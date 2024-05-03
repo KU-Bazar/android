@@ -29,6 +29,8 @@ class String{
         append("would be hassle free.")
     }
 
+    val firstDescriptionThird = null
+
     val secondTitlefirst = buildAnnotatedString {
         append("Buy or Sell")
         append("\t")
@@ -49,9 +51,9 @@ class String{
 
     val secondDescriptionSecond = buildAnnotatedString {
         append("study resources,furniture,")
-        append("\n")
-        append("even your friend ;)")
     }
+
+    val secondDescriptionThird = "even your friend ;)"
 
 
 }

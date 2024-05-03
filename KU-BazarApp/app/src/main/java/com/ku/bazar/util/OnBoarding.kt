@@ -12,6 +12,7 @@ sealed class OnBoarding(
     val titleFirst: AnnotatedString,
     val description_first: AnnotatedString,
     val description_second: AnnotatedString,
+    val description_third: kotlin.String,
     @DrawableRes
     val backFirst: Int,
     @DrawableRes
@@ -26,6 +27,7 @@ sealed class OnBoarding(
         titleFirst = stringObject.firstTitlefirst,
         description_first = stringObject.firstDescriptionfirst,
         description_second = stringObject.firstDescriptionsecond,
+        description_third = "",
         backFirst = R.drawable.wall,
         backSecond = R.drawable.clock,
         backThird = R.drawable.another_wall,
@@ -37,6 +39,7 @@ sealed class OnBoarding(
         titleFirst = stringObject.secondTitlefirst,
         description_first = stringObject.secondDescriprtionFirst,
         description_second = stringObject.secondDescriptionSecond,
+        description_third = stringObject.secondDescriptionThird,
         backFirst = R.drawable.clock_second,
         backSecond = R.drawable.picture_second,
         backThird = R.drawable.wall,

@@ -3,16 +3,17 @@ package com.ku.bazar
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Text
+//import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+//import androidx.compose.ui.unit.sp
 import com.ku.bazar.util.OnBoarding
 
-@Composable
+/*@Composable
 fun firstScreen(){
     Box(modifier = Modifier.fillMaxSize()) {
         
@@ -96,14 +97,29 @@ fun firstScreen(){
     }
 
 }
-
+*/
 
 @Preview(showSystemUi = true, showBackground = true)
 @Composable
 fun secondScreen(){
     Box(modifier = Modifier.fillMaxSize()){
-        Column() {
-            
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            Image(
+                modifier = Modifier
+                    .padding(10.dp, 60.dp, 0.dp, 0.dp)
+                    .size(height = 350.dp, width = 350.dp),
+                painter = painterResource(id = OnBoarding.Second.image),
+                contentDescription = "@string/wall_des"
+            )
+
+            Text(text = OnBoarding.Second.titleFirst)
+
+            Text(text = OnBoarding.Second.description_first)
+            Text(text = OnBoarding.Second.description_second)
+            Text(text = OnBoarding.Second.description_third)
         }
     }
 }
