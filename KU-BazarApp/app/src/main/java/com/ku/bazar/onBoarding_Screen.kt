@@ -3,14 +3,12 @@ package com.ku.bazar
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Text
-//import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-//import androidx.compose.ui.unit.sp
 import com.ku.bazar.util.OnBoarding
 
 /*@Composable
@@ -120,6 +118,15 @@ fun secondScreen(){
             Text(text = OnBoarding.Second.description_first)
             Text(text = OnBoarding.Second.description_second)
             Text(text = OnBoarding.Second.description_third)
+        }
+
+        Row(
+            horizontalArrangement = Arrangement.Start,
+            verticalAlignment = Alignment.Top
+        ) {
+            Image(
+                painter = painterResource(id = OnBoarding.Second.backFirst),
+                contentDescription = "@string/wall_des")
         }
     }
 }
