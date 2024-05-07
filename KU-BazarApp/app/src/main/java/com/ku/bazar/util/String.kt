@@ -29,11 +29,11 @@ class String{
         append("would be hassle free.")
     }
 
-    val firstDescriptionThird = null
+    val firstDescriptionThird = ""
 
     val secondTitlefirst = buildAnnotatedString {
         append("Buy or Sell")
-        append("\t")
+        append("\t\t")
         withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)){
             append("Products")
         }
@@ -55,5 +55,29 @@ class String{
 
     val secondDescriptionThird = "even your friend ;)"
 
+
+
+    val thirdTitleFirst = buildAnnotatedString {
+        append("Instant")
+        append("\t")
+        withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)){
+            append("Chats")
+        }
+    }
+
+    val thirdDescriptionFirst = buildAnnotatedString {
+        append("Chat with the ")
+        append("\t")
+        withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)){
+            append("seller")
+        }
+        append(", slight chance")
+    }
+
+    val thirdDescriptionSecond = buildAnnotatedString {
+        append("to get laid too.")
+    }
+
+    val thirdDescriptionThird = ""
 
 }

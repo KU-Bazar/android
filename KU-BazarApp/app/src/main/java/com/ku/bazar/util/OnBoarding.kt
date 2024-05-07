@@ -27,7 +27,7 @@ sealed class OnBoarding(
         titleFirst = stringObject.firstTitlefirst,
         description_first = stringObject.firstDescriptionfirst,
         description_second = stringObject.firstDescriptionsecond,
-        description_third = "",
+        description_third = stringObject.firstDescriptionThird,
         backFirst = R.drawable.wall,
         backSecond = R.drawable.clock,
         backThird = R.drawable.another_wall,
@@ -44,5 +44,17 @@ sealed class OnBoarding(
         backSecond = R.drawable.picture_second,
         backThird = R.drawable.wall,
         backFourth = R.drawable.another_wall
+    )
+
+    object Third : OnBoarding(
+        image = R.drawable.onboard_third,
+        titleFirst = stringObject.thirdTitleFirst,
+        description_first = stringObject.thirdDescriptionFirst,
+        description_second = stringObject.thirdDescriptionSecond,
+        description_third = stringObject.thirdDescriptionThird,
+        backFirst = R.drawable.picture_third,
+        backSecond = R.drawable.wall,
+        backThird = R.drawable.another_wall,
+        backFourth = R.drawable.clock  // This not used but using Int? gave an error in Onbording screen
     )
 }
