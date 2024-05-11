@@ -19,10 +19,10 @@ sealed class login(
 ){
     object first : login(
         first_background = R.drawable.login_background,
-        cloud_first = ,
-        cloud_second = ,
-        cloud_third = ,
-        house = ,
-        plant =
+        cloud_first = R.drawable.cloud_first,
+        cloud_second = R.drawable.clock_second,
+        cloud_third = R.drawable.cloud_third,
+        house = R.drawable.house,
+        plant =R.drawable.plant
     )
 }
