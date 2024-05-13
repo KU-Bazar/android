@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">KU-Bazar</string>
+    <string name="My_photo">onBoardInitMe</string>
+    <string name="easy">Easy</string>
+    <string name="registration">Registration</string>
+    <string name="with">With</string>
+    <string name="oauth">oAuth</string>
+    <string name="regis">the registration</string>
+    <string name="hassle">would be hassle free.</string>
+    <string name="skip">Skip</string>
+    <string name="con_description">This the first image of OnBoarding Screen</string>
+    <string name="wall_des">This is the background image for wall</string>
+</resources>
