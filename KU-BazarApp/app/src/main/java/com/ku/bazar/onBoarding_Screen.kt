@@ -13,6 +13,7 @@ import androidx.compose.ui.unit.sp
 import com.ku.bazar.util.OnBoarding
 
 @Composable
+
 fun firstScreen(){
     Box(modifier = Modifier.fillMaxSize()) {
         
