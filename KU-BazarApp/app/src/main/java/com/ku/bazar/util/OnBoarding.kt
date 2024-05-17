@@ -58,3 +58,10 @@ sealed class OnBoarding(
         backFourth = R.drawable.clock  // This not used but using Int? gave an error in Onbording screen
     )
 }
+
+sealed class topSection(
+    @DrawableRes
+    val backImage : Int
+){
+
+}
