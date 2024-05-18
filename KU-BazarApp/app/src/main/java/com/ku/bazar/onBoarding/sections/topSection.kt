@@ -1,4 +1,4 @@
-package com.ku.bazar.Onboarding
+package com.ku.bazar.onBoarding
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
@@ -9,13 +9,12 @@ import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowLeft
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 @Composable
 //@Preview(showBackground = true, showSystemUi = true)
 fun topSection(
-    showBackButton: Boolean = false,
+    showBackButton: Boolean,
     onBackClicked: () -> Unit
 ){
     Box(contentAlignment = Alignment.TopStart,
