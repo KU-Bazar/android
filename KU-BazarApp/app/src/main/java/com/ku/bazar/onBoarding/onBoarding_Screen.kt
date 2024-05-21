@@ -21,7 +21,7 @@ import kotlinx.coroutines.launch
 fun onBoarding(){
 
     val scope = rememberCoroutineScope()
-    val pageState = rememberPagerState(pageCount = { 0 })
+    val pageState = rememberPagerState(pageCount = { 2 })
     val showBackButton = pageState.currentPage > 0
 
     Column(modifier = Modifier.fillMaxSize()) {
