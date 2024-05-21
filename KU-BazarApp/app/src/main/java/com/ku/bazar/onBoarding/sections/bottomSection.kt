@@ -17,7 +17,7 @@ import com.ku.bazar.R
 fun bottomSection(
                 onArrowClick: () -> Unit ,
                 skipClicked: () -> Unit,
-                isSelected: Boolean,
+                currentPage: Int,
                 indicatorHeight: Dp,
                 selectedIndicatorColor: Color,
                 unselectedIndicatorColor: Color
@@ -28,7 +28,7 @@ fun bottomSection(
         }
 
         floor(
-            isSelected = isSelected,
+            currentPage = currentPage,
             indicatorHeight = indicatorHeight,
             selectedIndicatorColor = selectedIndicatorColor,
             unselectedIndicatorColor = unselectedIndicatorColor

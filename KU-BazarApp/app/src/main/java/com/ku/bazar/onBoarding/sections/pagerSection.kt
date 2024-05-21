@@ -11,14 +11,13 @@ import com.ku.bazar.onBoarding.screen.thirdScreen
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun pagerSection(
-    state: PagerState,
-    pageStage: Int
+    state: PagerState
 ){
 
     HorizontalPager(
         state = state
-    ) {
-        when(pageStage){
+    ) {page ->
+        when(page){
             0 -> firstScreen()
             1 -> secondScreen()
             2 -> thirdScreen()

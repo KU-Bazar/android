@@ -21,15 +21,15 @@ import kotlinx.coroutines.launch
 fun onBoarding(){
 
     val scope = rememberCoroutineScope()
-    val pageState = rememberPagerState(pageCount = { 2 })
+    val pageState = rememberPagerState(initialPage = 0, pageCount = { 3 } )
     val showBackButton = pageState.currentPage > 0
 
     Column(modifier = Modifier.fillMaxSize()) {
-        Box(modifier = Modifier.weight(0.15f)){
+        Box(modifier = Modifier.weight(0.1f)){
             topSection(
                 showBackButton = showBackButton,
                 onBackClicked = {
-                    if(pageState.currentPage +1 >1)
+                    if(pageState.currentPage > 0)
                         scope.launch {
                             pageState.scrollToPage(pageState.currentPage - 1)
                         }
@@ -37,20 +37,22 @@ fun onBoarding(){
             )
         }
 
-        Box(modifier = Modifier.weight(0.65f)){
+        Box(modifier = Modifier.weight(0.8f)){
             pagerSection(
-                state = pageState,
-                pageStage = pageState.currentPage
+                state = pageState
             )
         }
 
-        Box(modifier = Modifier.weight(0.2f)){
+        Box(modifier = Modifier.weight(0.1f)){
             bottomSection(
-                onArrowClick = {scope.launch {
-                    pageState.scrollToPage(pageState.currentPage - 1)
+                onArrowClick = {
+                	scope.launch {
+                    if (pageState.currentPage < pageState.pageCount - 1) {
+                            pageState.scrollToPage(pageState.currentPage + 1)
+                        }
                 }},
                 skipClicked = { /*TODO*/ },
-                isSelected = true,
+                currentPage = pageState.currentPage,
                 indicatorHeight = 10.dp,
                 selectedIndicatorColor = Color.Red,
                 unselectedIndicatorColor = Color.Black

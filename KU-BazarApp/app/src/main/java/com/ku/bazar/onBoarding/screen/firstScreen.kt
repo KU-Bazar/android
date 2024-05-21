@@ -6,6 +6,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -15,85 +16,92 @@ import com.ku.bazar.util.OnBoarding
 @Composable
 @Preview(showBackground = true, showSystemUi = true)
 fun firstScreen(){
-    Box(modifier = Modifier.fillMaxSize()) {
+    Box(
+        modifier = Modifier.fillMaxSize()
+    ) {
+        Row(modifier = Modifier.fillMaxSize()) {
 
-        Column(modifier = Modifier.fillMaxSize(), horizontalAlignment =  Alignment.Start) {
-            Image(
+            Column(
+                horizontalAlignment = Alignment.Start,
+                verticalArrangement = Arrangement.Top,
                 modifier = Modifier
                     .padding(0.dp, 90.dp, 0.dp, 0.dp)
-                    .size(height = 180.dp, width = 180.dp),
-                painter = painterResource(id = OnBoarding.First.backFourth),
-                contentDescription =" @string/wall_des"
-            )
+                    .weight(1f)
+            ) {
+                Image(
+                    modifier = Modifier
+                        .size(height = 230.dp, width = 190.dp),
+                    painter = painterResource(id = OnBoarding.First.backFourth),
+                    contentDescription =" @string/wall_des"
+                )
 
+                Spacer(modifier = Modifier.height(150.dp))
+
+                Image(
+                    modifier = Modifier
+                        .size(height = 100.dp, width = 100.dp),
+                    painter = painterResource(id = OnBoarding.First.backFirst),
+                    contentDescription = "@string/wall_des"
+                )
+            }
+
+            Spacer(modifier = Modifier.weight(1f))
+
+            Column(
+                modifier = Modifier
+                    .padding(0.dp, 130.dp, 0.dp, 0.dp)
+                    .weight(1f),
+                horizontalAlignment = Alignment.End
+            ) {
+                Image(
+                    modifier = Modifier
+                        .size(height = 130.dp, width = 80.dp),
+                    painter = painterResource(id = OnBoarding.First.backSecond),
+                    contentDescription =" @string/wall_des"
+                )
+
+                Spacer(modifier = Modifier.height(140.dp))
+
+                Image(
+                    modifier = Modifier
+                        .size(height = 100.dp, width = 100.dp),
+                    painter = painterResource(id = OnBoarding.First.backThird),
+                    contentDescription =" @string/wall_des"
+                )
+            }
+        }
+        
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
             Image(
                 modifier = Modifier
-                    .padding(0.dp, 170.dp, 0.dp, 0.dp)
-                    .size(height = 100.dp, width = 100.dp),
-                painter = painterResource(id = OnBoarding.First.backFirst),
-                contentDescription = "@string/wall_des"
+                    .padding(30.dp, 120.dp, 0.dp, 0.dp)
+                    .size(height = 350.dp, width = 350.dp),
+                painter = painterResource(id = OnBoarding.First.image),
+                contentDescription = "@string/con_description"
+            )
+
+            Spacer(modifier = Modifier.height(20.dp))
+
+            Text(
+                text = OnBoarding.First.titleFirst,
+                fontSize = 25.sp
+            )
+
+            Spacer(modifier = Modifier.height(30.dp))
+
+            Text(
+                text = OnBoarding.First.description_first,
+                fontSize = 15.sp
+            )
+
+            Text(
+                text = OnBoarding.First.description_second,
+                fontSize = 15.sp
             )
 
         }
-
-        Column(modifier = Modifier.fillMaxSize() , horizontalAlignment = Alignment.End) {
-
-            Image(
-                modifier = Modifier
-                    .padding(0.dp, 110.dp, 0.dp, 0.dp)
-                    .size(height = 100.dp, width = 100.dp),
-                painter = painterResource(id = OnBoarding.First.backSecond),
-                contentDescription =" @string/wall_des"
-            )
-
-            Image(
-                modifier = Modifier
-                    .padding(0.dp, 140.dp, 0.dp, 0.dp)
-                    .size(height = 100.dp, width = 100.dp),
-                painter = painterResource(id = OnBoarding.First.backThird),
-                contentDescription =" @string/wall_des"
-            )
-
-
-        }
     }
-
-
-    Column(
-        modifier = Modifier
-            .padding(16.dp)
-    )
-    {
-        Image(
-            modifier = Modifier
-                .padding(0.dp, 60.dp, 0.dp, 0.dp)
-                .align(Alignment.CenterHorizontally)
-                .size(height = 350.dp, width = 350.dp),
-            painter = painterResource(id = OnBoarding.First.image),
-            contentDescription = "@string/con_description"
-        )
-
-        Spacer(modifier = Modifier.height(20.dp))
-
-        Text(
-            text = OnBoarding.First.titleFirst,
-            fontSize = 25.sp,
-            modifier = Modifier.align(Alignment.CenterHorizontally)
-        )
-
-        Spacer(modifier = Modifier.height(30.dp))
-
-        Text(
-            text = OnBoarding.First.description_first,
-            fontSize = 15.sp,
-            modifier = Modifier.align(Alignment.CenterHorizontally)
-        )
-
-        Text(
-            text = OnBoarding.First.description_second,
-            fontSize = 15.sp,
-            modifier = Modifier.align(Alignment.CenterHorizontally)
-        )
-    }
-
 }

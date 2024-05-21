@@ -45,7 +45,7 @@ fun dot(
 
 @Composable
 fun floor(
-    isSelected: Boolean,
+    currentPage: Int,
     indicatorHeight: Dp,
     selectedIndicatorColor: Color ,
     unselectedIndicatorColor: Color
@@ -53,9 +53,9 @@ fun floor(
     Row(verticalAlignment = Alignment.CenterVertically,
     horizontalArrangement = Arrangement.spacedBy(10.dp)
         ) {
-        repeat(3){
+        repeat(3){ index ->
             dot(
-                isSelected = isSelected,
+                isSelected = index == currentPage,
                 indicatorHeight = indicatorHeight,
                 selectedIndicatorColor = selectedIndicatorColor,
                 unselectedIndicatorColor = unselectedIndicatorColor
