@@ -30,4 +30,23 @@ class String{
             append("University.")
         }
     }
+
+
+    // Login main
+
+    val titleLogin = buildAnnotatedString {
+        append("Login into")
+        append("\t")
+        withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)){
+            append("KU-Bazar")
+        }
+    }
+
+    val titleRegister = buildAnnotatedString {
+        append("Register into")
+        append("\t")
+        withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)){
+            append("KU-Bazar")
+        }
+    }
 }

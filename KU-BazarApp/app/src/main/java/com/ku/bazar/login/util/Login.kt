@@ -34,3 +34,36 @@ sealed class login(
         description = stringObject.loginDescription
     )
 }
+
+sealed class loginMain(
+    val title: AnnotatedString,
+    val fullName : kotlin.String?,
+    val username : kotlin.String?,
+    val email : kotlin.String?,
+    val password : kotlin.String,
+
+    val oauth : kotlin.String,
+    val account : kotlin.String
+        ){
+
+    object first : loginMain(
+        title = stringObject.titleLogin,
+        fullName = "Full Name",
+        username = "Username/Email",
+        email = "Email",
+        password = "Password",
+        oauth = "Login via google",
+        account = "Don't have an account?"
+    )
+
+    object second : loginMain(
+        title = stringObject.titleLogin,
+        fullName = "Full Name",
+        username = "Username",
+        email = "Email",
+        password = "Password",
+        oauth = "Login via google",
+        account = "Already have an account?"
+    )
+
+}
