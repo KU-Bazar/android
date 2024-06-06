@@ -9,6 +9,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import com.ku.bazar.chat.screen.chatScreen
+import com.ku.bazar.chat.screen.mainScreen
 import com.ku.bazar.login.screen.register
 import com.ku.bazar.ui.theme.KUBazarTheme
 
@@ -22,7 +24,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = Color.White
                 ) {
-                    register()
+                    chatScreen()
                 }
             }
         }
