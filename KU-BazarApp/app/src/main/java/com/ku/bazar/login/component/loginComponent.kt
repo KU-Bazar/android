@@ -94,6 +94,25 @@ fun registerButton(
 }
 
 @Composable
+fun registerBigButton(modifier : Modifier){
+    Box(
+        modifier = Modifier
+            .size(width = 180.dp, height = 70.dp)
+            .clip(RoundedCornerShape(50.dp))
+            .background(color = Color.Red)
+            .clickable {  }
+    ){
+        Text(
+            text = "Register",
+            fontSize = 30.sp,
+            fontWeight = FontWeight.Bold,
+            color = Color.White
+        )
+    }
+}
+
+
+@Composable
 fun loginBackground(){
     Box(
         modifier = Modifier.fillMaxSize()

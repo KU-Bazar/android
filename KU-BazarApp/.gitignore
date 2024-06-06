@@ -13,3 +13,5 @@
 .externalNativeBuild
 .cxx
 local.properties
+neer.properties
+/neer.properties

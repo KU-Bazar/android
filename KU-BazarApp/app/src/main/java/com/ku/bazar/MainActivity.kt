@@ -9,7 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
-import com.ku.bazar.onBoarding.onBoarding
+import com.ku.bazar.login.screen.register
 import com.ku.bazar.ui.theme.KUBazarTheme
 
 class MainActivity : ComponentActivity() {
@@ -22,7 +22,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = Color.White
                 ) {
-                    login()
+                    register()
                 }
             }
         }
