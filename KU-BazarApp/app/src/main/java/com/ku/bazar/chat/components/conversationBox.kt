@@ -1,6 +1,5 @@
 package com.ku.bazar.chat.components
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -12,21 +11,24 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.ku.bazar.R
+import coil.compose.AsyncImage
+import com.ku.bazar.chat.models.Conversation
+import com.ku.bazar.ui.theme.TextBlack
+
+
 
 @Composable
-fun conversationBox(){
+fun conversationBox(conversation:Conversation){
     Row(
         modifier = Modifier
             .padding(vertical = 22.dp)
             .fillMaxWidth()
             .height(60.dp)
-            .clickable {  } //left to fill
+            .clickable { } //left to fill
     ) {
         Box(
             modifier = Modifier
@@ -34,13 +36,8 @@ fun conversationBox(){
                 .clip(CircleShape)
                 .background(Color.White)
         ) {
-            Image(
-                painter = painterResource(id = R.drawable.house), //left to fill
-                contentDescription = null,
-                contentScale = ContentScale.Crop
-            )
+            AsyncImage(model = conversation.avatarUrl, contentDescription =null, contentScale = ContentScale.Crop )
         }
-
         Column(
             modifier = Modifier
                 .padding(start = 16.dp)
@@ -53,12 +50,12 @@ fun conversationBox(){
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "Test text", //left to fill
+                    text = conversation.fullName, //left to fill
                     maxLines = 1,
                     modifier = Modifier.weight(1f),
                     overflow = TextOverflow.Ellipsis,
                     style = TextStyle(
-                        color = Color.White,
+                        color = TextBlack,
                         fontSize = 18.sp,
                     )
                 )
@@ -66,9 +63,9 @@ fun conversationBox(){
                 Spacer(modifier = Modifier.width(10.dp))
 
                 Text(
-                    text = "3:45", //left to fill
+                    text = conversation.lastMessageSentAt.toString(), //left to fill
                     style = TextStyle(
-                        color = Color.White,
+                        color = TextBlack,
                         fontSize = 16.sp,
                     )
                 )
@@ -79,20 +76,19 @@ fun conversationBox(){
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "hello helloooo duedhu", //left to fill
+                    text = conversation.lastMessage.toString(), //left to fill
                     modifier = Modifier.weight(1f),
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                     style = TextStyle(
-                        color = Color.White,
+                        color = TextBlack,
                         fontSize = 16.sp,
                     )
                 )
 
                 Spacer(modifier = Modifier.width(10.dp))
-
-                //if(yaha chai message read or not)
-                //ReadIndicator()
+                if(conversation.unseenMessagesCount!=0)
+                ReadIndicator()
 
             }
         }
