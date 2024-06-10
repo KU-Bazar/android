@@ -33,11 +33,11 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = Color.White
                 ) {
-                    chatScreen()
+           //         chatScreen()
 //                    mainScreen()
 //                    MyApp()
 //                    getConversationData("4e3b5e7a-93e1-4f8b-9c1c-5b6d7e8a2d4f")
-
+register()
                 }
             }
         }

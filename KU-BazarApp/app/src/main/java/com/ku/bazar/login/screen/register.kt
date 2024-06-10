@@ -22,15 +22,16 @@ import androidx.compose.ui.unit.sp
 import androidx.credentials.CredentialManager
 import androidx.credentials.GetCredentialRequest
 import androidx.credentials.exceptions.GetCredentialException
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.ku.bazar.R
 import com.ku.bazar.login.component.loginBackground
 import com.ku.bazar.login.component.registerBigButton
 import com.ku.bazar.login.util.loginMain
-import androidx.compose.ui.platform.LocalContext
-import com.ku.bazar.BuildConfig
-import kotlinx.coroutines.launch
-import com.ku.bazar.login.data.handleSignIn
+import com.ku.bazar.login.data.googleSignIn
+import com.ku.bazar.login.data.rememberOneTapSignInState
+import com.ku.bazar.login.viewModel.SignInViewModel
+import androidx.compose.runtime.remember as remember
 
 @Composable
 fun register(){
@@ -40,8 +41,8 @@ fun register(){
     //val clientID = BuildConfig.SERVER_CLIENT_ID
     //Log.i("tag", clientID)
 
-    val context = LocalContext.current
-    val coroutineScope = rememberCoroutineScope()
+    val state = rememberOneTapSignInState()
+    val viewModel: SignInViewModel = viewModel()
 
     var username by remember {
         mutableStateOf("")
@@ -173,25 +174,11 @@ fun register(){
         Row(
             modifier = Modifier
                 .clickable {
-                val googleIdOption: GetGoogleIdOption = GetGoogleIdOption.Builder()
-                    .setFilterByAuthorizedAccounts(false) // Query all google accounts on the device
-                    .setServerClientId(SERVER_CLIENT_ID)
-                    .build()
-
-                val request = GetCredentialRequest.Builder()
-                    .addCredentialOption(googleIdOption)
-                    .build()
-
-                val credentialManager = CredentialManager.create(context)
-
-                coroutineScope.launch {
-                    try {
-                        val result = credentialManager.getCredential(context, request)
-                        handleSignIn(result , coroutineScope)
-                    } catch (e: GetCredentialException) {
-                        Log.e("MainActivity", "GetCredentialException", e)
-                    }
-                }
+                    viewModel.GoogleSignIn(
+                        state = state,
+                        clientId = "CLIENT_ID",
+                        rememberAccount = false
+                    )
             }
         ){
             Image(
