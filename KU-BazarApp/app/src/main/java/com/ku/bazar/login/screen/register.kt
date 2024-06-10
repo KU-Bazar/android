@@ -12,6 +12,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -31,6 +32,7 @@ import com.ku.bazar.login.util.loginMain
 import com.ku.bazar.login.data.googleSignIn
 import com.ku.bazar.login.data.rememberOneTapSignInState
 import com.ku.bazar.login.viewModel.SignInViewModel
+import kotlinx.coroutines.launch
 import androidx.compose.runtime.remember as remember
 
 @Composable
@@ -171,14 +173,22 @@ fun register(){
 
         Spacer(modifier = Modifier.height(30.dp))
 
+        val scope = rememberCoroutineScope()
+        val context = LocalContext.current
+
         Row(
             modifier = Modifier
                 .clickable {
-                    viewModel.GoogleSignIn(
-                        state = state,
-                        clientId = "CLIENT_ID",
-                        rememberAccount = false
-                    )
+                    Log.d("1","1")
+                    scope.launch {
+                        Log.d("2","2")
+                        viewModel.googleSignIn(
+                            context = context,
+                            state = state,
+                            clientId = SERVER_CLIENT_ID,
+                            rememberAccount = false
+                        )
+                    }
             }
         ){
             Image(

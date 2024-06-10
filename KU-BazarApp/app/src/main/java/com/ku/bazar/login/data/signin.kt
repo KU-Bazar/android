@@ -10,15 +10,16 @@ import com.google.android.libraries.identity.googleid.GoogleIdTokenParsingExcept
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.CoroutineScope
 import androidx.compose.runtime.saveable.Saver
-import androidx.compose.runtime.saveable.rememberSaveable
 
 fun handleSignIn(
     credentialResponse: GetCredentialResponse
 ) {
+    Log.d("6","6")
     when (val credential = credentialResponse.credential) {
         is CustomCredential -> {
             if (credential.type == GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL) {
                 try {
+                    Log.d("7","7")
                     val googleIdTokenCredential = GoogleIdTokenCredential
                         .createFrom(credential.data)
                 } catch (e: GoogleIdTokenParsingException) {
@@ -58,13 +59,13 @@ fun checkAuthStatus(idToken: String, coroutineScope: CoroutineScope) {
 }
 
 @Composable
-fun rememberOneTapSignInState(): googleSignIn {
+fun rememberOneTapSignInState(): signInState {
     return rememberSaveable(
         saver = OneTapSignInStateSaver
     ) { signInState() }
 }
 
-private val OneTapSignInStateSaver: Saver<OneTapSignInState, Boolean> = Saver(
+private val OneTapSignInStateSaver: Saver<signInState, Boolean> = Saver(
     save = { state -> state.opened },
-    restore = { opened -> OneTapSignInState(open = opened) },
+    restore = { opened -> signInState(open = opened) },
 )

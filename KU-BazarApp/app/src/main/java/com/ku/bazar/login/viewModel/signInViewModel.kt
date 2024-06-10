@@ -3,11 +3,6 @@ package com.ku.bazar.login.viewModel
 import android.content.ContentValues
 import android.content.Context
 import android.util.Log
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.platform.LocalContext
 import androidx.credentials.CredentialManager
 import androidx.credentials.GetCredentialRequest
 import androidx.credentials.exceptions.GetCredentialException
@@ -16,60 +11,52 @@ import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.ku.bazar.login.data.handleSignIn
 import com.ku.bazar.login.data.openGoogleAccountSettings
 import com.ku.bazar.login.data.signInState
-import kotlinx.coroutines.launch
 
 class SignInViewModel : ViewModel() {
 
-    @Composable
-    fun GoogleSignIn(
+    suspend fun googleSignIn(
+        context: Context,
         state: signInState,
         clientId: String,
-        rememberAccount: Boolean = true,
+        rememberAccount: Boolean = false,
         nonce: String? = null,
     ){
-        val scope = rememberCoroutineScope()
-        val context = LocalContext.current
-        val credentialManager = remember { CredentialManager.create(context) }
+        Log.d("3","3")
+        val credentialManager =  CredentialManager.create(context)
 
-        val googleIdOption = remember {
+        val googleIdOption =
             GetGoogleIdOption.Builder()
                 .setServerClientId(clientId)
                 .setNonce(nonce)
                 .setFilterByAuthorizedAccounts(rememberAccount)
                 .build()
-        }
 
-        val request = remember {
+        val request =
             GetCredentialRequest.Builder()
                 .setCredentialOptions(listOf(googleIdOption))
                 .build()
-        }
-
-                scope.launch {
+        Log.d("4","4")
                     try {
+                        Log.d("4.5","4.5")
                         val response = credentialManager.getCredential(
                             request = request,
                             context = context,
                         )
+                        Log.d("5","5")
                         handleSignIn(
                             credentialResponse = response
                         )
                     } catch (e: GetCredentialException) {
-                        if (e.message != null) {
-                            if (e.message!!.contains("No credentials available")) {
-                                handleCredentialsNotAvailable(
+                        Log.d("err","err")
+                        Log.e("SignInViewModel", "GetCredentialException: ${e.javaClass.simpleName}, Message: ${e.message}")
+                          handleCredentialsNotAvailable(
                                     context = context,
                                     state = state,
                                     credentialManager = credentialManager,
                                     clientId = clientId,
                                     nonce = nonce
                                 )
-                            }
-
-
-                        }
                     }
-                }
     }
 
 
