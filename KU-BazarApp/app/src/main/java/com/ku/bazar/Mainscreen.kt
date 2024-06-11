@@ -1,6 +1,8 @@
 package com.ku.bazar
 
-import androidx.compose.foundation.BorderStroke
+import androidx.compose.animation.core.tween
+
+
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -20,42 +22,62 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.staggeredgrid.LazyHorizontalStaggeredGrid
-import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
-import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.Send
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.composed
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
+
 import androidx.compose.ui.zIndex
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavHostController
+import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.exyte.animatednavbar.AnimatedNavigationBar
+import com.exyte.animatednavbar.animation.balltrajectory.Parabolic
+import com.exyte.animatednavbar.animation.indendshape.Height
+import com.exyte.animatednavbar.animation.indendshape.shapeCornerRadius
+import com.exyte.animatednavbar.utils.noRippleClickable
 import com.ku.bazar.ui.theme.PrimaryPink
 import com.ku.bazar.ui.theme.SecondaryPink
 import com.ku.bazar.ui.theme.TextBlack
 import com.ku.bazar.ui.theme.White
 
-data class FavoriteItem(val imageId: Int, val title: String , val price: String)
+
+
+data class Product(
+    val imageId: Int,
+    val title: String,
+    val price: String,
+    val description: String
+)
+
+
+data class FavoriteItem(val imageId: Int, val title: String , val price: String , val description: String)
 
 class FavoriteItemsViewModel : ViewModel() {
     private val _favoriteItems = mutableStateListOf<FavoriteItem>()
@@ -70,7 +92,6 @@ class FavoriteItemsViewModel : ViewModel() {
             _favoriteItems.add(item)
         }
         
-        
     }
 
     fun isFavorite(item: FavoriteItem): Boolean {
@@ -78,35 +99,67 @@ class FavoriteItemsViewModel : ViewModel() {
 
         return _favoriteItems.contains(item)
     }
+
+    fun getDescriptionForItem(item: FavoriteItem): String {
+        // Assuming you have a map of descriptions where the key is the title of the item
+        val descriptions = mapOf(
+            "Acoustic Guitar" to "This is a good guitar for beginners to kickstart their career in music  ",
+            "HDMI2 Cable + TV" to "This cable supports high-definition video and audio.",
+            "Mobile" to "Latest smartphone with great camera and performance.",
+            "Books" to "Best-selling novels for book lovers.",
+            // Add more descriptions as needed
+        )
+
+        // Retrieve the description based on the title of
+        return descriptions[item.title] ?: "Description not available" // Default description if not found
+    }
+
+
 }
 
 
 
 @Composable
+
 fun MyApp() {
     val navController = rememberNavController()
     val favoriteItemsViewModel: FavoriteItemsViewModel = viewModel()
+
     MaterialTheme {
-            Scaffold(
-                bottomBar = { BottomNavigationBar(navController) },
-                content = { paddingValues ->
+        Scaffold(
 
-                        NavHost(
-                            navController = navController,
-                            startDestination = "main_screen",
-                            modifier = Modifier.padding(paddingValues)
-                        ) {
-                            composable("main_screen") { MainScreen(favoriteItemsViewModel) }
-                            composable("favorites_screen") { FavoritesScreen(favoriteItemsViewModel) }
+            content = { paddingValues ->
+                Box(modifier = Modifier.padding(paddingValues)) {
+                    NavHost(
+                        navController = navController,
+                        startDestination = NavigationBarItems.Home.route
+                    ) {
+                        composable(NavigationBarItems.Home.route) {
+                            MainScreen(favoriteItemsViewModel, navController)
                         }
+                        composable(NavigationBarItems.Favorite.route) {
+                            FavoritesScreen(favoriteItemsViewModel,navController)
+                        }
+//                        composable(NavigationBarItems.Cart.route) {
+//                            CartScreen()
+//                        }
+//                        composable(NavigationBarItems.Chat.route) {
+//                            ChatScreen()
+//                        }
+                    }
                 }
-            )
-
-        }
+            }
+        )
     }
+}
+
 
 @Composable
-fun MainScreen(favoriteItemsViewModel: FavoriteItemsViewModel,modifier: Modifier = Modifier) {
+fun MainScreen(
+    favoriteItemsViewModel: FavoriteItemsViewModel,
+    navController: NavController,
+    modifier: Modifier = Modifier
+) {
     Box(
         modifier = modifier
             .fillMaxSize()
@@ -121,9 +174,12 @@ fun MainScreen(favoriteItemsViewModel: FavoriteItemsViewModel,modifier: Modifier
             SearchBar()
             CategoriesSection()
             ProductSection(sectionTitle = "Recently Added", favoriteItemsViewModel)
+
+            NavBar(navController = navController)
         }
     }
 }
+
 @Composable
 fun BackgroundPattern(modifier: Modifier = Modifier) {
     Row {
@@ -138,6 +194,7 @@ fun BackgroundPattern(modifier: Modifier = Modifier) {
     }
 
 }
+
 @Composable
 fun TopBar() {
     Row(
@@ -206,9 +263,9 @@ fun SearchBarWithButton(
             onValueChange = { onSearchTextChange(it) },
             placeholder = { Text(text = "Search") },
             modifier = Modifier
-                .weight(1f)
+                .weight(0.8f)
                 .padding(end = 8.dp)
-                .height(36.dp), // Adjust the height as needed
+                .height(50.dp), // Adjust the height as needed
             leadingIcon = {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_search),
@@ -216,7 +273,22 @@ fun SearchBarWithButton(
                     modifier = Modifier.size(20.dp)
                 )
             },
-            shape = RoundedCornerShape(100.dp)
+
+            shape = RoundedCornerShape(100.dp),
+            textStyle = TextStyle(fontSize = 16.sp),
+            singleLine = true,
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                placeholderColor = Color.Gray,
+                textColor = Color.Black,
+                backgroundColor = Color.Transparent,
+                cursorColor = Color.Black,
+                focusedBorderColor = PrimaryPink,
+                unfocusedBorderColor = Color(0xFFF5F5F5)
+            ),
+
+
+
+
         )
 
 
@@ -224,16 +296,7 @@ fun SearchBarWithButton(
             onClick = onSearchButtonClick,
 
         ) {
-//            Image(
-//                painter = painterResource(id = R.drawable.ic_cart),
-//                contentDescription = "Category Icon",
-//                modifier = Modifier
-//                    .size(40.dp) // Adjust size as needed
-//                    .clip(CircleShape)
-//                    .background(PrimaryPink)
-//                    .padding(10.dp), // Adjust padding as needed
-//                contentScale = ContentScale.Crop
-//            )
+
             Icon(
                 imageVector = Icons.AutoMirrored.Outlined.Send,
                 contentDescription = null,
@@ -244,6 +307,7 @@ fun SearchBarWithButton(
                     .padding(10.dp),
                 tint = White
             )
+
         }
     }
 }
@@ -288,15 +352,7 @@ fun CategoriesSection() {
 
 @Composable
 fun CategoryItem(name: String, imageResId: Int) {
-   /* Button(
-        onClick = { /* TODO: Handle category click */ },
-        shape = RoundedCornerShape(20.dp),
-        modifier = Modifier
-            .width(150.dp)
-            .height(45.dp) // Adjust height as needed
-            .padding(4.dp),
-        colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFF5F5F5), contentColor = Color.Black)
-    ) {*/
+
         Box(
             modifier= Modifier
                 .width(130.dp)
@@ -352,14 +408,16 @@ fun ProductSection(sectionTitle: String, favoriteItemsViewModel: FavoriteItemsVi
             horizontalArrangement = Arrangement.spacedBy(16.dp) // Adds equal spacing between items
         ) {
             items(10) { index ->
-                val (imageId, productTitle, productPrice) = when (index) {
-                    0 -> Triple(R.drawable.guitar, "Acoustic Guitar", "Rs.1800/day")
-                    1 -> Triple(R.drawable.ic_tv, "HDMI2 Cable + TV", "Rs.1800/day")
-                    2 -> Triple(R.drawable.ic_mobile, "Mobile", "Rs.1800/day")
-                    3 -> Triple(R.drawable.ic_books, "Books", "Rs.100/day")
-                    else -> Triple(R.drawable.ic_error, "Placeholder", "Rs.1800/day")
+                val Product = when (index) {
+                    0 -> Product(R.drawable.guitar, "Acoustic Guitar", "Rs.1800/day","This is a Good guitar")
+                    1 -> Product(R.drawable.ic_tv, "HDMI2 Cable + TV", "Rs.1800/day","This is a Good Tv")
+                    2 -> Product(R.drawable.ic_mobile, "Mobile", "Rs.1800/day","This is a Good Mobile")
+                    3 -> Product(R.drawable.ic_books, "Books", "Rs.100/day","This is a Good book")
+                    else -> Product(R.drawable.ic_error, "Placeholder", "Rs.1800/day","This is a Good error")
                 }
-                ProductItem(imageId = imageId, title = productTitle, price = productPrice, favoriteItemsViewModel = favoriteItemsViewModel)
+                ProductItem(imageId =Product.imageId, title =Product.title, price = Product.price, description = Product.description,favoriteItemsViewModel = favoriteItemsViewModel)
+
+
             }
         }
     }
@@ -370,9 +428,10 @@ fun ProductItem(
     imageId: Int,
     title: String,
     price: String,
+    description: String,
     favoriteItemsViewModel: FavoriteItemsViewModel
 ) {
-    val favoriteItem = FavoriteItem(imageId, title, price)
+    val favoriteItem = FavoriteItem(imageId, title, price,description)
     val isFavorite by remember { derivedStateOf { favoriteItemsViewModel.isFavorite(favoriteItem) } }
 
     Card(
@@ -422,7 +481,11 @@ fun ProductItem(
                 Icon(
                     painter = painterResource(id = if (isFavorite) R.drawable.ic_favourite_filled else R.drawable.ic_favourite_unfill),
                     contentDescription = "Favorite Icon",
-                    modifier = Modifier.size(20.dp).clip(CircleShape).background(White).padding(4.dp)
+                    modifier = Modifier
+                        .size(20.dp)
+                        .clip(CircleShape)
+                        .background(White)
+                        .padding(4.dp)
                 )
 
             }
@@ -464,31 +527,112 @@ fun ProductItem(
                             tint = White
                         )
 
-
-
-
-
                     }
                 }
             }
         }
     }
 
+@Composable
+fun PopularItem(
+    imageId: Int,
+    title: String,
+    price: String,
+    description: String,
+    favoriteItemsViewModel: FavoriteItemsViewModel,
+    modifier: Modifier = Modifier
+) {
+    val favoriteItem = FavoriteItem(imageId, title, price,description )
+    val isFavorite by remember { derivedStateOf { favoriteItemsViewModel.isFavorite(favoriteItem) } }
+
+    if (isFavorite) {
+        Card(
+            shape = RoundedCornerShape(8.dp),
+            modifier = modifier
+                .width(200.dp)
+                .height(250.dp)
+                .padding(vertical = 8.dp)
+        ) {
+            Column(modifier = Modifier.fillMaxSize()) {
+                Box(
+                    modifier = Modifier
+                        .height(150.dp)
+                        .fillMaxWidth()
+                ) {
+                    Image(
+                        painter = painterResource(id = imageId),
+                        contentDescription = "Product Image",
+                        modifier = Modifier.fillMaxSize(),
+                        contentScale = ContentScale.Crop
+                    )
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(
+                                Brush.verticalGradient(
+                                    colors = listOf(
+                                        PrimaryPink.copy(alpha = 0.1f),
+                                        SecondaryPink.copy(alpha = 0.8f),
+                                    )
+                                )
+                            )
+                            .zIndex(1f)
+                    )
+                }
+
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp),
+                    contentAlignment = Alignment.BottomStart
+                ) {
+                    Column(horizontalAlignment = Alignment.Start) {
+                        Text(
+                            text = title,
+                            style = TextStyle(color = Color.White, fontWeight = FontWeight.Normal, fontSize = 16.sp),
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
+                        )
+                        Text(
+                            text = price,
+                            style = TextStyle(color = Color.White, fontWeight = FontWeight.Bold, fontSize = 16.sp),
+                        )
+                        Button(
+                            onClick = { /* TODO: Handle buy now click */ },
+                            colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFF5F5F5), contentColor = TextBlack),
+                            shape = RoundedCornerShape(5.dp),
+                            modifier = Modifier.padding(top = 8.dp)
+                        ) {
+                            Text(text = "Buy Now", modifier = Modifier.padding(end = 12.dp))
+                            Icon(
+                                imageVector = Icons.Filled.Add,
+                                contentDescription = null,
+                                modifier = Modifier
+                                    .size(20.dp)
+                                    .clip(CircleShape)
+                                    .background(PrimaryPink)
+                                    .padding(5.dp),
+                                tint = White
+                            )
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+
 
 
 
 @Composable
 
-fun FavoritesScreen(favoriteItemsViewModel: FavoriteItemsViewModel) {
+fun FavoritesScreen(favoriteItemsViewModel: FavoriteItemsViewModel ,navController: NavController) {
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
-        Image(
-            painter = painterResource(id = R.drawable.login_background),
-            contentDescription = "Background Image",
-            contentScale = ContentScale.Crop,
-            modifier = Modifier.matchParentSize()
-        )
+        BackgroundPattern(modifier = Modifier.fillMaxSize())
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -499,7 +643,7 @@ fun FavoritesScreen(favoriteItemsViewModel: FavoriteItemsViewModel) {
                     .fillMaxWidth(),
                 contentAlignment = Alignment.Center
             ) {
-                Text(text = "Favorite Items", fontWeight = FontWeight.Bold, fontSize = 24.sp)
+                Text(text = "Favorite Items", fontWeight = FontWeight.SemiBold, fontSize = 20.sp, )
             }
 
             LazyRow(
@@ -512,6 +656,9 @@ fun FavoritesScreen(favoriteItemsViewModel: FavoriteItemsViewModel) {
                         imageId = item.imageId,
                         title = item.title,
                         price = item.price,
+                        description = favoriteItemsViewModel.getDescriptionForItem(item),
+
+
                         favoriteItemsViewModel = favoriteItemsViewModel,
                         modifier = Modifier
                             .fillParentMaxWidth()
@@ -520,72 +667,146 @@ fun FavoritesScreen(favoriteItemsViewModel: FavoriteItemsViewModel) {
                 }
             }
         }
+        NavBar(navController = navController)
     }
 }
 
     @Composable
 
-    fun  FavoriteProductItem(imageId: Int, title: String, price: String, favoriteItemsViewModel: FavoriteItemsViewModel, modifier: Modifier = Modifier) {
-        val favoriteItem = FavoriteItem(imageId, title, price)
+    fun FavoriteProductItem(
+        imageId: Int,
+        title: String,
+        price: String,
+        description: String,
+        favoriteItemsViewModel: FavoriteItemsViewModel,
+        modifier: Modifier = Modifier,
+
+        ) {
+
+        val favoriteItem = FavoriteItem(imageId, title, price, description)
         val isFavorite by remember { derivedStateOf { favoriteItemsViewModel.isFavorite(favoriteItem) } }
 
+
         Card(
-            shape = RoundedCornerShape(20.dp),
-            border = BorderStroke(2.dp, Color.Black),
+            shape = RoundedCornerShape(8.dp),
             modifier = modifier
-                .fillMaxSize()
-                .padding(8.dp),
-            elevation = 8.dp
+                .fillMaxWidth() // Take the whole width of the screen
+                .padding(top = 20.dp, bottom = 100.dp)
+
+            // Padding for top and bottom
         ) {
-            Box(modifier = Modifier.fillMaxSize()) {
+            Box(
+                modifier = Modifier
+
+                    .fillMaxWidth()
+            ) {
                 Image(
                     painter = painterResource(id = imageId),
                     contentDescription = "Product Image",
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier.fillMaxSize()
+                    modifier = Modifier.fillMaxSize(),
+                    contentScale = ContentScale.Crop
                 )
                 Box(
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    IconButton(
-                        onClick = {
-                            favoriteItemsViewModel.toggleFavorite(favoriteItem)
-                        },
-                        modifier = Modifier.align(Alignment.TopEnd)
-                    ) {
-                        Icon(
-                            painter = painterResource(id = if (isFavorite) R.drawable.ic_favourite_filled else R.drawable.ic_favourite_unfill),
-                            contentDescription = "Favorite Icon",
-                            modifier = Modifier.size(24.dp)
-                        )
-                    }
-                }
-                Box(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .align(Alignment.BottomCenter)
-                        .background(Color.White.copy(alpha = 0.7f))
-                        .padding(8.dp),
-                    contentAlignment = Alignment.Center
+                        .fillMaxSize()
+                        .background(
+                            Brush.verticalGradient(
+                                colors = listOf(
+                                    PrimaryPink.copy(alpha = 0.1f),
+                                    SecondaryPink.copy(alpha = 0.8f),
+                                )
+                            )
+                        )
+                        .zIndex(1f)
+                )
+
+            }
+
+
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp),
+                contentAlignment = Alignment.TopEnd
+            ) {
+                IconButton(
+                    onClick = {
+                        favoriteItemsViewModel.toggleFavorite(favoriteItem)
+                    },
+                    modifier = Modifier.align(Alignment.TopEnd)
                 ) {
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Text(
-                            text = title,
-                            style = TextStyle(color = Color.Black, fontWeight = FontWeight.SemiBold, fontSize = 16.sp),
+                    Icon(
+                        painter = painterResource(id = if (isFavorite) R.drawable.ic_favourite_filled else R.drawable.ic_favourite_unfill),
+                        contentDescription = "Favorite Icon",
+                        modifier = Modifier
+                            .size(20.dp)
+                            .clip(CircleShape)
+                            .background(White)
+                            .padding(4.dp)
+                    )
+                }
+            }
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp),
+                contentAlignment = Alignment.BottomStart
+
+            ) {
+                Column(horizontalAlignment = Alignment.Start,
+                        verticalArrangement = Arrangement.spacedBy(10.dp)
+                ) {
+                    Text(
+                        text = title,
+                        style = TextStyle(
+                            color = Color.White,
+                            fontWeight = FontWeight.Normal,
+                            fontSize = 20.sp
+                        ),
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+
                         )
-                        Text(
-                            text = price,
-                            style = TextStyle(color = Color.Black, fontWeight = FontWeight.SemiBold, fontSize = 16.sp),
+
+                    Text(
+                        text = description,
+                        style = TextStyle(
+                            color = Color.White,
+                            fontWeight = FontWeight.Normal,
+                            fontSize = 14.sp
+                        ),
+                        maxLines = 3, // Adjust as needed
+                        overflow = TextOverflow.Ellipsis,
+                    )
+
+                    Text(
+                        text = price,
+                        style = TextStyle(
+                            color = Color.White,
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 16.sp
+                        ),
+                    )
+                    Button(
+                        onClick = { /* TODO: Handle buy now click */ },
+                        colors = ButtonDefaults.buttonColors(
+                            backgroundColor = Color(0xFFF5F5F5),
+                            contentColor = TextBlack
+                        ),
+                        shape = RoundedCornerShape(5.dp),
+                        modifier = Modifier.padding(top = 8.dp)
+                    ) {
+                        Text(text = "Buy Now", modifier = Modifier.padding(end = 12.dp))
+                        Icon(
+                            imageVector = Icons.Filled.Add,
+                            contentDescription = null,
+                            modifier = Modifier
+                                .size(20.dp)
+                                .clip(CircleShape)
+                                .background(PrimaryPink)
+                                .padding(5.dp),
+                            tint = White
                         )
-                        Button(
-                            onClick = { /* TODO: Handle buy now click */ },
-                            colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFF5F5F5), contentColor = Color.Black),
-                            border = BorderStroke(1.dp, Color.Black),
-                            shape = RoundedCornerShape(25.dp),
-                            modifier = Modifier.padding(top = 8.dp)
-                        ) {
-                            Text(text = "Buy Now")
-                        }
                     }
                 }
             }
@@ -594,133 +815,76 @@ fun FavoritesScreen(favoriteItemsViewModel: FavoriteItemsViewModel) {
 
 
 @Composable
+fun NavBar(navController: NavController) {
+    val navigationBarItems = remember { NavigationBarItems.values() }
+    var selectedIndex by remember { mutableStateOf(0) }
 
-    fun BottomNavigationBar(navController: NavHostController) {
-        BottomNavigation(
-            backgroundColor = Color(0xFFFFFFFF)
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxSize(),
+        contentAlignment = Alignment.BottomCenter
+
+    ) {
+
+        AnimatedNavigationBar(
+            modifier = Modifier
+                .height(64.dp)
+                .fillMaxWidth(),
+            selectedIndex = selectedIndex,
+            cornerRadius = shapeCornerRadius(cornerRadius = 34.dp),
+            ballAnimation = Parabolic(tween(300)),
+            indentAnimation = Height(tween(300)),
+            barColor = Color(0xFFF5F5F5),
+            ballColor = PrimaryPink
         ) {
-            BottomNavigationItem(
-                icon = {
+            navigationBarItems.forEachIndexed { index, item ->
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .noRippleClickable {
+                            selectedIndex = index
+                            navController.navigate(item.route) {
+                                popUpTo(navController.graph.startDestinationId) {
+                                    saveState = true
+                                }
+                                launchSingleTop = true
+                                restoreState = true
+                            }
+                        },
+                    contentAlignment = Alignment.Center
+                ) {
                     Icon(
-                        painter = painterResource(id = R.drawable.ic_home2),
-                        contentDescription = "Home",
-                        modifier = Modifier.size(20.dp)
+                        modifier = Modifier.size(26.dp),
+                        imageVector = item.icon,
+                        contentDescription = "Bottom Bar Icon",
+                        tint = if (selectedIndex == index) PrimaryPink else TextBlack
                     )
-                },
-                label = { Text(text = "Home") },
-                selected = navController.currentDestination?.route == "main_screen",
-                onClick = {
-                    navController.navigate("main_screen") {
-                        popUpTo(navController.graph.startDestinationId) { saveState = true }
-                        launchSingleTop = true
-                        restoreState = true
-                    }
+
                 }
-            )
-            BottomNavigationItem(
-                icon = {
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_favourite2),
-                        contentDescription = "Favorites",
-                        modifier = Modifier.size(20.dp)
-                    )
-                },
-                label = { Text(text = "Favorites") },
-                selected = navController.currentDestination?.route == "favorites_screen",
-                onClick = {
-                    navController.navigate("favorites_screen") {
-                        popUpTo(navController.graph.startDestinationId) { saveState = true }
-                        launchSingleTop = true
-                        restoreState = true
-                    }
-                }
-            )
-            BottomNavigationItem(
-                icon = {
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_shoppingcart),
-                        contentDescription = "Cart",
-                        modifier = Modifier.size(30.dp)
-                    )
-                },
-                label = { Text(text = "Cart") },
-                selected = navController.currentDestination?.route == "cart_screen",
-                onClick = {
-                    navController.navigate("cart_screen") {
-                        popUpTo(navController.graph.startDestinationId) { saveState = true }
-                        launchSingleTop = true
-                        restoreState = true
-                    }
-                }
-            )
-            BottomNavigationItem(
-                icon = {
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_chat2),
-                        contentDescription = "Chat",
-                        modifier = Modifier.size(20.dp)
-                    )
-                },
-                label = { Text(text = "Chat") },
-                selected = navController.currentDestination?.route == "chat_screen",
-                onClick = {
-                    navController.navigate("chat_screen") {
-                        popUpTo(navController.graph.startDestinationId) { saveState = true }
-                        launchSingleTop = true
-                        restoreState = true
-                    }
-                }
-            )
+            }
+
         }
     }
+}
 
+enum class NavigationBarItems(val icon: ImageVector, val route: String) {
+    Home(icon = Icons.Default.Home, route = "main_screen"),
+    Favorite(icon = Icons.Default.Favorite, route = "favorites_screen"),
+    Cart(icon = Icons.Default.ShoppingCart, route = "cart_screen"),
+    Chat(icon = Icons.Default.Email, route = "chat_screen"),
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+fun Modifier.noRippleClickable(onClick: () -> Unit): Modifier = composed {
+    this.then(
+        clickable(
+            indication = null,
+            interactionSource = remember { MutableInteractionSource() }
+        ) {
+            onClick()
+        }
+    )
+}
 
 
 
