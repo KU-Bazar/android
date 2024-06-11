@@ -13,7 +13,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.ku.bazar.BASE_URL
 import com.ku.bazar.chat.ApiInterface
 import com.ku.bazar.chat.components.conversationBox
 import com.ku.bazar.chat.components.mainAppBar
@@ -51,7 +50,7 @@ fun mainScreen() {
         }
     }
 }
-
+var BASE_URL = "null"
 private fun getConversationData(id: String, onConversationDataFetched: (List<Conversation>) -> Unit) {
     val retrofitBuilder = Retrofit.Builder()
         .addConverterFactory(GsonConverterFactory.create())
