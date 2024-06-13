@@ -1,4 +1,4 @@
-package com.ku.bazar
+package com.ku.bazar.mainScreen
 
 import androidx.compose.animation.core.tween
 
@@ -62,6 +62,11 @@ import com.exyte.animatednavbar.animation.balltrajectory.Parabolic
 import com.exyte.animatednavbar.animation.indendshape.Height
 import com.exyte.animatednavbar.animation.indendshape.shapeCornerRadius
 import com.exyte.animatednavbar.utils.noRippleClickable
+import com.ku.bazar.R
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
+
 import com.ku.bazar.ui.theme.PrimaryPink
 import com.ku.bazar.ui.theme.SecondaryPink
 import com.ku.bazar.ui.theme.TextBlack
@@ -84,18 +89,18 @@ class FavoriteItemsViewModel : ViewModel() {
     val favoriteItems: List<FavoriteItem> = _favoriteItems
 
     fun toggleFavorite(item: FavoriteItem) {
-        
-        
+
+
         if (_favoriteItems.contains(item)) {
             _favoriteItems.remove(item)
         } else {
             _favoriteItems.add(item)
         }
-        
+
     }
 
     fun isFavorite(item: FavoriteItem): Boolean {
-        
+
 
         return _favoriteItems.contains(item)
     }
@@ -127,7 +132,6 @@ fun MyApp() {
 
     MaterialTheme {
         Scaffold(
-
             content = { paddingValues ->
                 Box(modifier = Modifier.padding(paddingValues)) {
                     NavHost(
@@ -140,8 +144,9 @@ fun MyApp() {
                         composable(NavigationBarItems.Favorite.route) {
                             FavoritesScreen(favoriteItemsViewModel,navController)
                         }
-
                     }
+                    NavBar(navController = navController)
+
                 }
             }
         )
@@ -156,8 +161,7 @@ fun MainScreen(
     modifier: Modifier = Modifier
 ) {
     Box(
-        modifier = modifier
-            .fillMaxSize()
+        modifier = modifier.fillMaxSize()
     ) {
         BackgroundPattern(modifier = Modifier.fillMaxSize())
         Column(
@@ -398,21 +402,27 @@ fun ProductSection(sectionTitle: String, favoriteItemsViewModel: FavoriteItemsVi
         ) {
             Text(text = sectionTitle, fontWeight = FontWeight.Bold, fontSize = 16.sp, modifier = Modifier.padding(bottom = 10.dp))
         }
-        LazyRow(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(16.dp) // Adds equal spacing between items
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(2), // 2 items per row
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             items(10) { index ->
-                val Product = when (index) {
-                    0 -> Product(R.drawable.guitar, "Acoustic Guitar", "Rs.1800/day","This is a Good guitar")
-                    1 -> Product(R.drawable.ic_tv, "HDMI2 Cable + TV", "Rs.1800/day","This is a Good Tv")
-                    2 -> Product(R.drawable.ic_mobile, "Mobile", "Rs.1800/day","This is a Good Mobile")
-                    3 -> Product(R.drawable.ic_books, "Books", "Rs.100/day","This is a Good book")
-                    else -> Product(R.drawable.ic_error, "Placeholder", "Rs.1800/day","This is a Good error")
+                val product = when (index) {
+                    0 -> Product(R.drawable.guitar, "Acoustic Guitar", "Rs.1800/day", "This is a Good guitar")
+                    1 -> Product(R.drawable.ic_tv, "HDMI2 Cable + TV", "Rs.1800/day", "This is a Good Tv")
+                    2 -> Product(R.drawable.ic_mobile, "Mobile", "Rs.1800/day", "This is a Good Mobile")
+                    3 -> Product(R.drawable.ic_books, "Books", "Rs.100/day", "This is a Good book")
+                    else -> Product(R.drawable.ic_error, "Placeholder", "Rs.1800/day", "This is a Good error")
                 }
-                ProductItem(imageId =Product.imageId, title =Product.title, price = Product.price, description = Product.description,favoriteItemsViewModel = favoriteItemsViewModel)
-
-
+                ProductItem(
+                    imageId = product.imageId,
+                    title = product.title,
+                    price = product.price,
+                    description = product.description,
+                    favoriteItemsViewModel = favoriteItemsViewModel
+                )
             }
         }
     }
@@ -623,7 +633,7 @@ fun PopularItem(
 
 @Composable
 
-fun FavoritesScreen(favoriteItemsViewModel: FavoriteItemsViewModel ,navController: NavController) {
+fun FavoritesScreen(favoriteItemsViewModel: FavoriteItemsViewModel, navController: NavController) {
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -638,12 +648,13 @@ fun FavoritesScreen(favoriteItemsViewModel: FavoriteItemsViewModel ,navControlle
                     .fillMaxWidth(),
                 contentAlignment = Alignment.Center
             ) {
-                Text(text = "Favorite Items", fontWeight = FontWeight.SemiBold, fontSize = 20.sp, )
+                Text(text = "Favorite Items", fontWeight = FontWeight.SemiBold, fontSize = 20.sp)
             }
 
-            LazyRow(
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(2), // 2 items per row
                 modifier = Modifier.fillMaxSize(),
-                contentPadding = PaddingValues(horizontal = 16.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp),
                 horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 items(favoriteItemsViewModel.favoriteItems) { item ->
@@ -652,12 +663,8 @@ fun FavoritesScreen(favoriteItemsViewModel: FavoriteItemsViewModel ,navControlle
                         title = item.title,
                         price = item.price,
                         description = favoriteItemsViewModel.getDescriptionForItem(item),
-
-
                         favoriteItemsViewModel = favoriteItemsViewModel,
-                        modifier = Modifier
-                            .fillParentMaxWidth()
-                            .fillParentMaxHeight()
+                        modifier = Modifier.fillMaxWidth()
                     )
                 }
             }
@@ -665,33 +672,30 @@ fun FavoritesScreen(favoriteItemsViewModel: FavoriteItemsViewModel ,navControlle
         NavBar(navController = navController)
     }
 }
+@Composable
+fun FavoriteProductItem(
+    imageId: Int,
+    title: String,
+    price: String,
+    description: String,
+    favoriteItemsViewModel: FavoriteItemsViewModel,
+    modifier: Modifier = Modifier,
+) {
+    val favoriteItem = FavoriteItem(imageId, title, price, description)
+    val isFavorite by remember { derivedStateOf { favoriteItemsViewModel.isFavorite(favoriteItem) } }
 
-    @Composable
-    fun FavoriteProductItem(
-        imageId: Int,
-        title: String,
-        price: String,
-        description: String,
-        favoriteItemsViewModel: FavoriteItemsViewModel,
-        modifier: Modifier = Modifier,
-
-        ) {
-
-        val favoriteItem = FavoriteItem(imageId, title, price, description)
-        val isFavorite by remember { derivedStateOf { favoriteItemsViewModel.isFavorite(favoriteItem) } }
-
-
-        Card(
-            shape = RoundedCornerShape(8.dp),
-            modifier = modifier
-                .fillMaxWidth() // Take the whole width of the screen
-                .padding(top = 20.dp, bottom = 100.dp)
-
-            // Padding for top and bottom
+    Card(
+        shape = RoundedCornerShape(8.dp),
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(vertical = 8.dp)
+    ) {
+        Column(
+            modifier = Modifier.fillMaxWidth()
         ) {
             Box(
                 modifier = Modifier
-
+                    .height(150.dp)
                     .fillMaxWidth()
             ) {
                 Image(
@@ -713,55 +717,36 @@ fun FavoritesScreen(favoriteItemsViewModel: FavoriteItemsViewModel ,navControlle
                         )
                         .zIndex(1f)
                 )
-
             }
-
 
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(8.dp),
-                contentAlignment = Alignment.TopEnd
+                    .padding(horizontal = 8.dp, vertical = 12.dp),
+                contentAlignment = Alignment.TopStart
             ) {
-                IconButton(
-                    onClick = {
-                        favoriteItemsViewModel.toggleFavorite(favoriteItem)
-                    },
-                    modifier = Modifier.align(Alignment.TopEnd)
-                ) {
-                    Icon(
-                        painter = painterResource(id = if (isFavorite) R.drawable.ic_favourite_filled else R.drawable.ic_favourite_unfill),
-                        contentDescription = "Favorite Icon",
-                        modifier = Modifier
-                            .size(20.dp)
-                            .clip(CircleShape)
-                            .background(White)
-                            .padding(4.dp)
-                    )
-                }
-            }
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp),
-                contentAlignment = Alignment.BottomStart
-
-            ) {
-                Column(horizontalAlignment = Alignment.Start,
-                        verticalArrangement = Arrangement.spacedBy(10.dp)
+                Column(
+                    horizontalAlignment = Alignment.Start,
+                    verticalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
                     Text(
                         text = title,
                         style = TextStyle(
                             color = Color.White,
-                            fontWeight = FontWeight.Normal,
-                            fontSize = 20.sp
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 18.sp
                         ),
                         maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-
+                        overflow = TextOverflow.Ellipsis
+                    )
+                    Text(
+                        text = price,
+                        style = TextStyle(
+                            color = Color.White,
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 16.sp
                         )
-
+                    )
                     Text(
                         text = description,
                         style = TextStyle(
@@ -769,44 +754,38 @@ fun FavoritesScreen(favoriteItemsViewModel: FavoriteItemsViewModel ,navControlle
                             fontWeight = FontWeight.Normal,
                             fontSize = 14.sp
                         ),
-                        maxLines = 3, // Adjust as needed
-                        overflow = TextOverflow.Ellipsis,
+                        maxLines = 3,
+                        overflow = TextOverflow.Ellipsis
                     )
+                }
+            }
 
-                    Text(
-                        text = price,
-                        style = TextStyle(
-                            color = Color.White,
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 16.sp
-                        ),
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 8.dp, vertical = 12.dp),
+                contentAlignment = Alignment.BottomEnd
+            ) {
+                IconButton(
+                    onClick = {
+                        favoriteItemsViewModel.toggleFavorite(favoriteItem)
+                    },
+                    modifier = Modifier.align(Alignment.BottomEnd)
+                ) {
+                    Icon(
+                        painter = painterResource(id = if (isFavorite) R.drawable.ic_favourite_filled else R.drawable.ic_favourite_unfill),
+                        contentDescription = "Favorite Icon",
+                        modifier = Modifier
+                            .size(24.dp)
+                            .clip(CircleShape)
+                            .background(White)
+                            .padding(8.dp)
                     )
-                    Button(
-                        onClick = { /* TODO: Handle buy now click */ },
-                        colors = ButtonDefaults.buttonColors(
-                            backgroundColor = Color(0xFFF5F5F5),
-                            contentColor = TextBlack
-                        ),
-                        shape = RoundedCornerShape(5.dp),
-                        modifier = Modifier.padding(top = 8.dp)
-                    ) {
-                        Text(text = "Buy Now", modifier = Modifier.padding(end = 12.dp))
-                        Icon(
-                            imageVector = Icons.Filled.Add,
-                            contentDescription = null,
-                            modifier = Modifier
-                                .size(20.dp)
-                                .clip(CircleShape)
-                                .background(PrimaryPink)
-                                .padding(5.dp),
-                            tint = White
-                        )
-                    }
                 }
             }
         }
     }
-
+}
 
 @Composable
 fun NavBar(navController: NavController) {
@@ -816,14 +795,15 @@ fun NavBar(navController: NavController) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .fillMaxSize(),
+            .fillMaxSize()
+        .fillMaxHeight(),
         contentAlignment = Alignment.BottomCenter
 
     ) {
 
         AnimatedNavigationBar(
             modifier = Modifier
-                .height(64.dp)
+                .height(60.dp)
                 .fillMaxWidth(),
             selectedIndex = selectedIndex,
             cornerRadius = shapeCornerRadius(cornerRadius = 34.dp),

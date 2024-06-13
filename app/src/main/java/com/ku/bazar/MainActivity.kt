@@ -9,8 +9,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import com.ku.bazar.mainScreen.MyApp
 
-import com.ku.bazar.productpage.Description
 import com.ku.bazar.ui.theme.KUBazarTheme
 
 class MainActivity : ComponentActivity() {
@@ -23,8 +23,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = Color.White
                 ) {
-                    //MyApp()
-                    MainScreen()
+                    MyApp()
 
 
                 }

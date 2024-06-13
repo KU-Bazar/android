@@ -7,5 +7,6 @@ data class Product(
     val Item_desc: String,
     val Item_price: Int,
     val Item_seller: String,
-    @SerializedName("Image_url") val Image_url: List<String>?
+    @SerializedName("Image_url") val Image_url: List<String>?,
+    var isFavorite: Boolean = false
 )
