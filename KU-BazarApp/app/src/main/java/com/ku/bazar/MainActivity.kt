@@ -4,12 +4,15 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+
 import com.ku.bazar.mainScreen.MyApp
+
 
 import com.ku.bazar.ui.theme.KUBazarTheme
 
@@ -23,7 +26,15 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = Color.White
                 ) {
+
                     MyApp()
+
+
+                    val scrollState= rememberScrollState()
+                    //MyApp()
+                    //Description()
+                   // register()
+                Product(scrollState=scrollState)
 
 
                 }
