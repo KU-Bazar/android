@@ -1,10 +1,9 @@
-package com.ku.bazar
+package com.ku.bazar.productpage
 
-import android.net.Uri
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -27,21 +26,17 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.automirrored.filled.ExitToApp
-import androidx.compose.material.icons.automirrored.outlined.ArrowBack
-
-import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowLeft
 
 import androidx.compose.material.icons.filled.MailOutline
-import androidx.compose.material.icons.outlined.KeyboardArrowLeft
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.AbsoluteAlignment
-
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import coil.compose.rememberImagePainter
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -53,38 +48,44 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.zIndex
-import androidx.lifecycle.ViewModel
+import coil.compose.rememberAsyncImagePainter
+import com.ku.bazar.R
+import com.ku.bazar.productpage.ApiService
+import com.ku.bazar.chat.models.Conversation
+import com.ku.bazar.chat.screen.BASE_URL
 import com.ku.bazar.ui.theme.PrimaryPink
-import com.ku.bazar.ui.theme.SecondaryPink
 import com.ku.bazar.ui.theme.TextBlack
 import com.ku.bazar.ui.theme.White
-
+import com.ku.bazar.productpage.models.Product
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.create
 
 
 @Preview
 @Composable
-fun Description()
+fun Description() {
+    val productState = remember { mutableStateOf<Product?>(null) }
 
-{
-
-        val images = listOf(
-            R.drawable.guitar,
-            R.drawable.ic_tv,
-            R.drawable.ic_books,
-
-        )
-
-
-
-    Box(modifier = Modifier.fillMaxSize()
+    LaunchedEffect(Unit) {
+        getProductDetails { result ->
+            if (result != null) {
+                productState.value = result
+            } else {
+                productState.value = null
+            }
+        }
+    }
+    val images = productState.value?.Image_url?: emptyList()
 
 
-            )
-
+    Box(
+        modifier = Modifier.fillMaxSize()
+    )
     {
-
-
         Image(
             painter = painterResource(id = R.drawable.login_background),
             contentDescription = "Background",
@@ -98,43 +99,31 @@ fun Description()
                     )
                 )
         )
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
 
 
-
-        Box(modifier = Modifier
-            .fillMaxSize()
-
-
-            .offset(y = 90.dp, x = 120.dp)
-
-
-
+                .offset(y = 90.dp, x = 120.dp)
         )
         {
-            Image(painter = painterResource(id = R.drawable.topographic_6), contentDescription = "Pattern",
+            Image(
+                painter = painterResource(id = R.drawable.topographic_6),
+                contentDescription = "Pattern",
                 contentScale = ContentScale.Fit,
                 modifier = Modifier.fillMaxSize()
-
 
 
             )
 
 
-
         }
-
-
-
-
-
-
-
-
-        Box(modifier = Modifier
-            .fillMaxWidth()
-            //.clickable { }
-            .align(Alignment.TopStart)
-            .padding(start = 30.dp, top = 40.dp)
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                //.clickable { }
+                .align(Alignment.TopStart)
+                .padding(start = 30.dp, top = 40.dp)
         )
 
         {
@@ -151,66 +140,65 @@ fun Description()
             )
         }
 
+//        val images = listOf(
+//            "https://kubazar-products.s3-ap-south-1.amazonaws.com/uploads/1718210068-1-basic-integration--formula---chapter-7-class-12.jpg"
+//        )
+        Box(
+            modifier = Modifier
+                .width(310.dp)
+                .align(Alignment.CenterEnd)
+                .height(330.dp)
+                .offset(y = (-120).dp)
+                .clip(
+                    RoundedCornerShape(
+                        topStart = 100.dp
+                    )
+                )
 
-                Box(
-                    modifier = Modifier
-                        .width(310.dp)
-                        .align(Alignment.CenterEnd)
-                        .height(330.dp)
-                        .offset(y = (-120).dp)
-                        .clip(
-                            RoundedCornerShape(
-                                topStart = 100.dp
-                            )
+
+        )
+        {
+            LazyRow {
+                items(images) { imageRes ->
+                    Box(
+                        modifier = Modifier
+                            .width(310.dp)
+                            .height(330.dp)
+                    ) {
+                        Image(
+                            painter = rememberAsyncImagePainter(model = imageRes),
+                            contentDescription = null,
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier.fillMaxSize()
                         )
-
-
-
-
-
-                ) {
-
-                    LazyRow {
-                        items(images) { imageRes ->
-                            Box(
-                                modifier = Modifier
-                                    .width(310.dp)
-                                    .height(330.dp)
-                            ) {
-                                Image(
-                                    painter = painterResource(id = imageRes),
-                                    contentDescription = null,
-                                    contentScale = ContentScale.Crop,
-                                    modifier = Modifier.fillMaxSize()
-                                )
-                                Box(
-                                    modifier = Modifier
-                                        .fillMaxSize()
-                                        .background(
-                                            Brush.verticalGradient(
-                                                colors = listOf(
-                                                    PrimaryPink.copy(alpha = 0f),
-                                                    PrimaryPink.copy(alpha = 0f),
-                                                    PrimaryPink.copy(alpha = 0f),
-                                                    PrimaryPink.copy(alpha = 0f),
-                                                    White.copy(alpha = 1f),
-                                                )
-                                            )
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .background(
+                                    Brush.verticalGradient(
+                                        colors = listOf(
+                                            PrimaryPink.copy(alpha = 0f),
+                                            PrimaryPink.copy(alpha = 0f),
+                                            PrimaryPink.copy(alpha = 0f),
+                                            PrimaryPink.copy(alpha = 0f),
+                                            White.copy(alpha = 1f),
                                         )
+                                    )
                                 )
-                            }
-                        }
+                        )
                     }
                 }
+            }
+        }
 
 
 
 
-            Box(modifier = Modifier
+        Box(
+            modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.Center)
                 .offset(y = 100.dp, x = 340.dp)
-
 
 
         ) {
@@ -235,17 +223,25 @@ fun Description()
                 .offset(y = 100.dp, x = 10.dp)
         )
         {
-            Text(text = "Buy Acoustic Guitar", fontSize = 20.sp,modifier = Modifier
-                .padding(top = 50.dp))
-            Text(
-                text = "Rs.1800",
-                fontSize = 22.sp,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier
-                    .padding(top = 80.dp)
-            )
+            productState.value?.let {
+                Text(
+                    text = "Buy " + it.Item_name,
+                    fontSize = 20.sp,
+                    modifier = Modifier
+                        .padding(top = 50.dp)
+                )
+            }
+            productState.value?.let {
+                Text(
+                    text = "Rs. " + it.Item_price,
+                    fontSize = 22.sp,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier
+                        .padding(top = 80.dp)
+                )
+            }
 
-            Row (modifier = Modifier.padding(top = 110.dp)){
+            Row(modifier = Modifier.padding(top = 110.dp)) {
 
 
                 Button(
@@ -256,7 +252,7 @@ fun Description()
 
                     ),
                     shape = RoundedCornerShape(20.dp),
-                  //  modifier = Modifier.padding(top = 110.dp)
+                    //  modifier = Modifier.padding(top = 110.dp)
                 ) {
                     Text(text = "Chat  Now", modifier = Modifier.padding(end = 12.dp))
                     Icon(
@@ -274,11 +270,11 @@ fun Description()
 
 
                 Box(
-                    modifier= Modifier
+                    modifier = Modifier
                         .width(130.dp)
                         .height(40.dp)
-                       // .offset(y = 100.dp, x = 10.dp)
-                        .padding(start = 5.dp,top=5.dp)
+                        // .offset(y = 100.dp, x = 10.dp)
+                        .padding(start = 5.dp, top = 5.dp)
                         .background(
                             color = Color(0xFFF5F5F5),
                             shape = RoundedCornerShape(20.dp)
@@ -320,65 +316,67 @@ fun Description()
 
 
 
-
-
-
-
-
-
-
-        Box(modifier = Modifier
-            .fillMaxWidth()
-            .align(Alignment.Center)
-            .offset(y = 240.dp, x = 10.dp))
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.Center)
+                .offset(y = 240.dp, x = 10.dp)
+        )
         {
-            Text(
-                text = "Product Description",
-                fontSize = 16.sp,
+            productState.value?.let {
+                Text(
+                    text = it.Item_desc,
+                    fontSize = 16.sp,
 
-                modifier = Modifier
-                   // .padding(top = 20.dp)
-            )
+                    modifier = Modifier
+                        .padding(top = 30.dp)
+                )
+            }
 
+            productState.value?.let {
+                Text(
+                    text = "Seller: " + it.Item_seller,
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier
+                        .padding(top = 5.dp)
 
-            Text(
-                text = "Band:yamaha",
-                fontSize = 12.sp,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier
-                    .padding(top = 30.dp)
-            )
-            Text(
-                text = "Model:XYZ",
-                fontSize = 12.sp,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier
-                    .padding(top = 60.dp)
-            )
-            Text(
-                text = "Color:Grey",
-                fontSize = 12.sp,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier
-                    .padding(top = 90.dp)
-            )
+                )
+            }
+        }
+    }
+}
 
-
-
-
+private fun getProductDetails(onResult: (Product?) -> Unit
+) {
+    val BASE_URL = "https://fine-moral-seasnail.ngrok-free.app" // Replace with your actual base URL
+    val retrofitBuilder = Retrofit.Builder()
+        .addConverterFactory(GsonConverterFactory.create())
+        .baseUrl(BASE_URL)
+        .build()
+        .create(ApiService::class.java)
 
 
-
-
+    val retrofitData = retrofitBuilder.getProduct(213152)
+    retrofitData.enqueue(object : Callback<com.ku.bazar.productpage.models.Product> {
+        override fun onResponse(call: Call<com.ku.bazar.productpage.models.Product>, response: Response<com.ku.bazar.productpage.models.Product>) {
+            if (response.isSuccessful) {
+                onResult(response.body())
+            } else {
+                onResult(null)
+            }
         }
 
 
+        override fun onFailure(call: Call<com.ku.bazar.productpage.models.Product>, t: Throwable) {
+            Log.d("FAILED", t.toString())
+            onResult(null)
+        }
+    })
+}
 
 
-    }
 
-
-    }
 
 
 
