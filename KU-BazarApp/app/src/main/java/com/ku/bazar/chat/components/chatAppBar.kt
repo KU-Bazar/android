@@ -13,6 +13,10 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ku.bazar.R
+import com.ku.bazar.ui.theme.PrimaryPink
+import com.ku.bazar.ui.theme.SecondaryPink
+import com.ku.bazar.ui.theme.TextBlack
+import com.ku.bazar.ui.theme.White
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -26,18 +30,17 @@ fun chatAppBar(){
                 Text(
                     text = "Neer",
                     style = TextStyle(
-                        color = Color.White,
+                        color = White,
                         fontSize = 20.sp
                     )
                 )
 
                 Spacer(modifier = Modifier.height(6.dp))
-
                 Text(
-                    text = "Online",
+                    text = "Offline",
                     style = TextStyle(
-                        color = Color.White,
-                        fontSize = 7.sp,
+                        color = White,
+                        fontSize = 10.sp,
                     )
                 )
             }
@@ -50,7 +53,7 @@ fun chatAppBar(){
                 )
             ),
         colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-            containerColor = Color(0xFF1F1F1F)
+            containerColor = SecondaryPink
         ),
         navigationIcon = {
             IconButton(onClick = {  }) {

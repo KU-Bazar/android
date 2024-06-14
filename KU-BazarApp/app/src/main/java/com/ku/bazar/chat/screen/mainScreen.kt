@@ -1,36 +1,47 @@
 package com.ku.bazar.chat.screen
 
 import android.util.Log
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.ku.bazar.BASE_URL
+import androidx.navigation.NavHostController
 import com.ku.bazar.chat.ApiInterface
 import com.ku.bazar.chat.components.conversationBox
 import com.ku.bazar.chat.components.mainAppBar
 import com.ku.bazar.chat.models.Conversation
+import com.ku.bazar.ui.theme.PrimaryPink
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
+
+const val BASE_URL = "https://special-bunny-vigorously.ngrok-free.app/"
 @Composable
-fun mainScreen() {
+fun mainScreen(id:String,navController: NavHostController) {
     val conversationList = remember { mutableStateListOf<Conversation>() }
+    var isLoading by remember { mutableStateOf(true) }
     LaunchedEffect(key1 = true) {
-        getConversationData("4e3b5e7a-93e1-4f8b-9c1c-5b6d7e8a2d4f") { conversations ->
+        getConversationData(id) { conversations ->
             conversationList.clear()
             conversationList.addAll(conversations)
+            isLoading=false
         }
     }
     Scaffold(
@@ -39,14 +50,28 @@ fun mainScreen() {
         },
         containerColor = Color.Transparent
     ) { paddingValues ->
-        LazyColumn(
-            modifier = Modifier
-                .padding(paddingValues = paddingValues)
-                .padding(horizontal = 16.dp)
-                .fillMaxSize()
-        ) {
-            items(conversationList) { conversation ->
-                conversationBox(conversation)
+        if (isLoading){
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator(color = PrimaryPink)
+            }
+
+        }else {
+
+            LazyColumn(
+                modifier = Modifier
+                    .padding(paddingValues = paddingValues)
+                    .padding(horizontal = 16.dp)
+                    .fillMaxSize()
+            ) {
+                items(conversationList) { conversation ->
+                    conversationBox(
+                        conversation,
+                        onClick = { navController.navigate("chatScreen/${id}/${conversation.id}") })
+                }
+
             }
         }
     }

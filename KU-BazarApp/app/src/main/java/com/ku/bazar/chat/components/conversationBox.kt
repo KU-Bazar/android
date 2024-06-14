@@ -22,13 +22,13 @@ import com.ku.bazar.ui.theme.TextBlack
 
 
 @Composable
-fun conversationBox(conversation:Conversation){
+fun conversationBox(conversation: Conversation, onClick: () -> Unit){
     Row(
         modifier = Modifier
             .padding(vertical = 22.dp)
             .fillMaxWidth()
             .height(60.dp)
-            .clickable { } //left to fill
+            .clickable(onClick= onClick) //left to fill
     ) {
         Box(
             modifier = Modifier

@@ -14,6 +14,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ku.bazar.R
 import com.ku.bazar.ui.theme.PrimaryPink
+import com.ku.bazar.ui.theme.SecondaryPink
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview(showBackground = true, showSystemUi = true)
@@ -28,7 +29,7 @@ fun mainAppBar(){
                 )
             ),
         colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-            containerColor = PrimaryPink
+            containerColor = SecondaryPink
         ),
         title = {
             Text(
