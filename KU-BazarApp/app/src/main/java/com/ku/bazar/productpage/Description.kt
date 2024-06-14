@@ -140,9 +140,7 @@ fun Description() {
             )
         }
 
-//        val images = listOf(
-//            "https://kubazar-products.s3-ap-south-1.amazonaws.com/uploads/1718210068-1-basic-integration--formula---chapter-7-class-12.jpg"
-//        )
+
         Box(
             modifier = Modifier
                 .width(310.dp)
@@ -347,7 +345,7 @@ fun Description() {
     }
 }
 
-private fun getProductDetails(onResult: (Product?) -> Unit
+fun getProductDetails(onResult: (Product?) -> Unit
 ) {
     val BASE_URL = "https://fine-moral-seasnail.ngrok-free.app" // Replace with your actual base URL
     val retrofitBuilder = Retrofit.Builder()
