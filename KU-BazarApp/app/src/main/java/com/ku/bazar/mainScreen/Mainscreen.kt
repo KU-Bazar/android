@@ -27,6 +27,7 @@ import androidx.compose.foundation.clickable
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import retrofit2.*
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -54,6 +55,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
+import com.ku.bazar.mainScreen.models.Product
 
 import androidx.compose.ui.zIndex
 import androidx.lifecycle.ViewModel
@@ -71,7 +73,8 @@ import com.ku.bazar.R
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import com.ku.bazar.productpage.ApiService
+import coil.compose.rememberAsyncImagePainter
+import com.ku.bazar.mainScreen.ApiService
 
 import com.ku.bazar.ui.theme.PrimaryPink
 import com.ku.bazar.ui.theme.SecondaryPink
@@ -133,6 +136,7 @@ class FavoriteItemsViewModel : ViewModel() {
 @Composable
 
 fun MyApp() {
+    fetchProducts()
     val navController = rememberNavController()
     val favoriteItemsViewModel: FavoriteItemsViewModel = viewModel()
 
@@ -178,12 +182,13 @@ fun MainScreen(
             TopBar()
             SearchBar()
             CategoriesSection()
-            ProductSection(sectionTitle = "Recently Added", favoriteItemsViewModel)
+            ProductSection(sectionTitle = "Recently Added", products = emptyList(), favoriteItemsViewModel = favoriteItemsViewModel)
 
             NavBar(navController = navController)
         }
     }
 }
+
 
 @Composable
 fun BackgroundPattern(modifier: Modifier = Modifier) {
@@ -398,7 +403,7 @@ fun CategoryItem(name: String, imageResId: Int) {
     }
 
 @Composable
-fun ProductSection(sectionTitle: String, favoriteItemsViewModel: FavoriteItemsViewModel) {
+fun ProductSection(sectionTitle: String, products: List<Product>, favoriteItemsViewModel: FavoriteItemsViewModel) {
     Column(modifier = Modifier.padding(vertical = 5.dp)) {
         Row(
             modifier = Modifier
@@ -414,19 +419,9 @@ fun ProductSection(sectionTitle: String, favoriteItemsViewModel: FavoriteItemsVi
             verticalArrangement = Arrangement.spacedBy(16.dp),
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            items(10) { index ->
-                val product = when (index) {
-                    0 -> Product(R.drawable.guitar, "Acoustic Guitar", "Rs.1800/day", "This is a Good guitar")
-                    1 -> Product(R.drawable.ic_tv, "HDMI2 Cable + TV", "Rs.1800/day", "This is a Good Tv")
-                    2 -> Product(R.drawable.ic_mobile, "Mobile", "Rs.1800/day", "This is a Good Mobile")
-                    3 -> Product(R.drawable.ic_books, "Books", "Rs.100/day", "This is a Good book")
-                    else -> Product(R.drawable.ic_error, "Placeholder", "Rs.1800/day", "This is a Good error")
-                }
+            items(products) { product ->
                 ProductItem(
-                    imageId = product.imageId,
-                    title = product.title,
-                    price = product.price,
-                    description = product.description,
+                    product = product,
                     favoriteItemsViewModel = favoriteItemsViewModel
                 )
             }
@@ -434,16 +429,24 @@ fun ProductSection(sectionTitle: String, favoriteItemsViewModel: FavoriteItemsVi
     }
 }
 
+
 @Composable
 fun ProductItem(
-    imageId: Int,
-    title: String,
-    price: String,
-    description: String,
+    product: Product,
     favoriteItemsViewModel: FavoriteItemsViewModel
 ) {
-    val favoriteItem = FavoriteItem(imageId, title, price,description)
-    val isFavorite by remember { derivedStateOf { favoriteItemsViewModel.isFavorite(favoriteItem) } }
+    val isFavorite by remember {
+        derivedStateOf {
+            favoriteItemsViewModel.isFavorite(
+                FavoriteItem(
+                    product.Item_id,
+                    product.Item_name,
+                    product.Item_price.toString(), // Assuming Item_price is an Int, convert to String
+                    "" // Replace with actual description if available
+                )
+            )
+        }
+    }
 
     Card(
         shape = RoundedCornerShape(8.dp),
@@ -452,97 +455,106 @@ fun ProductItem(
             .height(250.dp)
             .padding(vertical = 8.dp),
     ) {
+        Box(
+            modifier = Modifier
+                .height(150.dp)
+                .fillMaxWidth()
+        ) {
+            // Assuming you want to display the first image URL from product.imageUrls
+            val firstImageUrl = product.imageUrls.firstOrNull() ?: ""
+
+            Image(
+                painter = rememberAsyncImagePainter(model = firstImageUrl),
+                contentDescription = "Product Image",
+                modifier = Modifier.fillMaxSize(),
+                contentScale = ContentScale.Crop
+            )
 
             Box(
                 modifier = Modifier
-                    .height(150.dp)
-                    .fillMaxWidth()
-            ) {
-                Image(
-                    painter = painterResource(id = imageId),
-                    contentDescription = "Product Image",
-                    modifier = Modifier.fillMaxSize(),
-                    contentScale = ContentScale.Crop
-                )
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(
-                            Brush.verticalGradient(
-                                colors = listOf(
-                                    PrimaryPink.copy(alpha = 0.1f),
-                                    SecondaryPink.copy(alpha = 0.8f),
-                                )
+                    .fillMaxSize()
+                    .background(
+                        Brush.verticalGradient(
+                            colors = listOf(
+                                PrimaryPink.copy(alpha = 0.1f),
+                                SecondaryPink.copy(alpha = 0.8f),
                             )
                         )
-                        .zIndex(1f)
-                )
-
-            }
-        Box(modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp),
-            contentAlignment = Alignment.TopEnd){
-            IconButton(
-                onClick = {
-                    favoriteItemsViewModel.toggleFavorite(favoriteItem)
-                },
-                modifier = Modifier.align(Alignment.TopEnd)
-            ) {
-                Icon(
-                    painter = painterResource(id = if (isFavorite) R.drawable.ic_favourite_filled else R.drawable.ic_favourite_unfill),
-                    contentDescription = "Favorite Icon",
-                    modifier = Modifier
-                        .size(20.dp)
-                        .clip(CircleShape)
-                        .background(White)
-                        .padding(4.dp)
-                )
-
-            }
-        }
+                    )
+                    .zIndex(1f)
+            )
 
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(8.dp),
-                contentAlignment = Alignment.BottomStart
-
+                contentAlignment = Alignment.TopEnd
             ) {
-                Column(horizontalAlignment = Alignment.Start) {
-                    Text(
-                        text = title,
-                        style = TextStyle(color = Color.White, fontWeight = FontWeight.Normal, fontSize = 16.sp),
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                    Text(
-                        text = price,
-                        style = TextStyle(color = Color.White, fontWeight = FontWeight.Bold, fontSize = 16.sp),
-                    )
-                    Button(
-                        onClick = { /* TODO: Handle buy now click */ },
-                        colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFF5F5F5), contentColor = TextBlack),
-                        shape = RoundedCornerShape(5.dp),
-                        modifier = Modifier.padding(top = 8.dp)
-                    ) {
-                        Text(text = "Buy Now", modifier = Modifier.padding(end = 12.dp))
-                        Icon(
-                            imageVector = Icons.    Filled.Add,
-                            contentDescription = null,
-                            modifier = Modifier
-                                .size(20.dp)
-                                .clip(CircleShape)
-                                .background(PrimaryPink)
-                                .padding(5.dp),
-                            tint = White
+                IconButton(
+                    onClick = {
+                        favoriteItemsViewModel.toggleFavorite(
+                            FavoriteItem(
+                                product.Item_id,
+                                product.Item_name,
+                                product.Item_price.toString(), // Convert Int to String
+                                "" // Replace with actual description if available
+                            )
                         )
+                    },
+                    modifier = Modifier.align(Alignment.TopEnd)
+                ) {
+                    Icon(
+                        painter = painterResource(id = if (isFavorite) R.drawable.ic_favourite_filled else R.drawable.ic_favourite_unfill),
+                        contentDescription = "Favorite Icon",
+                        modifier = Modifier
+                            .size(20.dp)
+                            .clip(CircleShape)
+                            .background(White)
+                            .padding(4.dp)
+                    )
+                }
+            }
+        }
 
-                    }
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp),
+            contentAlignment = Alignment.BottomStart
+        ) {
+            Column(horizontalAlignment = Alignment.Start) {
+                Text(
+                    text = product.Item_name,
+                    style = TextStyle(color = Color.White, fontWeight = FontWeight.Normal, fontSize = 16.sp),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+                Text(
+                    text = "$${product.Item_price}", // Assuming Item_price is in dollars
+                    style = TextStyle(color = Color.White, fontWeight = FontWeight.Bold, fontSize = 16.sp),
+                )
+                Button(
+                    onClick = { /* TODO: Handle buy now click */ },
+                    colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFF5F5F5), contentColor = TextBlack),
+                    shape = RoundedCornerShape(5.dp),
+                    modifier = Modifier.padding(top = 8.dp)
+                ) {
+                    Text(text = "Buy Now", modifier = Modifier.padding(end = 12.dp))
+                    Icon(
+                        imageVector = Icons.Filled.Add,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .size(20.dp)
+                            .clip(CircleShape)
+                            .background(PrimaryPink)
+                            .padding(5.dp),
+                        tint = White
+                    )
                 }
             }
         }
     }
+}
 
 @Composable
 fun PopularItem(
@@ -866,29 +878,38 @@ fun Modifier.noRippleClickable(onClick: () -> Unit): Modifier = composed {
     )
 }
 
-private fun fetchProducts(onResult: (com.ku.bazar.productpage.models.Product?) -> Unit) {
+private fun fetchProducts() {
     val BASE_URL = "https://fine-moral-seasnail.ngrok-free.app" // Replace with your actual base URL
-    val retrofitBuilder = Retrofit.Builder()
+    val retrofit = Retrofit.Builder()
         .addConverterFactory(GsonConverterFactory.create())
         .baseUrl(BASE_URL)
         .build()
-        .create(ApiService::class.java)
 
+    val apiService = retrofit.create(ApiService::class.java)
+    val call = apiService.getProducts()
 
-    val retrofitData = retrofitBuilder.getProduct(213152)
-    retrofitData.enqueue(object : Callback<com.ku.bazar.productpage.models.Product> {
-        override fun onResponse(call: Call<com.ku.bazar.productpage.models.Product>, response: Response<com.ku.bazar.productpage.models.Product>) {
+    call.enqueue(object : Callback<List<Product>> {
+        override fun onResponse(call: Call<List<Product>>, response: Response<List<Product>>) {
             if (response.isSuccessful) {
-                onResult(response.body())
+                val products = response.body()
+                if (products != null) {
+                    for (product in products) {
+                        // Accessing the first image URL
+                        val firstImageUrl = product.imageUrls.firstOrNull()
+                        Log.d("Product", "Item_id: ${product.Item_id}, Item_name: ${product.Item_name}, First Image URL: $firstImageUrl")
+                    }
+                } else {
+                    Log.d("Product", "No products found")
+                }
             } else {
-                onResult(null)
+                Log.d("Product", "Response not successful: ${response.code()} - ${response.message()}")
+                // Log error body if available
+                Log.d("Product", "Response body: ${response.errorBody()?.string()}")
             }
         }
 
-
-        override fun onFailure(call: Call<com.ku.bazar.productpage.models.Product>, t: Throwable) {
-            Log.d("FAILED", t.toString())
-            onResult(null)
+        override fun onFailure(call: Call<List<Product>>, t: Throwable) {
+            Log.d("Product", "Failed to fetch products: ${t.message}")
         }
     })
 }

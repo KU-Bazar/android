@@ -12,6 +12,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 
 import com.ku.bazar.mainScreen.MyApp
+import com.ku.bazar.productpage.Description
 
 
 import com.ku.bazar.ui.theme.KUBazarTheme
@@ -28,15 +29,7 @@ class MainActivity : ComponentActivity() {
                 ) {
 
                     MyApp()
-
-
-                    val scrollState= rememberScrollState()
-                    //MyApp()
-                    //Description()
-                   // register()
-                Product(scrollState=scrollState)
-
-
+//                    Description()
                 }
             }
         }
