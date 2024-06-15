@@ -10,6 +10,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.rememberNavController
+import com.ku.bazar.addProduct.addProduct
 
 import com.ku.bazar.mainScreen.MyApp
 import com.ku.bazar.productpage.Description
@@ -21,6 +23,8 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+            val navController = rememberNavController()
+
             KUBazarTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(
@@ -29,7 +33,8 @@ class MainActivity : ComponentActivity() {
                 ) {
 
 //                    MyApp()
-                    Description()
+//                    Description()
+                    addProduct(navController = navController)
                 }
             }
         }
