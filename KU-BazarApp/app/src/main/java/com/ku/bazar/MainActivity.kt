@@ -28,8 +28,8 @@ class MainActivity : ComponentActivity() {
                     color = Color.White
                 ) {
 
-                    MyApp()
-//                    Description()
+//                    MyApp()
+                    Description()
                 }
             }
         }

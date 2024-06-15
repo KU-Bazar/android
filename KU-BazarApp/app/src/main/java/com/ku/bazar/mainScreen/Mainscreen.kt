@@ -324,11 +324,10 @@ fun CategoriesSection() {
                 horizontalArrangement = Arrangement.spacedBy(8.dp) // Adjust spacing as needed
             ) {
                 val categories = listOf(
-                    Pair("Chair", R.drawable.ic_chair),
                     Pair("Books ", R.drawable.ic_book_photo),
                     Pair("Instruments", R.drawable.ic_instruments),
                     Pair("Electronics", R.drawable.ic_electronics),
-                    Pair("Clothes", R.drawable.ic_clothes)
+                    Pair("Clothes", R.drawable.ic_clothing)
                 )
                 items(categories.size) { index ->
                     CategoryItem(name = categories[index].first, imageResId = categories[index].second)
@@ -507,7 +506,7 @@ fun ProductItem(
                     overflow = TextOverflow.Ellipsis
                 )
                 Text(
-                    text = "$${product.Item_price}", // Assuming Item_price is in dollars
+                    text = "Rs. ${product.Item_price}", // Assuming Item_price is in dollars
                     style = TextStyle(color = Color.White, fontWeight = FontWeight.Bold, fontSize = 16.sp),
                 )
                 Button(
