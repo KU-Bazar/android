@@ -1,10 +1,10 @@
 package com.ku.bazar
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -24,7 +24,10 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-
+import com.ku.bazar.mainScreen.MyApp
+import com.ku.bazar.productListing.models.Category
+import com.ku.bazar.productListing.screen.mainProdcutListingScreen
+import com.ku.bazar.ui.theme.KUBazarTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,17 +41,27 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = Color.White
                 ) {
-                    ChatAppNavGraph(navController = navController)
+
+//                    ChatAppNavGraph(navController = navController)
 //                    chatScreen( "d9b2d63d-a233-4123-847a-7ac9b47c4f44","4e3b5e7a-93e1-4f8b-9c1c-5b6d7e8a2d4f")
 //                    mainScreen(BASE_USER)
 //                    MyApp()
 
 
+//                    MyApp()
+                    mainProdcutListingScreen(Category.OTHER)
+
+
+//                    val scrollState= rememberScrollState()
+                    //MyApp()
+                    //Description()
+                   // register()
+//                Product(scrollState=scrollState)
+
                 }
             }
         }
     }
-
 
 }
 

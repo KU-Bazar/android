@@ -12,25 +12,29 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.credentials.CredentialManager
 import androidx.credentials.GetCredentialRequest
 import androidx.credentials.exceptions.GetCredentialException
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.ku.bazar.R
 import com.ku.bazar.login.component.loginBackground
 import com.ku.bazar.login.component.registerBigButton
 import com.ku.bazar.login.util.loginMain
-import androidx.compose.ui.platform.LocalContext
-import com.ku.bazar.BuildConfig
+import com.ku.bazar.login.data.googleSignIn
+import com.ku.bazar.login.data.rememberOneTapSignInState
+import com.ku.bazar.login.viewModel.SignInViewModel
 import kotlinx.coroutines.launch
-import com.ku.bazar.login.data.handleSignIn
+import androidx.compose.runtime.remember as remember
 
 @Composable
 fun register(){
@@ -40,8 +44,8 @@ fun register(){
     //val clientID = BuildConfig.SERVER_CLIENT_ID
     //Log.i("tag", clientID)
 
-    val context = LocalContext.current
-    val coroutineScope = rememberCoroutineScope()
+    val state = rememberOneTapSignInState()
+    val viewModel: SignInViewModel = viewModel()
 
     var username by remember {
         mutableStateOf("")
@@ -170,28 +174,22 @@ fun register(){
 
         Spacer(modifier = Modifier.height(30.dp))
 
+        val scope = rememberCoroutineScope()
+        val context = LocalContext.current
+
         Row(
             modifier = Modifier
                 .clickable {
-                val googleIdOption: GetGoogleIdOption = GetGoogleIdOption.Builder()
-                    .setFilterByAuthorizedAccounts(false) // Query all google accounts on the device
-                    .setServerClientId(SERVER_CLIENT_ID)
-                    .build()
-
-                val request = GetCredentialRequest.Builder()
-                    .addCredentialOption(googleIdOption)
-                    .build()
-
-                val credentialManager = CredentialManager.create(context)
-
-                coroutineScope.launch {
-                    try {
-                        val result = credentialManager.getCredential(context, request)
-                        handleSignIn(result , coroutineScope)
-                    } catch (e: GetCredentialException) {
-                        Log.e("MainActivity", "GetCredentialException", e)
+                    Log.d("1","1")
+                    scope.launch {
+                        Log.d("2","2")
+                        viewModel.googleSignIn(
+                            context = context,
+                            state = state,
+                            clientId = SERVER_CLIENT_ID,
+                            rememberAccount = false
+                        )
                     }
-                }
             }
         ){
             Image(

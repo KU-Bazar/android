@@ -76,7 +76,6 @@ fun mainScreen(id:String,navController: NavHostController) {
         }
     }
 }
-
 private fun getConversationData(id: String, onConversationDataFetched: (List<Conversation>) -> Unit) {
     val retrofitBuilder = Retrofit.Builder()
         .addConverterFactory(GsonConverterFactory.create())
