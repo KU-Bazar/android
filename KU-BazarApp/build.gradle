@@ -1,4 +1,4 @@
-buildscript {
+buildscript {1
     ext {
         compose_ui_version = '1.6.6'
     }

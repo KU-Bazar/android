@@ -279,6 +279,7 @@ fun SearchBarWithButton(
                 focusedBorderColor = PrimaryPink,
                 unfocusedBorderColor = Color(0xFFF5F5F5)
             ),
+
         )
         IconButton(
             onClick = onSearchButtonClick,
