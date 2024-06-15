@@ -31,7 +31,6 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -54,6 +53,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
+import com.ku.bazar.mainScreen.models.Product
 
 import androidx.compose.ui.zIndex
 import androidx.lifecycle.ViewModel
@@ -71,7 +71,9 @@ import com.ku.bazar.R
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import com.ku.bazar.productpage.ApiService
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.platform.LocalContext
+import coil.compose.rememberAsyncImagePainter
 
 import com.ku.bazar.ui.theme.PrimaryPink
 import com.ku.bazar.ui.theme.SecondaryPink
@@ -130,9 +132,19 @@ class FavoriteItemsViewModel : ViewModel() {
 
 
 
-@Composable
 
+@Composable
 fun MyApp() {
+    fetchProducts(
+        onSuccess = { products ->
+            Log.d("Product", "Fetched products: $products")
+        },
+        onFailure = { errorMessage ->
+            // Handle the failure here
+            // For example, show an error message to the user
+            Log.d("Product", "Error fetching products: $errorMessage")
+        }
+    )
     val navController = rememberNavController()
     val favoriteItemsViewModel: FavoriteItemsViewModel = viewModel()
 
@@ -148,11 +160,10 @@ fun MyApp() {
                             MainScreen(favoriteItemsViewModel, navController)
                         }
                         composable(NavigationBarItems.Favorite.route) {
-                            FavoritesScreen(favoriteItemsViewModel,navController)
+                            FavoritesScreen(favoriteItemsViewModel, navController)
                         }
                     }
                     NavBar(navController = navController)
-
                 }
             }
         )
@@ -160,45 +171,7 @@ fun MyApp() {
 }
 
 
-@Composable
-fun MainScreen(
-    favoriteItemsViewModel: FavoriteItemsViewModel,
-    navController: NavController,
-    modifier: Modifier = Modifier
-) {
-    Box(
-        modifier = modifier.fillMaxSize()
-    ) {
-        BackgroundPattern(modifier = Modifier.fillMaxSize())
-        Column(
-            modifier = modifier
-                .fillMaxSize()
-                .padding(16.dp)
-        ) {
-            TopBar()
-            SearchBar()
-            CategoriesSection()
-            ProductSection(sectionTitle = "Recently Added", favoriteItemsViewModel)
 
-            NavBar(navController = navController)
-        }
-    }
-}
-
-@Composable
-fun BackgroundPattern(modifier: Modifier = Modifier) {
-    Row {
-        Spacer(modifier = Modifier.weight(2f))
-        Image(
-            painter = painterResource(id = R.drawable.topographic_5
-            ),
-            modifier = Modifier.size(300.dp),
-            contentDescription = null,
-            contentScale = ContentScale.Crop,
-            )
-    }
-
-}
 
 @Composable
 fun TopBar() {
@@ -220,6 +193,22 @@ fun TopBar() {
         )
     }
 }
+@Composable
+fun BackgroundPattern(modifier: Modifier = Modifier) {
+    Row {
+        Spacer(modifier = Modifier.weight(2f))
+        Image(
+            painter = painterResource(id = R.drawable.topographic_5
+            ),
+            modifier = Modifier.size(300.dp),
+            contentDescription = null,
+            contentScale = ContentScale.Crop,
+        )
+    }
+
+}
+
+
 
 @Composable
 fun SearchBar() {
@@ -292,12 +281,10 @@ fun SearchBarWithButton(
             ),
 
         )
-
-
         IconButton(
             onClick = onSearchButtonClick,
 
-        ) {
+            ) {
 
             Icon(
                 imageVector = Icons.AutoMirrored.Outlined.Send,
@@ -355,47 +342,46 @@ fun CategoriesSection() {
 @Composable
 fun CategoryItem(name: String, imageResId: Int) {
 
-        Box(
-            modifier= Modifier
-                .width(130.dp)
-                .height(40.dp)
-                .padding(start = 5.dp)
-                .background(
-                    color = Color(0xFFF5F5F5),
-                    shape = RoundedCornerShape(20.dp)
-                )
-                .clickable { }
+    Box(
+        modifier= Modifier
+            .width(130.dp)
+            .height(40.dp)
+            .padding(start = 5.dp)
+            .background(
+                color = Color(0xFFF5F5F5),
+                shape = RoundedCornerShape(20.dp)
+            )
+            .clickable { }
+    ) {
+        Row(
+            modifier = Modifier
+                .padding(4.dp)
+                .padding(horizontal = 8.dp, vertical = 4.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Row(
+            Image(
+                painter = painterResource(id = imageResId),
+                contentDescription = "Category Icon",
                 modifier = Modifier
-                    .padding(4.dp)
-                    .padding(horizontal = 8.dp, vertical = 4.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Image(
-                    painter = painterResource(id = imageResId),
-                    contentDescription = "Category Icon",
-                    modifier = Modifier
-                        .size(24.dp) // Adjust size as needed
-                        .clip(CircleShape)
-                        .background(PrimaryPink)
-                        .padding(4.dp), // Adjust padding as needed
-                    contentScale = ContentScale.Crop
-                )
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(
-                    text = name,
-                    fontSize = 12.sp,
-                    fontWeight = FontWeight.Normal,
-                    color = TextBlack
-                )
-            }
+                    .size(24.dp) // Adjust size as needed
+                    .clip(CircleShape)
+                    .background(PrimaryPink)
+                    .padding(4.dp), // Adjust padding as needed
+                contentScale = ContentScale.Crop
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            Text(
+                text = name,
+                fontSize = 12.sp,
+                fontWeight = FontWeight.Normal,
+                color = TextBlack
+            )
         }
     }
-
+}
 @Composable
-fun ProductSection(sectionTitle: String, favoriteItemsViewModel: FavoriteItemsViewModel) {
+fun ProductSection(sectionTitle: String, products: List<Product>, favoriteItemsViewModel: FavoriteItemsViewModel) {
     Column(modifier = Modifier.padding(vertical = 5.dp)) {
         Row(
             modifier = Modifier
@@ -407,23 +393,14 @@ fun ProductSection(sectionTitle: String, favoriteItemsViewModel: FavoriteItemsVi
         }
         LazyVerticalGrid(
             columns = GridCells.Fixed(2), // 2 items per row
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier.fillMaxSize()
+                .padding(bottom = 56.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp),
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            items(10) { index ->
-                val product = when (index) {
-                    0 -> Product(R.drawable.guitar, "Acoustic Guitar", "Rs.1800/day", "This is a Good guitar")
-                    1 -> Product(R.drawable.ic_tv, "HDMI2 Cable + TV", "Rs.1800/day", "This is a Good Tv")
-                    2 -> Product(R.drawable.ic_mobile, "Mobile", "Rs.1800/day", "This is a Good Mobile")
-                    3 -> Product(R.drawable.ic_books, "Books", "Rs.100/day", "This is a Good book")
-                    else -> Product(R.drawable.ic_error, "Placeholder", "Rs.1800/day", "This is a Good error")
-                }
+            items(products) { product ->
                 ProductItem(
-                    imageId = product.imageId,
-                    title = product.title,
-                    price = product.price,
-                    description = product.description,
+                    product = product,
                     favoriteItemsViewModel = favoriteItemsViewModel
                 )
             }
@@ -431,208 +408,224 @@ fun ProductSection(sectionTitle: String, favoriteItemsViewModel: FavoriteItemsVi
     }
 }
 
+
 @Composable
 fun ProductItem(
-    imageId: Int,
-    title: String,
-    price: String,
-    description: String,
+    product: Product,
     favoriteItemsViewModel: FavoriteItemsViewModel
 ) {
-    val favoriteItem = FavoriteItem(imageId, title, price,description)
-    val isFavorite by remember { derivedStateOf { favoriteItemsViewModel.isFavorite(favoriteItem) } }
+    val isFavorite by remember {
+        derivedStateOf {
+            favoriteItemsViewModel.isFavorite(
+                FavoriteItem(
+                    product.Item_id,
+                    product.Item_name,
+                    product.Item_price.toString(), // Item_price is an Int, convert to String
+                    ""
+                )
+            )
+        }
+    }
 
     Card(
         shape = RoundedCornerShape(8.dp),
         modifier = Modifier
-            .width(200.dp)
-            .height(250.dp)
+            .fillMaxWidth()
+            .aspectRatio(1f) //square aspect ratio
             .padding(vertical = 8.dp),
     ) {
+        Box(
+            modifier = Modifier
+                .height(150.dp)
+                .fillMaxWidth()
+        ) {
+            val firstImageUrl = product.imageUrls.firstOrNull() ?: ""
+
+            Image(
+                painter = rememberAsyncImagePainter(model = firstImageUrl),
+                contentDescription = "Product Image",
+                modifier = Modifier.fillMaxSize(),
+                contentScale = ContentScale.Crop
+            )
 
             Box(
                 modifier = Modifier
-                    .height(150.dp)
-                    .fillMaxWidth()
-            ) {
-                Image(
-                    painter = painterResource(id = imageId),
-                    contentDescription = "Product Image",
-                    modifier = Modifier.fillMaxSize(),
-                    contentScale = ContentScale.Crop
-                )
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(
-                            Brush.verticalGradient(
-                                colors = listOf(
-                                    PrimaryPink.copy(alpha = 0.1f),
-                                    SecondaryPink.copy(alpha = 0.8f),
-                                )
+                    .fillMaxSize()
+                    .background(
+                        Brush.verticalGradient(
+                            colors = listOf(
+                                PrimaryPink.copy(alpha = 0.1f),
+                                SecondaryPink.copy(alpha = 0.8f),
                             )
                         )
-                        .zIndex(1f)
-                )
-
-            }
-        Box(modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp),
-            contentAlignment = Alignment.TopEnd){
-            IconButton(
-                onClick = {
-                    favoriteItemsViewModel.toggleFavorite(favoriteItem)
-                },
-                modifier = Modifier.align(Alignment.TopEnd)
-            ) {
-                Icon(
-                    painter = painterResource(id = if (isFavorite) R.drawable.ic_favourite_filled else R.drawable.ic_favourite_unfill),
-                    contentDescription = "Favorite Icon",
-                    modifier = Modifier
-                        .size(20.dp)
-                        .clip(CircleShape)
-                        .background(White)
-                        .padding(4.dp)
-                )
-
-            }
-        }
+                    )
+                    .zIndex(1f)
+            )
 
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(8.dp),
-                contentAlignment = Alignment.BottomStart
-
+                contentAlignment = Alignment.TopEnd
             ) {
-                Column(horizontalAlignment = Alignment.Start) {
-                    Text(
-                        text = title,
-                        style = TextStyle(color = Color.White, fontWeight = FontWeight.Normal, fontSize = 16.sp),
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                    Text(
-                        text = price,
-                        style = TextStyle(color = Color.White, fontWeight = FontWeight.Bold, fontSize = 16.sp),
-                    )
-                    Button(
-                        onClick = { /* TODO: Handle buy now click */ },
-                        colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFF5F5F5), contentColor = TextBlack),
-                        shape = RoundedCornerShape(5.dp),
-                        modifier = Modifier.padding(top = 8.dp)
-                    ) {
-                        Text(text = "Buy Now", modifier = Modifier.padding(end = 12.dp))
-                        Icon(
-                            imageVector = Icons.    Filled.Add,
-                            contentDescription = null,
-                            modifier = Modifier
-                                .size(20.dp)
-                                .clip(CircleShape)
-                                .background(PrimaryPink)
-                                .padding(5.dp),
-                            tint = White
+                IconButton(
+                    onClick = {
+                        favoriteItemsViewModel.toggleFavorite(
+                            FavoriteItem(
+                                product.Item_id,
+                                product.Item_name,
+                                product.Item_price.toString(), // Convert Int to String
+                                ""
+                            )
                         )
-
-                    }
+                    },
+                    modifier = Modifier.align(Alignment.TopEnd)
+                ) {
+                    Icon(
+                        painter = painterResource(id = if (isFavorite) R.drawable.ic_favourite_filled else R.drawable.ic_favourite_unfill),
+                        contentDescription = "Favorite Icon",
+                        modifier = Modifier
+                            .size(20.dp)
+                            .clip(CircleShape)
+                            .background(White)
+                            .padding(4.dp)
+                    )
                 }
             }
         }
-    }
 
-@Composable
-fun PopularItem(
-    imageId: Int,
-    title: String,
-    price: String,
-    description: String,
-    favoriteItemsViewModel: FavoriteItemsViewModel,
-    modifier: Modifier = Modifier
-) {
-    val favoriteItem = FavoriteItem(imageId, title, price,description )
-    val isFavorite by remember { derivedStateOf { favoriteItemsViewModel.isFavorite(favoriteItem) } }
-
-    if (isFavorite) {
-        Card(
-            shape = RoundedCornerShape(8.dp),
-            modifier = modifier
-                .width(200.dp)
-                .height(250.dp)
-                .padding(vertical = 8.dp)
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp),
+            contentAlignment = Alignment.BottomStart
         ) {
-            Column(modifier = Modifier.fillMaxSize()) {
-                Box(
-                    modifier = Modifier
-                        .height(150.dp)
-                        .fillMaxWidth()
+            Column(horizontalAlignment = Alignment.Start) {
+                Text(
+                    text = product.Item_name,
+                    style = TextStyle(color = Color.White, fontWeight = FontWeight.Normal, fontSize = 16.sp),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+                Text(
+                    text = "$${product.Item_price}", // Assuming Item_price is in dollars
+                    style = TextStyle(color = Color.White, fontWeight = FontWeight.Bold, fontSize = 16.sp),
+                )
+                Button(
+                    onClick = { /* TODO: Handle buy now click */ },
+                    colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFF5F5F5), contentColor = TextBlack),
+                    shape = RoundedCornerShape(5.dp),
+                    modifier = Modifier.padding(top = 8.dp)
                 ) {
-                    Image(
-                        painter = painterResource(id = imageId),
-                        contentDescription = "Product Image",
-                        modifier = Modifier.fillMaxSize(),
-                        contentScale = ContentScale.Crop
-                    )
-                    Box(
+                    Text(text = "Buy Now", modifier = Modifier.padding(end = 12.dp))
+                    Icon(
+                        imageVector = Icons.Filled.Add,
+                        contentDescription = null,
                         modifier = Modifier
-                            .fillMaxSize()
-                            .background(
-                                Brush.verticalGradient(
-                                    colors = listOf(
-                                        PrimaryPink.copy(alpha = 0.1f),
-                                        SecondaryPink.copy(alpha = 0.8f),
-                                    )
-                                )
-                            )
-                            .zIndex(1f)
+                            .size(20.dp)
+                            .clip(CircleShape)
+                            .background(PrimaryPink)
+                            .padding(5.dp),
+                        tint = White
                     )
-                }
-
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(8.dp),
-                    contentAlignment = Alignment.BottomStart
-                ) {
-                    Column(horizontalAlignment = Alignment.Start) {
-                        Text(
-                            text = title,
-                            style = TextStyle(color = Color.White, fontWeight = FontWeight.Normal, fontSize = 16.sp),
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis
-                        )
-                        Text(
-                            text = price,
-                            style = TextStyle(color = Color.White, fontWeight = FontWeight.Bold, fontSize = 16.sp),
-                        )
-                        Button(
-                            onClick = { /* TODO: Handle buy now click */ },
-                            colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFF5F5F5), contentColor = TextBlack),
-                            shape = RoundedCornerShape(5.dp),
-                            modifier = Modifier.padding(top = 8.dp)
-                        ) {
-                            Text(text = "Buy Now", modifier = Modifier.padding(end = 12.dp))
-                            Icon(
-                                imageVector = Icons.Filled.Add,
-                                contentDescription = null,
-                                modifier = Modifier
-                                    .size(20.dp)
-                                    .clip(CircleShape)
-                                    .background(PrimaryPink)
-                                    .padding(5.dp),
-                                tint = White
-                            )
-                        }
-                    }
                 }
             }
         }
     }
 }
+@Composable
+fun NavBar(navController: NavController) {
+    val navigationBarItems = remember { NavigationBarItems.values() }
+    var selectedIndex by remember { mutableStateOf(0) }
 
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxSize()
+            .fillMaxHeight(),
+        contentAlignment = Alignment.BottomCenter
 
+    ) {
 
+        AnimatedNavigationBar(
+            modifier = Modifier
+                .height(60.dp)
+                .fillMaxWidth(),
+            selectedIndex = selectedIndex,
+            cornerRadius = shapeCornerRadius(cornerRadius = 34.dp),
+            ballAnimation = Parabolic(tween(300)),
+            indentAnimation = Height(tween(300)),
+            barColor = Color(0xFFF5F5F5),
+            ballColor = PrimaryPink
+        ) {
+            navigationBarItems.forEachIndexed { index, item ->
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .noRippleClickable {
+                            selectedIndex = index
+                            navController.navigate(item.route) {
+                                popUpTo(navController.graph.startDestinationId) {
+                                    saveState = true
+                                }
+                                launchSingleTop = true
+                                restoreState = true
+                            }
+                        },
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        modifier = Modifier.size(26.dp),
+                        imageVector = item.icon,
+                        contentDescription = "Bottom Bar Icon",
+                        tint = if (selectedIndex == index) PrimaryPink else TextBlack
+                    )
 
+                }
+            }
+
+        }
+    }
+}
+
+enum class NavigationBarItems(val icon: ImageVector, val route: String) {
+    Home(icon = Icons.Default.Home, route = "main_screen"),
+    Favorite(icon = Icons.Default.Favorite, route = "favorites_screen"),
+    Cart(icon = Icons.Default.ShoppingCart, route = "cart_screen"),
+    Chat(icon = Icons.Default.Email, route = "chat_screen"),
+}
+
+private fun fetchProducts(onSuccess: (List<Product>) -> Unit, onFailure: (String) -> Unit) {
+    val BASE_URL = "https://fine-moral-seasnail.ngrok-free.app" // Replace with your actual base URL
+    val retrofit = Retrofit.Builder()
+        .addConverterFactory(GsonConverterFactory.create())
+        .baseUrl(BASE_URL)
+        .build()
+
+    val apiService = retrofit.create(ApiService::class.java)
+    val call = apiService.getProducts()
+
+    call.enqueue(object : Callback<List<Product>> {
+        override fun onResponse(call: Call<List<Product>>, response: Response<List<Product>>) {
+            if (response.isSuccessful) {
+                val products = response.body()
+                if (products != null) {
+                    onSuccess(products)
+                } else {
+                    onFailure("No products found")
+                }
+            } else {
+                onFailure("Response not successful: ${response.code()} - ${response.message()}")
+                // Log error body if available
+                Log.d("Product", "Response body: ${response.errorBody()?.string()}")
+            }
+        }
+
+        override fun onFailure(call: Call<List<Product>>, t: Throwable) {
+            onFailure("Failed to fetch products: ${t.message}")
+        }
+    })
+}
 
 @Composable
 
@@ -791,101 +784,182 @@ fun FavoriteProductItem(
 }
 
 @Composable
-fun NavBar(navController: NavController) {
-    val navigationBarItems = remember { NavigationBarItems.values() }
-    var selectedIndex by remember { mutableStateOf(0) }
+fun MainScreen(
+    favoriteItemsViewModel: FavoriteItemsViewModel,
+    navController: NavController,
+    modifier: Modifier = Modifier
+) {
+    val context = LocalContext.current
+    val productsListState = remember { mutableStateOf<List<Product>>(emptyList()) }
 
     Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxSize()
-        .fillMaxHeight(),
-        contentAlignment = Alignment.BottomCenter
-
+        modifier = modifier.fillMaxSize()
     ) {
-
-        AnimatedNavigationBar(
-            modifier = Modifier
-                .height(60.dp)
-                .fillMaxWidth(),
-            selectedIndex = selectedIndex,
-            cornerRadius = shapeCornerRadius(cornerRadius = 34.dp),
-            ballAnimation = Parabolic(tween(300)),
-            indentAnimation = Height(tween(300)),
-            barColor = Color(0xFFF5F5F5),
-            ballColor = PrimaryPink
+        BackgroundPattern(modifier = Modifier.fillMaxSize())
+        Column(
+            modifier = modifier
+                .fillMaxSize()
+                .padding(16.dp)
         ) {
-            navigationBarItems.forEachIndexed { index, item ->
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .noRippleClickable {
-                            selectedIndex = index
-                            navController.navigate(item.route) {
-                                popUpTo(navController.graph.startDestinationId) {
-                                    saveState = true
-                                }
-                                launchSingleTop = true
-                                restoreState = true
-                            }
-                        },
-                    contentAlignment = Alignment.Center
-                ) {
-                    Icon(
-                        modifier = Modifier.size(26.dp),
-                        imageVector = item.icon,
-                        contentDescription = "Bottom Bar Icon",
-                        tint = if (selectedIndex == index) PrimaryPink else TextBlack
-                    )
+            TopBar()
+            SearchBar()
+            CategoriesSection()
+            ProductSection(sectionTitle = "Recently Added", products = productsListState.value, favoriteItemsViewModel = favoriteItemsViewModel)
 
+            NavBar(navController = navController)
+
+            // Fetch products list from the database
+            LaunchedEffect(Unit) {
+                fetchProducts(
+                    onSuccess = { products ->
+                        productsListState.value = products
+                        Log.d("Product", "Fetched products: $products")
+                    },
+                    onFailure = { errorMessage ->
+                        // Handle the failure here
+                        Log.d("Product", "Error fetching products: $errorMessage")
+                    }
+                )
+            }
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(2),
+                modifier = Modifier.fillMaxSize(),
+                contentPadding = PaddingValues(8.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                items(productsListState.value.size) { index ->
+                    val product = productsListState.value[index]
+                    ProductItem(
+                        product = product,
+                        favoriteItemsViewModel = favoriteItemsViewModel
+                    )
+                }
+            }
+        }
+
+
+
+        @Composable
+        fun PopularItem(
+            imageId: Int,
+            title: String,
+            price: String,
+            description: String,
+            favoriteItemsViewModel: FavoriteItemsViewModel,
+            modifier: Modifier = Modifier
+        ) {
+            val favoriteItem = FavoriteItem(imageId, title, price, description)
+            val isFavorite by remember {
+                derivedStateOf {
+                    favoriteItemsViewModel.isFavorite(
+                        favoriteItem
+                    )
                 }
             }
 
+            if (isFavorite) {
+                Card(
+                    shape = RoundedCornerShape(8.dp),
+                    modifier = modifier
+                        .width(200.dp)
+                        .height(250.dp)
+                        .padding(vertical = 8.dp)
+                ) {
+                    Column(modifier = Modifier.fillMaxSize()) {
+                        Box(
+                            modifier = Modifier
+                                .height(150.dp)
+                                .fillMaxWidth()
+                        ) {
+                            Image(
+                                painter = painterResource(id = imageId),
+                                contentDescription = "Product Image",
+                                modifier = Modifier.fillMaxSize(),
+                                contentScale = ContentScale.Crop
+                            )
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .background(
+                                        Brush.verticalGradient(
+                                            colors = listOf(
+                                                PrimaryPink.copy(alpha = 0.1f),
+                                                SecondaryPink.copy(alpha = 0.8f),
+                                            )
+                                        )
+                                    )
+                                    .zIndex(1f)
+                            )
+                        }
+
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(8.dp),
+                            contentAlignment = Alignment.BottomStart
+                        ) {
+                            Column(horizontalAlignment = Alignment.Start) {
+                                Text(
+                                    text = title,
+                                    style = TextStyle(
+                                        color = Color.White,
+                                        fontWeight = FontWeight.Normal,
+                                        fontSize = 16.sp
+                                    ),
+                                    maxLines = 1,
+                                    overflow = TextOverflow.Ellipsis
+                                )
+                                Text(
+                                    text = price,
+                                    style = TextStyle(
+                                        color = Color.White,
+                                        fontWeight = FontWeight.Bold,
+                                        fontSize = 16.sp
+                                    ),
+                                )
+                                Button(
+                                    onClick = { /* TODO: Handle buy now click */ },
+                                    colors = ButtonDefaults.buttonColors(
+                                        backgroundColor = Color(
+                                            0xFFF5F5F5
+                                        ), contentColor = TextBlack
+                                    ),
+                                    shape = RoundedCornerShape(5.dp),
+                                    modifier = Modifier.padding(top = 8.dp)
+                                ) {
+                                    Text(text = "Buy Now", modifier = Modifier.padding(end = 12.dp))
+                                    Icon(
+                                        imageVector = Icons.Filled.Add,
+                                        contentDescription = null,
+                                        modifier = Modifier
+                                            .size(20.dp)
+                                            .clip(CircleShape)
+                                            .background(PrimaryPink)
+                                            .padding(5.dp),
+                                        tint = White
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+
+        fun Modifier.noRippleClickable(onClick: () -> Unit): Modifier = composed {
+            this.then(
+                clickable(
+                    indication = null,
+                    interactionSource = remember { MutableInteractionSource() }
+                ) {
+                    onClick()
+                }
+            )
         }
     }
 }
 
-enum class NavigationBarItems(val icon: ImageVector, val route: String) {
-    Home(icon = Icons.Default.Home, route = "main_screen"),
-    Favorite(icon = Icons.Default.Favorite, route = "favorites_screen"),
-    Cart(icon = Icons.Default.ShoppingCart, route = "cart_screen"),
-    Chat(icon = Icons.Default.Email, route = "chat_screen"),
-}
-
-fun Modifier.noRippleClickable(onClick: () -> Unit): Modifier = composed {
-    this.then(
-        clickable(
-            indication = null,
-            interactionSource = remember { MutableInteractionSource() }
-        ) {
-            onClick()
-        }
-    )
-}
-
-private fun fetchProducts(onResult: (com.ku.bazar.productpage.models.Product?) -> Unit) {
-    val BASE_URL = "https://fine-moral-seasnail.ngrok-free.app" // Replace with your actual base URL
-    val retrofitBuilder = Retrofit.Builder()
-        .addConverterFactory(GsonConverterFactory.create())
-        .baseUrl(BASE_URL)
-        .build()
-        .create(ApiService::class.java)
 
 
-    val retrofitData = retrofitBuilder.getProduct(213152)
-    retrofitData.enqueue(object : Callback<com.ku.bazar.productpage.models.Product> {
-        override fun onResponse(call: Call<com.ku.bazar.productpage.models.Product>, response: Response<com.ku.bazar.productpage.models.Product>) {
-            if (response.isSuccessful) {
-                onResult(response.body())
-            } else {
-                onResult(null)
-            }
-        }
-
-
-        override fun onFailure(call: Call<com.ku.bazar.productpage.models.Product>, t: Throwable) {
-            Log.d("FAILED", t.toString())
-            onResult(null)
-        }
-    })
-}

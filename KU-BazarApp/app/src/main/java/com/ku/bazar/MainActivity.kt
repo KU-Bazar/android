@@ -27,6 +27,11 @@ import retrofit2.converter.gson.GsonConverterFactory
 import com.ku.bazar.mainScreen.MyApp
 import com.ku.bazar.productListing.models.Category
 import com.ku.bazar.productListing.screen.mainProdcutListingScreen
+
+import com.ku.bazar.productpage.Description
+
+
+
 import com.ku.bazar.ui.theme.KUBazarTheme
 
 class MainActivity : ComponentActivity() {
@@ -57,6 +62,8 @@ class MainActivity : ComponentActivity() {
                     //Description()
                    // register()
 //                Product(scrollState=scrollState)
+
+//                    Description()
 
                 }
             }

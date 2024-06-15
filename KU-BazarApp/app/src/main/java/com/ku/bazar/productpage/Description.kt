@@ -138,9 +138,7 @@ fun Description() {
             )
         }
 
-//        val images = listOf(
-//            "https://kubazar-products.s3-ap-south-1.amazonaws.com/uploads/1718210068-1-basic-integration--formula---chapter-7-class-12.jpg"
-//        )
+
         Box(
             modifier = Modifier
                 .width(310.dp)
@@ -210,8 +208,6 @@ fun Description() {
                     .background(color = Color(0xFFF5F5F5))
                     .padding(8.dp)
             )
-
-
         }
 
         Box(
@@ -345,7 +341,7 @@ fun Description() {
     }
 }
 
-private fun getProductDetails(onResult: (Product?) -> Unit
+fun getProductDetails(onResult: (Product?) -> Unit
 ) {
     val retrofitBuilder = Retrofit.Builder()
         .addConverterFactory(GsonConverterFactory.create())
@@ -354,6 +350,9 @@ private fun getProductDetails(onResult: (Product?) -> Unit
         .create(ApiService::class.java)
 
     val retrofitData = retrofitBuilder.getProduct(213152)
+
+
+
     retrofitData.enqueue(object : Callback<com.ku.bazar.productpage.models.Product> {
         override fun onResponse(call: Call<com.ku.bazar.productpage.models.Product>, response: Response<com.ku.bazar.productpage.models.Product>) {
             if (response.isSuccessful) {
