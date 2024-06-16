@@ -11,6 +11,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
+
+import com.ku.bazar.addProduct.addProduct
+
 import com.ku.bazar.chat.ApiInterface
 import com.ku.bazar.chat.components.ChatAppNavGraph
 import com.ku.bazar.chat.models.Conversation
@@ -39,7 +42,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             val navController = rememberNavController()
-            ChatAppNavGraph(navController = navController)
+            
             KUBazarTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(
@@ -49,6 +52,9 @@ class MainActivity : ComponentActivity() {
 
 
 //                    MyApp()
+
+//                    Description()
+                    addProduct(navController = navController)
                     Description()
 
 //                    ChatAppNavGraph(navController = navController)

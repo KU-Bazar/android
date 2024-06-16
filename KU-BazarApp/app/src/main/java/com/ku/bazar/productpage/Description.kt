@@ -352,8 +352,7 @@ private fun getProductDetails(onResult: (Product?) -> Unit
         .build()
         .create(ApiService::class.java)
 
-    val retrofitData = retrofitBuilder.getProduct(213162)
-
+    val retrofitData = retrofitBuilder.getProduct(213163)
 
     retrofitData.enqueue(object : Callback<com.ku.bazar.productpage.models.Product> {
         override fun onResponse(call: Call<com.ku.bazar.productpage.models.Product>, response: Response<com.ku.bazar.productpage.models.Product>) {
