@@ -1,5 +1,6 @@
 package com.ku.bazar.productpage.models
 import com.google.gson.annotations.SerializedName
+import com.ku.bazar.productListing.models.Category
 
 data class Product(
     val Item_id: Int,
@@ -9,5 +10,6 @@ data class Product(
     val Item_seller: String,
     val category: String,
     @SerializedName("Image_url") val Image_url: List<String>?,
-    var isFavorite: Boolean = false
+    val category: Category
+//    var isFavorite: Boolean = false
 )

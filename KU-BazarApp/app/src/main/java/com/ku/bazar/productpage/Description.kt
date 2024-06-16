@@ -51,9 +51,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
 import com.ku.bazar.R
-import com.ku.bazar.productpage.ApiService
-import com.ku.bazar.chat.models.Conversation
-import com.ku.bazar.chat.screen.BASE_URL
+
 import com.ku.bazar.ui.theme.PrimaryPink
 import com.ku.bazar.ui.theme.TextBlack
 import com.ku.bazar.ui.theme.White
@@ -66,8 +64,11 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.create
 import java.util.Locale
 
+import com.ku.bazar.productpage.BASE_URL
 
-@Preview
+
+
+
 @Composable
 fun Description() {
     val productState = remember { mutableStateOf<Product?>(null) }
@@ -345,15 +346,14 @@ fun Description() {
 
 private fun getProductDetails(onResult: (Product?) -> Unit
 ) {
-    val BASE_URL = "https://fine-moral-seasnail.ngrok-free.app" // Replace with your actual base URL
     val retrofitBuilder = Retrofit.Builder()
         .addConverterFactory(GsonConverterFactory.create())
         .baseUrl(BASE_URL)
         .build()
         .create(ApiService::class.java)
 
-
     val retrofitData = retrofitBuilder.getProduct(213163)
+
     retrofitData.enqueue(object : Callback<com.ku.bazar.productpage.models.Product> {
         override fun onResponse(call: Call<com.ku.bazar.productpage.models.Product>, response: Response<com.ku.bazar.productpage.models.Product>) {
             if (response.isSuccessful) {
