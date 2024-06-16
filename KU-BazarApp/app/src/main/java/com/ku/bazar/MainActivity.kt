@@ -32,9 +32,9 @@ class MainActivity : ComponentActivity() {
                     color = Color.White
                 ) {
 
-//                    MyApp()
+                    MyApp()
 //                    Description()
-                    addProduct(navController = navController)
+//                    addProduct()
                 }
             }
         }

@@ -49,11 +49,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.ku.bazar.R
 import com.ku.bazar.productpage.ApiService
 import com.ku.bazar.chat.models.Conversation
 import com.ku.bazar.chat.screen.BASE_URL
+import com.ku.bazar.mainScreen.NavigationBarItems
 import com.ku.bazar.ui.theme.PrimaryPink
 import com.ku.bazar.ui.theme.TextBlack
 import com.ku.bazar.ui.theme.White
@@ -69,15 +71,13 @@ import java.util.Locale
 
 @Preview
 @Composable
-fun Description() {
+fun Description(navController: NavController, productId: String?) {
     val productState = remember { mutableStateOf<Product?>(null) }
 
-    LaunchedEffect(Unit) {
-        getProductDetails { result ->
-            if (result != null) {
+    LaunchedEffect(productId) {
+        productId?.let {
+            getProductDetails(it) { result ->
                 productState.value = result
-            } else {
-                productState.value = null
             }
         }
     }
@@ -120,12 +120,17 @@ fun Description() {
 
 
         }
+        // back arrow button
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 //.clickable { }
                 .align(Alignment.TopStart)
-                .padding(start = 30.dp, top = 40.dp)
+                .padding(start = 16.dp, top = 16.dp)
+                .clickable {
+                    // Navigate back to the previous screen
+                    navController.popBackStack()
+                }
         )
 
         {
@@ -343,7 +348,7 @@ fun Description() {
         }
     }
 
-private fun getProductDetails(onResult: (Product?) -> Unit
+private fun getProductDetails(productId: String, onResult: (Product?) -> Unit
 ) {
     val BASE_URL = "https://fine-moral-seasnail.ngrok-free.app" // Replace with your actual base URL
     val retrofitBuilder = Retrofit.Builder()
@@ -353,7 +358,7 @@ private fun getProductDetails(onResult: (Product?) -> Unit
         .create(ApiService::class.java)
 
 
-    val retrofitData = retrofitBuilder.getProduct(213163)
+    val retrofitData = retrofitBuilder.getProduct(productId.toInt())
     retrofitData.enqueue(object : Callback<com.ku.bazar.productpage.models.Product> {
         override fun onResponse(call: Call<com.ku.bazar.productpage.models.Product>, response: Response<com.ku.bazar.productpage.models.Product>) {
             if (response.isSuccessful) {
