@@ -29,6 +29,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowBack
 
 import androidx.compose.material.icons.filled.MailOutline
 import androidx.compose.runtime.Composable
@@ -50,9 +51,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
 import com.ku.bazar.R
-import com.ku.bazar.productpage.ApiService
-import com.ku.bazar.chat.models.Conversation
-import com.ku.bazar.chat.screen.BASE_URL
+
 import com.ku.bazar.ui.theme.PrimaryPink
 import com.ku.bazar.ui.theme.TextBlack
 import com.ku.bazar.ui.theme.White
@@ -63,9 +62,13 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.create
+import java.util.Locale
+
+import com.ku.bazar.productpage.BASE_URL
 
 
-@Preview
+
+
 @Composable
 fun Description() {
     val productState = remember { mutableStateOf<Product?>(null) }
@@ -79,7 +82,7 @@ fun Description() {
             }
         }
     }
-    val images = productState.value?.Image_url?: emptyList()
+    val images = productState.value?.Image_url ?: emptyList()
 
 
     Box(
@@ -210,8 +213,6 @@ fun Description() {
                     .background(color = Color(0xFFF5F5F5))
                     .padding(8.dp)
             )
-
-
         }
 
         Box(
@@ -266,96 +267,93 @@ fun Description() {
 
                 }
 
-
+                // Category Icon and Text
+                val categoryIcons = mapOf(
+                    "Furniture" to R.drawable.ic_furniture,
+                    "Clothing" to R.drawable.ic_clothing,
+                    "Electronics" to R.drawable.ic_electronics,
+                    "Books" to R.drawable.ic_books,
+                    "Other" to R.drawable.ic_other
+                )
                 Box(
                     modifier = Modifier
                         .width(130.dp)
                         .height(40.dp)
-                        // .offset(y = 100.dp, x = 10.dp)
                         .padding(start = 5.dp, top = 5.dp)
                         .background(
                             color = Color(0xFFF5F5F5),
                             shape = RoundedCornerShape(20.dp)
                         )
-
                 ) {
                     Row(
                         modifier = Modifier
                             .padding(4.dp)
                             .padding(horizontal = 8.dp, vertical = 4.dp),
                         verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceBetween
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
-                        Image(
-                            painter = painterResource(id = R.drawable.ic_instruments),
-                            contentDescription = "Category Icon",
-                            modifier = Modifier
-                                .size(24.dp) // Adjust size as needed
-                                .clip(CircleShape)
-                                .background(PrimaryPink)
-                                .padding(4.dp), // Adjust padding as needed
-                            contentScale = ContentScale.Crop
-                        )
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text(
-                            text = "Instruments",
-                            fontSize = 12.sp,
-                            fontWeight = FontWeight.Normal,
-                            color = TextBlack
-                        )
+                        productState.value?.let { product ->
+                            val category = product.category.capitalize(Locale.ROOT)
+                            val iconResId = categoryIcons[category]
+                            iconResId?.let { resourceId ->
+                                Image(
+                                    painter = painterResource(id = resourceId),
+                                    contentDescription = "Category Icon",
+                                    modifier = Modifier
+                                        .size(26.dp)
+                                        .clip(CircleShape)
+                                        .background(PrimaryPink)
+                                        .padding(4.dp),
+                                    contentScale = ContentScale.Crop
+                                )
+                            }
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Text(
+                                text = category,
+                                fontSize = 14.sp,
+                                fontWeight = FontWeight.Normal,
+                                color = TextBlack
+                            )
+                        }
                     }
                 }
-
             }
-
-
         }
 
-
-
-
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .align(Alignment.Center)
-                .offset(y = 240.dp, x = 10.dp)
-        )
-        {
-            productState.value?.let {
-                Text(
-                    text = it.Item_desc,
-                    fontSize = 16.sp,
-
-                    modifier = Modifier
-                        .padding(top = 30.dp)
-                )
-            }
-
-            productState.value?.let {
-                Text(
-                    text = "Seller: " + it.Item_seller,
-                    fontSize = 12.sp,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier
-                        .padding(top = 5.dp)
-
-                )
+            // Product Description and Seller
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.Center)
+                    .offset(y = 240.dp, x = 10.dp)
+            ) {
+                productState.value?.let { product ->
+                    Text(
+                        text = product.Item_desc,
+                        fontSize = 16.sp,
+                        modifier = Modifier.padding(top = 30.dp)
+                    )
+                    Text(
+                        text = "Seller: ${product.Item_seller}",
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.padding(top = 5.dp)
+                    )
+                }
             }
         }
     }
-}
 
-fun getProductDetails(onResult: (Product?) -> Unit
+private fun getProductDetails(onResult: (Product?) -> Unit
 ) {
-    val BASE_URL = "https://fine-moral-seasnail.ngrok-free.app" // Replace with your actual base URL
     val retrofitBuilder = Retrofit.Builder()
         .addConverterFactory(GsonConverterFactory.create())
         .baseUrl(BASE_URL)
         .build()
         .create(ApiService::class.java)
 
+    val retrofitData = retrofitBuilder.getProduct(213163)
 
-    val retrofitData = retrofitBuilder.getProduct(213153)
     retrofitData.enqueue(object : Callback<com.ku.bazar.productpage.models.Product> {
         override fun onResponse(call: Call<com.ku.bazar.productpage.models.Product>, response: Response<com.ku.bazar.productpage.models.Product>) {
             if (response.isSuccessful) {
@@ -372,10 +370,6 @@ fun getProductDetails(onResult: (Product?) -> Unit
         }
     })
 }
-
-
-
-
 
 
 
