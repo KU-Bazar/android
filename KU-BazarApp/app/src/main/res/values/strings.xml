@@ -10,4 +10,9 @@
     <string name="skip">Skip</string>
     <string name="con_description">This the first image of OnBoarding Screen</string>
     <string name="wall_des">This is the background image for wall</string>
+    <string name="home">Home</string>
+    <string name="favorite">Favorites</string>">
+    <string name="chat">Chat</string>
+    <string name="profile">Profile</string>
+
 </resources>

@@ -10,9 +10,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import com.ku.bazar.mainScreen.HomeScreen
 
-import com.ku.bazar.mainScreen.MyApp
-import com.ku.bazar.productpage.Description
+import com.ku.bazar.mainScreen.viewModel.HomeViewModel
+import com.ku.bazar.mainScreen.viewModel.FavoriteItemsViewModel
 
 
 import com.ku.bazar.ui.theme.KUBazarTheme
@@ -28,7 +29,10 @@ class MainActivity : ComponentActivity() {
                     color = Color.White
                 ) {
 
-                    MyApp()
+                    HomeScreen(homeViewModel = HomeViewModel(),
+                        favoriteItemsViewModel = FavoriteItemsViewModel(),
+                        userName = "Bipul") // for now mani please change it
+ //                   MyApp()
 //                    Description()
                 }
             }
