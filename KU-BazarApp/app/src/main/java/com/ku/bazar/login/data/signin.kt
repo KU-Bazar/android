@@ -37,26 +37,26 @@ fun handleSignIn(
 }
 
 
-
-fun checkAuthStatus(idToken: String, coroutineScope: CoroutineScope) {
-    coroutineScope.launch {
-        try {
-            val response = RetrofitClient.apiService.checkAuthStatus(idToken)
-            if (response.isSuccessful) {
-                val authStatus = response.body()
-                if (authStatus?.isAuthenticated == true) {
-                    Log.d("MainActivity", "User is authenticated: ${authStatus.message}")
-                } else {
-                    Log.e("MainActivity", "User is not authenticated: ${authStatus?.message}")
-                }
-            } else {
-                Log.e("MainActivity", "Failed to check auth status: ${response.errorBody()?.string()}")
-            }
-        } catch (e: Exception) {
-            Log.e("MainActivity", "Error checking auth status", e)
-        }
-    }
-}
+//
+//fun checkAuthStatus(idToken: String, coroutineScope: CoroutineScope) {
+//    coroutineScope.launch {
+//        try {
+//            val response = RetrofitClient.apiService.checkAuthStatus(idToken)
+//            if (response.isSuccessful) {
+//                val authStatus = response.body()
+//                if (authStatus?.isAuthenticated == true) {
+//                    Log.d("MainActivity", "User is authenticated: ${authStatus.message}")
+//                } else {
+//                    Log.e("MainActivity", "User is not authenticated: ${authStatus?.message}")
+//                }
+//            } else {
+//                Log.e("MainActivity", "Failed to check auth status: ${response.errorBody()?.string()}")
+//            }
+//        } catch (e: Exception) {
+//            Log.e("MainActivity", "Error checking auth status", e)
+//        }
+//    }
+//}
 
 @Composable
 fun rememberOneTapSignInState(): signInState {

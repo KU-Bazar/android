@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -62,7 +64,9 @@ fun HomeScreen(
     Box(modifier = Modifier.fillMaxSize()) {
            BackgroundPatterns()
 
+
         Column(modifier = Modifier.fillMaxSize()) {
+            PatternMain()
             LazyVerticalGrid(
                 modifier = Modifier.weight(1f),
                 columns = GridCells.Fixed(2)
@@ -135,7 +139,6 @@ fun HomeScreen(
                 }
             }
         }
-
         AppBottomNav(
             modifier = Modifier
                 .align(Alignment.BottomCenter)

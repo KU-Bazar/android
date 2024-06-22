@@ -167,26 +167,20 @@ fun AppBottomNavItem(
             .width(IntrinsicSize.Min),
         contentAlignment = Alignment.Center
     ) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
 
-
-            Icon(
-                painter = painterResource(id = icon),
-                contentDescription = title,
-                tint = if (active) PrimaryPink else TextBlack.copy(alpha = 1f),
-                modifier = Modifier.size(18.dp)
-            )
-
-            Spacer(
-                modifier = Modifier
-                    .padding(top = Dimension.sm)
-                    .fillMaxWidth()
-                    .height(2.dp)
-                    .clip(MaterialTheme.shapes.medium)
-                    .background(if (active) PrimaryPink else Color.Transparent)
-            )
-        }
+        Spacer(
+            modifier = Modifier
+                .padding(bottom = Dimension.sm)
+                .fillMaxWidth()
+                .height(Dimension.sm)
+                .clip(MaterialTheme.shapes.medium)
+                .background(if (active) PrimaryPink else Color.Transparent)
+        )
+        Icon(
+            painter = painterResource(id = icon),
+            contentDescription = title,
+            tint = if (active) PrimaryPink else Color.Black.copy(alpha = 0.5f),
+            modifier = Modifier.size(Dimension.smIcon)
+        )
     }
 }
