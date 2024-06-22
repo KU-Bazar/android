@@ -1,5 +1,6 @@
 package com.ku.bazar.mainScreen
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
@@ -11,15 +12,38 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.ku.bazar.R
 import com.ku.bazar.mainScreen.components.*
 import com.ku.bazar.mainScreen.data.MainScreen
 import com.ku.bazar.mainScreen.models.Product
 import com.ku.bazar.mainScreen.viewModel.FavoriteItemsViewModel
 import com.ku.bazar.mainScreen.viewModel.HomeViewModel
+import com.ku.bazar.ui.theme.White
+
+
+
+
+@Composable
+fun BackgroundPatterns(modifier: Modifier = Modifier) {
+    Row {
+        Spacer(modifier = Modifier.weight(2f))
+        Image(
+            painter = painterResource(id = R.drawable.topographic_5
+            ),
+            modifier = Modifier.size(300.dp),
+            contentDescription = null,
+            contentScale = ContentScale.Crop,
+        )
+    }
+
+}
 
 @Composable
 fun HomeScreen(
@@ -35,6 +59,8 @@ fun HomeScreen(
     val cartOffset = remember { mutableStateOf(IntOffset.Zero) }
 
     Box(modifier = Modifier.fillMaxSize()) {
+           BackgroundPatterns()
+
         Column(modifier = Modifier.fillMaxSize()) {
             LazyVerticalGrid(
                 modifier = Modifier.weight(1f),
@@ -108,10 +134,15 @@ fun HomeScreen(
         }
 
         AppBottomNav(
-            modifier = Modifier.align(Alignment.BottomCenter),
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .shadow(
+                    elevation = 10.dp,
+                    clip = false
+                ),
             activeRoute = currentRoute.value,
             bottomNavDestinations = listOf(MainScreen.Home, MainScreen.Favorite, MainScreen.Chat, MainScreen.Profile),
-            backgroundColor = Color.Black,
+            backgroundColor = Color.White,
             onCartOffsetMeasured = { cartOffset.value = it },
             onActiveRouteChange = { newRoute -> currentRoute.value = newRoute },
             navHostController

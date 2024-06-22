@@ -35,8 +35,9 @@ import com.ku.bazar.ui.theme.TextBlack
 fun CategoriesSection() {
     Box(
         modifier = Modifier
+            .padding(vertical = 4.dp, horizontal =24.dp)
             .fillMaxWidth()
-            .padding(vertical = 4.dp)
+
     ) {
         Column {
             Row(
@@ -54,11 +55,11 @@ fun CategoriesSection() {
                 horizontalArrangement = Arrangement.spacedBy(8.dp) // Adjust spacing as needed
             ) {
                 val categories = listOf(
-                    Pair("Chair", R.drawable.ic_chair),
-                    Pair("Books ", R.drawable.ic_book_photo),
-                    Pair("Instruments", R.drawable.ic_instruments),
+                    Pair("Furniture", R.drawable.ic_furniture),
+                    Pair("Clothing ", R.drawable.ic_clothing),
+                    Pair("Books", R.drawable.ic_book_photo),
                     Pair("Electronics", R.drawable.ic_electronics),
-                    Pair("Clothes", R.drawable.ic_clothing)
+                    Pair("Other", R.drawable.ic_other)
                 )
                 items(categories.size) { index ->
                     CategoryItem(name = categories[index].first, imageResId = categories[index].second)

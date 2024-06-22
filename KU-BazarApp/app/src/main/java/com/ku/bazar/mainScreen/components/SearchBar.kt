@@ -66,11 +66,10 @@ fun SearchBar(
 
 
             backgroundColor = Color(0xFFF5F5F5),
-            textColor = Color(0xFFA3A3A3),
+            textColor = Color(0xFF727272),
             imeAction = ImeAction.Search,
             //   shape = MaterialTheme.shapes.large,
             leadingIcon = {
-
                 Icon(
                     modifier = Modifier
                         .padding(end = 8.dp)
@@ -80,7 +79,6 @@ fun SearchBar(
                     tint = MaterialTheme.colors.onBackground.copy(alpha = 0.4f),
                 )
             },
-
             onFocusChange = onFocusChange,
             onKeyboardActionClicked = onImeActionClicked,
 

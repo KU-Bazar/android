@@ -36,12 +36,14 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.ku.bazar.mainScreen.data.MainScreen
 import com.ku.bazar.navigation.Screen
 import kotlin.math.roundToInt
 import com.ku.bazar.ui.theme.Dimension
 import com.ku.bazar.ui.theme.PrimaryPink
+import com.ku.bazar.ui.theme.TextBlack
 
 
 @Composable
@@ -69,7 +71,7 @@ fun AppBottomNav(
                     cartOffsetY = coordinates.size.height
                 }
                 .fillMaxWidth()
-                .padding(horizontal = Dimension.pagePadding, vertical = Dimension.pagePadding / 2),
+                .padding(horizontal = Dimension.pagePadding, vertical = Dimension.pagePadding / 4),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceAround,
         ) {
@@ -105,15 +107,15 @@ fun AppBottomNav(
                 .align(Alignment.TopCenter)
                 .offset{
                     IntOffset(
-                        y = with(density) { (-cartOffsetY / 2).toDp().roundToPx() },
+                        y = with(density) { (-cartOffsetY / 3).toDp().roundToPx() },
                         x = 0,
                     )
                 }
-                .border(width = Dimension.sm / 2, color = PrimaryPink, shape = CircleShape),
+                .border(width = 2.dp, color = PrimaryPink, shape = CircleShape),
             painter = painterResource(id = R.drawable.ic_shopping_bag),
             backgroundColor = if (activeRoute == MainScreen.Cart.route) PrimaryPink else Color.White,
-            iconSize = Dimension.mdIcon * 0.8f,
-            iconTint = if (activeRoute == MainScreen.Cart.route) Color(0xF8F8FF) else Color.Gray.copy(alpha = 0.5f),
+            iconSize = 18.dp,
+            iconTint = if (activeRoute == MainScreen.Cart.route) Color(0xFFF8F8FF) else TextBlack.copy(alpha = 1f),
             onButtonClicked = {
                 onActiveRouteChange(MainScreen.Cart.route)
                 navHostController.navigate(Screen.Sell.route)
@@ -124,6 +126,7 @@ fun AppBottomNav(
     }
 }
 
+
 @Composable
 fun AppBottomNavItem(
     modifier: Modifier = Modifier,
@@ -132,25 +135,33 @@ fun AppBottomNavItem(
     icon: Int,
     onRouteClicked: () -> Unit,
 ) {
-    Column(
+    Box(
         modifier = modifier
-            .width(IntrinsicSize.Min)
-            .clickable { onRouteClicked() },
-        horizontalAlignment = Alignment.CenterHorizontally,
+            .clickable { onRouteClicked() }
+            .padding(10.dp)
+            .width(IntrinsicSize.Min),
+        contentAlignment = Alignment.Center
     ) {
-        Spacer(
-            modifier = Modifier
-                .padding(bottom = Dimension.sm)
-                .fillMaxWidth()
-                .height(Dimension.sm)
-                .clip(MaterialTheme.shapes.medium)
-                .background(if (active) PrimaryPink else Color.Transparent)
-        )
-        Icon(
-            painter = painterResource(id = icon),
-            contentDescription = title,
-            tint = if (active) PrimaryPink else Color.Gray.copy(alpha = 0.5f),
-            modifier = Modifier.size(Dimension.smIcon)
-        )
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+
+
+            Icon(
+                painter = painterResource(id = icon),
+                contentDescription = title,
+                tint = if (active) PrimaryPink else TextBlack.copy(alpha = 1f),
+                modifier = Modifier.size(18.dp)
+            )
+
+            Spacer(
+                modifier = Modifier
+                    .padding(top = Dimension.sm)
+                    .fillMaxWidth()
+                    .height(2.dp)
+                    .clip(MaterialTheme.shapes.medium)
+                    .background(if (active) PrimaryPink else Color.Transparent)
+            )
+        }
     }
 }
