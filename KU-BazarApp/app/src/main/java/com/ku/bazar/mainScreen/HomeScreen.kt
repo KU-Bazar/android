@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -14,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.ku.bazar.mainScreen.components.*
 import com.ku.bazar.mainScreen.data.MainScreen
@@ -26,7 +26,8 @@ fun HomeScreen(
     navHostController: NavHostController,
     homeViewModel: HomeViewModel,
     favoriteItemsViewModel: FavoriteItemsViewModel,
-    userName: String
+    userName: String,
+    navController: NavController
 ) {
     val searchQuery by remember { homeViewModel.searchQuery }
     val productsListState by homeViewModel.products
@@ -70,7 +71,7 @@ fun HomeScreen(
                     span = { GridItemSpan(2) }
                 ) {
                     SearchBar(
-                        value = searchQuery,
+                        value = homeViewModel.searchQuery.toString(),
                         onValueChange = { homeViewModel.updateSearchInputValue(it) },
                         onFocusChange = {},
                         onImeActionClicked = { /* We should run the search now */ }
@@ -89,7 +90,8 @@ fun HomeScreen(
                     ProductSection(
                         sectionTitle = "Recently Added",
                         products = productsListState,
-                        favoriteItemsViewModel = favoriteItemsViewModel
+                        favoriteItemsViewModel = favoriteItemsViewModel,
+                        navController = navController
                     )
                 }
 
@@ -97,7 +99,8 @@ fun HomeScreen(
                     val product = productsListState[index]
                     ProductItem(
                         product = product,
-                        favoriteItemsViewModel = favoriteItemsViewModel
+                        favoriteItemsViewModel = favoriteItemsViewModel,
+                        navController = navController
                     )
                 }
 

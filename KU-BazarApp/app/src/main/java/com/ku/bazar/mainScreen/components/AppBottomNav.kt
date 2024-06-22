@@ -42,7 +42,7 @@ import com.ku.bazar.navigation.Screen
 import kotlin.math.roundToInt
 import com.ku.bazar.ui.theme.Dimension
 import com.ku.bazar.ui.theme.PrimaryPink
-
+import com.ku.bazar.addProduct.addProduct
 
 @Composable
 fun AppBottomNav(
@@ -90,8 +90,7 @@ fun AppBottomNav(
                 }
             }
         }
-
-        DrawableButton(
+        AddProductButton(
             modifier = Modifier
                 .onGloballyPositioned { coordinates ->
                     val offset = coordinates.positionInWindow()
@@ -103,26 +102,39 @@ fun AppBottomNav(
                     )
                 }
                 .align(Alignment.TopCenter)
-                .offset{
+                .offset {
                     IntOffset(
                         y = with(density) { (-cartOffsetY / 2).toDp().roundToPx() },
                         x = 0,
                     )
                 }
                 .border(width = Dimension.sm / 2, color = PrimaryPink, shape = CircleShape),
-            painter = painterResource(id = R.drawable.ic_shopping_bag),
-            backgroundColor = if (activeRoute == MainScreen.Cart.route) PrimaryPink else Color.White,
-            iconSize = Dimension.mdIcon * 0.8f,
-            iconTint = if (activeRoute == MainScreen.Cart.route) Color(0xF8F8FF) else Color.Gray.copy(alpha = 0.5f),
-            onButtonClicked = {
+
+            onAddProduct = {
                 onActiveRouteChange(MainScreen.Cart.route)
-                navHostController.navigate(Screen.Sell.route)
-                              },
-            shape = CircleShape,
-            paddingValue = PaddingValues(Dimension.md)
+                navHostController.navigate(Screen.Sell.route) },
         )
     }
 }
+@Composable
+fun AddProductButton(
+    modifier: Modifier = Modifier,
+    onAddProduct: () -> Unit
+) {
+    DrawableButton(
+        modifier = modifier,
+        painter = painterResource(id = R.drawable.ic_shopping_bag),
+        backgroundColor = Color.White,
+        iconSize = Dimension.mdIcon * 0.8f,
+        iconTint = Color.Gray.copy(alpha = 0.5f),
+        onButtonClicked = {
+            onAddProduct() // Call the callback function
+        },
+        shape = CircleShape,
+        paddingValue = PaddingValues(Dimension.md)
+    )
+}
+
 
 @Composable
 fun AppBottomNavItem(

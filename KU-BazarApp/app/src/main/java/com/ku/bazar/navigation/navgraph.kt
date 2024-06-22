@@ -13,6 +13,8 @@ import com.ku.bazar.login.screen.login
 import com.ku.bazar.login.screen.loginFirst
 import com.ku.bazar.login.screen.register
 import com.ku.bazar.mainScreen.HomeScreen
+import com.ku.bazar.productpage.Description
+
 import com.ku.bazar.mainScreen.viewModel.FavoriteItemsViewModel
 import com.ku.bazar.mainScreen.viewModel.HomeViewModel
 import com.ku.bazar.onBoarding.component.OnBoardingViewModel
@@ -28,7 +30,9 @@ sealed class Screen(val route: String) {
     object Register : Screen("register")
     object Home : Screen("home")
     object Sell : Screen("sell")
-}
+    object Description : Screen("description/{productId}") {
+        fun createRoute(productId: Int) = "description/$productId"
+    }}
 
 @Composable
 fun Nav() {
@@ -63,13 +67,20 @@ fun Nav() {
                 composable(Screen.Register.route) {
                     register(navController)
                 }
+                composable(Screen.Description.route) { backStackEntry ->
+                    val productId = backStackEntry.arguments?.getString("productId")?.toIntOrNull()
+                    productId?.let {
+                        Description(navController, it)
+                    }
+                }
 
                 composable(Screen.Home.route) {
                     HomeScreen(
                         navController,
                         homeViewModel,
                         favoriteItemsViewModel,
-                        userName
+                        userName,
+                        navController
                     )
                 }
 
@@ -96,13 +107,13 @@ fun Nav() {
                 composable(Screen.Register.route) {
                     register(navController)
                 }
-
                 composable(Screen.Home.route) {
                     HomeScreen(
                         navController,
                         homeViewModel,
                         favoriteItemsViewModel,
-                        userName
+                        userName,
+                        navController
                     )
                 }
 
