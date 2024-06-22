@@ -116,11 +116,23 @@ fun AppBottomNav(
             backgroundColor = if (activeRoute == MainScreen.Cart.route) PrimaryPink else Color.White,
             iconSize = 18.dp,
             iconTint = if (activeRoute == MainScreen.Cart.route) Color(0xFFF8F8FF) else TextBlack.copy(alpha = 1f),
-            onButtonClicked = {
-                .border(width = Dimension.sm / 2, color = PrimaryPink, shape = CircleShape),
+                        onButtonClicked = {
+                onActiveRouteChange(MainScreen.Cart.route)
+                navHostController.navigate(Screen.Sell.route)
+
+                              },
+              
+              
 
             onAddProduct = {
                 onActiveRouteChange(MainScreen.Cart.route)
+                navHostController.navigate(Screen.Sell.route)
+
+                              },
+
+            shape = CircleShape,
+
+            paddingValue = PaddingValues(Dimension.md)
                 navHostController.navigate(Screen.Sell.route) },
         )
     }
@@ -184,3 +196,5 @@ fun AppBottomNavItem(
         }
     }
 }
+
+//Plz fix the code
