@@ -40,13 +40,13 @@ fun Welcome(userName: String) {
         Text(
             text = "Find Desired Products Near",
             style = MaterialTheme.typography.body1.copy(
-                fontSize = 18.sp
+                fontSize = 15.sp
             )
         )
         Text(
             text = "Kathmandu University",
             style = MaterialTheme.typography.body1.copy(
-                fontSize = 18.sp,
+                fontSize = 25.sp,
                 fontWeight = FontWeight.Bold
             )
         )

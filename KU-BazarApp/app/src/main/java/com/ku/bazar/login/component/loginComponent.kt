@@ -85,7 +85,7 @@ fun registerButton(
             .size(height = 50.dp, width = 120.dp)
             .clip(RoundedCornerShape(50.dp))
             .background(color = Color.White)
-            .border(width = 2.dp, color = Color.Red)
+         .border(width = 2.dp, color=Color.Red )
             .clickable (
                 onClick = onClick
             )
