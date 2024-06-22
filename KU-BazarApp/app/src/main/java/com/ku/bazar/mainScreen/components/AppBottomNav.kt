@@ -119,8 +119,11 @@ fun AppBottomNav(
             onButtonClicked = {
                 onActiveRouteChange(MainScreen.Cart.route)
                 navHostController.navigate(Screen.Sell.route)
+
                               },
+
             shape = CircleShape,
+
             paddingValue = PaddingValues(Dimension.md)
         )
     }
@@ -165,3 +168,5 @@ fun AppBottomNavItem(
         }
     }
 }
+
+//Plz fix the code
