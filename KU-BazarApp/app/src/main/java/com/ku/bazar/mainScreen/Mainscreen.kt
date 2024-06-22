@@ -137,16 +137,16 @@ class FavoriteItemsViewModel : ViewModel() {
 
 @Composable
 fun MyApp() {
-    fetchProducts(
-        onSuccess = { products ->
-            Log.d("Product", "Fetched products: $products")
-        },
-        onFailure = { errorMessage ->
-            // Handle the failure here
-            // For example, show an error message to the user
-            Log.d("Product", "Error fetching products: $errorMessage")
-        }
-    )
+//    fetchProducts(
+//        onSuccess = { products ->
+//            Log.d("Product", "Fetched products: $products")
+//        },
+//        onFailure = { errorMessage ->
+//            // Handle the failure here
+//            // For example, show an error message to the user
+//            Log.d("Product", "Error fetching products: $errorMessage")
+//        }
+//    )
     val navController = rememberNavController()
     val favoriteItemsViewModel: FavoriteItemsViewModel = viewModel()
 
@@ -213,7 +213,10 @@ fun BackgroundPattern(modifier: Modifier = Modifier) {
 
 
 @Composable
-fun SearchBar() {
+fun SearchBar(value: String,
+              onValueChange: (String) -> Unit,
+              onFocusChange: (Boolean) -> Unit,
+              onImeActionClicked: () -> Unit) {
     var searchText by remember { mutableStateOf("") }
     Column (
         modifier = Modifier
@@ -596,37 +599,37 @@ enum class NavigationBarItems(val icon: ImageVector, val route: String) {
     Chat(icon = Icons.Default.Email, route = "chat_screen"),
 }
 
-private fun fetchProducts(onSuccess: (List<Product>) -> Unit, onFailure: (String) -> Unit) {
-    val BASE_URL = "https://fine-moral-seasnail.ngrok-free.app" // Replace with your actual base URL
-    val retrofit = Retrofit.Builder()
-        .addConverterFactory(GsonConverterFactory.create())
-        .baseUrl(BASE_URL)
-        .build()
-
-    val apiService = retrofit.create(ApiService::class.java)
-    val call = apiService.getProducts()
-
-    call.enqueue(object : Callback<List<Product>> {
-        override fun onResponse(call: Call<List<Product>>, response: Response<List<Product>>) {
-            if (response.isSuccessful) {
-                val products = response.body()
-                if (products != null) {
-                    onSuccess(products)
-                } else {
-                    onFailure("No products found")
-                }
-            } else {
-                onFailure("Response not successful: ${response.code()} - ${response.message()}")
-                // Log error body if available
-                Log.d("Product", "Response body: ${response.errorBody()?.string()}")
-            }
-        }
-
-        override fun onFailure(call: Call<List<Product>>, t: Throwable) {
-            onFailure("Failed to fetch products: ${t.message}")
-        }
-    })
-}
+//private fun fetchProducts(onSuccess: (List<Product>) -> Unit, onFailure: (String) -> Unit) {
+//    val BASE_URL = "https://fine-moral-seasnail.ngrok-free.app" // Replace with your actual base URL
+//    val retrofit = Retrofit.Builder()
+//        .addConverterFactory(GsonConverterFactory.create())
+//        .baseUrl(BASE_URL)
+//        .build()
+//
+//    val apiService = retrofit.create(ApiService::class.java)
+//    val call = apiService.getProducts()
+//
+//    call.enqueue(object : Callback<List<Product>> {
+//        override fun onResponse(call: Call<List<Product>>, response: Response<List<Product>>) {
+//            if (response.isSuccessful) {
+//                val products = response.body()
+//                if (products != null) {
+//                    onSuccess(products)
+//                } else {
+//                    onFailure("No products found")
+//                }
+//            } else {
+//                onFailure("Response not successful: ${response.code()} - ${response.message()}")
+//                // Log error body if available
+//                Log.d("Product", "Response body: ${response.errorBody()?.string()}")
+//            }
+//        }
+//
+//        override fun onFailure(call: Call<List<Product>>, t: Throwable) {
+//            onFailure("Failed to fetch products: ${t.message}")
+//        }
+//    })
+//}
 
 @Composable
 
@@ -803,25 +806,25 @@ fun MainScreen(
                 .padding(16.dp)
         ) {
             TopBar()
-            SearchBar()
-            CategoriesSection()
-            ProductSection(sectionTitle = "Recently Added", products = productsListState.value, favoriteItemsViewModel = favoriteItemsViewModel)
+//            SearchBar()
+//            CategoriesSection()
+//            ProductSection(sectionTitle = "Recently Added", products = productsListState.value, favoriteItemsViewModel = favoriteItemsViewModel)
 
-            NavBar(navController = navController)
+//            NavBar(navController = navController)
 
             // Fetch products list from the database
-            LaunchedEffect(Unit) {
-                fetchProducts(
-                    onSuccess = { products ->
-                        productsListState.value = products
-                        Log.d("Product", "Fetched products: $products")
-                    },
-                    onFailure = { errorMessage ->
-                        // Handle the failure here
-                        Log.d("Product", "Error fetching products: $errorMessage")
-                    }
-                )
-            }
+//            LaunchedEffect(Unit) {
+//                fetchProducts(
+//                    onSuccess = { products ->
+//                        productsListState.value = products
+//                        Log.d("Product", "Fetched products: $products")
+//                    },
+//                    onFailure = { errorMessage ->
+//                        // Handle the failure here
+//                        Log.d("Product", "Error fetching products: $errorMessage")
+//                    }
+//                )
+//            }
             LazyVerticalGrid(
                 columns = GridCells.Fixed(2),
                 modifier = Modifier.fillMaxSize(),
