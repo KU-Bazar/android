@@ -111,7 +111,7 @@ fun HomeScreen(
             modifier = Modifier.align(Alignment.BottomCenter),
             activeRoute = currentRoute.value,
             bottomNavDestinations = listOf(MainScreen.Home, MainScreen.Favorite, MainScreen.Chat, MainScreen.Profile),
-            backgroundColor = Color(0xF8F8FF),
+            backgroundColor = Color.Black,
             onCartOffsetMeasured = { cartOffset.value = it },
             onActiveRouteChange = { newRoute -> currentRoute.value = newRoute },
             navHostController

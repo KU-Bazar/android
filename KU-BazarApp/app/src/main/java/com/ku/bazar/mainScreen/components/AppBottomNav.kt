@@ -49,7 +49,7 @@ fun AppBottomNav(
     modifier: Modifier = Modifier,
     activeRoute: String,
     bottomNavDestinations: List<MainScreen>,
-    backgroundColor: Color,
+    backgroundColor: Color= Color.Black,
     onCartOffsetMeasured: (offset: IntOffset) -> Unit,
     onActiveRouteChange: (route: String) -> Unit,
     navHostController: NavHostController
@@ -111,7 +111,7 @@ fun AppBottomNav(
                 }
                 .border(width = Dimension.sm / 2, color = PrimaryPink, shape = CircleShape),
             painter = painterResource(id = R.drawable.ic_shopping_bag),
-            backgroundColor = if (activeRoute == MainScreen.Cart.route) PrimaryPink else Color(0xF8F8FF),
+            backgroundColor = if (activeRoute == MainScreen.Cart.route) PrimaryPink else Color.White,
             iconSize = Dimension.mdIcon * 0.8f,
             iconTint = if (activeRoute == MainScreen.Cart.route) Color(0xF8F8FF) else Color.Gray.copy(alpha = 0.5f),
             onButtonClicked = {
