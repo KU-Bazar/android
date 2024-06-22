@@ -212,38 +212,38 @@ fun BackgroundPattern(modifier: Modifier = Modifier) {
 
 
 
-@Composable
-fun SearchBar(value: String,
-              onValueChange: (String) -> Unit,
-              onFocusChange: (Boolean) -> Unit,
-              onImeActionClicked: () -> Unit) {
-    var searchText by remember { mutableStateOf("") }
-    Column (
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(bottom = 10.dp)
-    ) {
-        Text(
-            text = "Find Desired Products Near" ,
-            modifier = Modifier.padding(bottom = 4.dp),
-            fontSize = 15.sp,
-            fontWeight = FontWeight.Normal,
-            color = TextBlack
-        )
-        Text(
-            text = "Kathmandu University",
-            modifier = Modifier.padding(bottom = 8.dp),
-            fontSize = 25.sp,
-            fontWeight = FontWeight.ExtraBold,
-            color = TextBlack
-        )
-        SearchBarWithButton(
-            searchText = searchText,
-            onSearchTextChange = { searchText = it },
-            onSearchButtonClick = { /* Implement search functionality here */ }
-        )
-    }
-}
+//@Composable
+//fun SearchBar(value: String,
+//              onValueChange: (String) -> Unit,
+//              onFocusChange: (Boolean) -> Unit,
+//              onImeActionClicked: () -> Unit) {
+//    var searchText by remember { mutableStateOf("") }
+//    Column (
+//        modifier = Modifier
+//            .fillMaxWidth()
+//            .padding(bottom = 10.dp)
+//    ) {
+//        Text(
+//            text = "Find Desired Products Near" ,
+//            modifier = Modifier.padding(bottom = 4.dp),
+//            fontSize = 15.sp,
+//            fontWeight = FontWeight.Normal,
+//            color = TextBlack
+//        )
+//        Text(
+//            text = "Kathmandu University",
+//            modifier = Modifier.padding(bottom = 8.dp),
+//            fontSize = 25.sp,
+//            fontWeight = FontWeight.ExtraBold,
+//            color = TextBlack
+//        )
+//        SearchBarWithButton(
+//            searchText = searchText,
+//            onSearchTextChange = { searchText = it },
+//            onSearchButtonClick = { /* Implement search functionality here */ }
+//        )
+//    }
+//}
 @Composable
 fun SearchBarWithButton(
     searchText: String,

@@ -14,9 +14,6 @@ import androidx.compose.foundation.text.KeyboardActionScope
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Text
-import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.Send
 import androidx.compose.runtime.Composable
@@ -63,8 +60,6 @@ fun SearchBar(
                 vertical = Dimension.pagePadding.times(0.7f)
             ),
             shape = RoundedCornerShape(100.dp),
-
-
             backgroundColor = Color(0xFFF5F5F5),
             textColor = Color(0xFF727272),
             imeAction = ImeAction.Search,
@@ -81,17 +76,13 @@ fun SearchBar(
             },
             onFocusChange = onFocusChange,
             onKeyboardActionClicked = onImeActionClicked,
-
-
             )
 
 
         Spacer(modifier = Modifier.padding(horizontal = 8.dp))
         IconButton(
             onClick = {}
-
             ) {
-
             Icon(
                 imageVector = Icons.AutoMirrored.Outlined.Send,
                 contentDescription = null,

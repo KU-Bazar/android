@@ -48,6 +48,28 @@ import com.ku.bazar.addProduct.addProduct
 
 
 @Composable
+fun AddProductButton(
+    modifier: Modifier = Modifier,
+    onAddProduct: () -> Unit
+) {
+    DrawableButton(
+        modifier = modifier,
+        painter = painterResource(id = R.drawable.ic_shopping_bag),
+        backgroundColor = Color.White,
+        iconSize = Dimension.mdIcon * 0.8f,
+        iconTint = Color.Gray.copy(alpha = 0.5f),
+        onButtonClicked = {
+            onAddProduct() // Call the callback function
+        },
+        shape = CircleShape,
+        paddingValue = PaddingValues(Dimension.md)
+    )
+}
+
+
+
+
+@Composable
 fun AppBottomNav(
     modifier: Modifier = Modifier,
     activeRoute: String,
@@ -93,7 +115,8 @@ fun AppBottomNav(
                 }
             }
         }
-        AddProductButton(
+
+        DrawableButton(
             modifier = Modifier
                 .onGloballyPositioned { coordinates ->
                     val offset = coordinates.positionInWindow()
@@ -105,7 +128,7 @@ fun AppBottomNav(
                     )
                 }
                 .align(Alignment.TopCenter)
-                .offset {
+                .offset{
                     IntOffset(
                         y = with(density) { (-cartOffsetY / 3).toDp().roundToPx() },
                         x = 0,
@@ -115,17 +138,8 @@ fun AppBottomNav(
             painter = painterResource(id = R.drawable.ic_shopping_bag),
             backgroundColor = if (activeRoute == MainScreen.Cart.route) PrimaryPink else Color.White,
             iconSize = 18.dp,
-            iconTint = if (activeRoute == MainScreen.Cart.route) Color(0xFFF8F8FF) else TextBlack.copy(
-                alpha = 1f
-            ),
+            iconTint = if (activeRoute == MainScreen.Cart.route) Color(0xFFF8F8FF) else TextBlack.copy(alpha = 1f),
             onButtonClicked = {
-                onActiveRouteChange(MainScreen.Cart.route)
-                navHostController.navigate(Screen.Sell.route)
-
-            },
-
-
-            onAddProduct = {
                 onActiveRouteChange(MainScreen.Cart.route)
                 navHostController.navigate(Screen.Sell.route)
 
@@ -133,70 +147,46 @@ fun AppBottomNav(
 
             shape = CircleShape,
 
-            paddingValue = PaddingValues(Dimension.md),
-                    navHostController.navigate (Screen.Sell.route)
-        )
-    }
-
-
-    @Composable
-    fun AddProductButton(
-        modifier: Modifier = Modifier,
-        onAddProduct: () -> Unit
-    ) {
-        DrawableButton(
-            modifier = modifier,
-            painter = painterResource(id = R.drawable.ic_shopping_bag),
-            backgroundColor = Color.White,
-            iconSize = Dimension.mdIcon * 0.8f,
-            iconTint = Color.Gray.copy(alpha = 0.5f),
-            onButtonClicked = {
-                onAddProduct() // Call the callback function
-            },
-            shape = CircleShape,
             paddingValue = PaddingValues(Dimension.md)
         )
     }
+}
 
-
-    @Composable
-    fun AppBottomNavItem(
-        modifier: Modifier = Modifier,
-        active: Boolean,
-        title: String,
-        icon: Int,
-        onRouteClicked: () -> Unit,
+@Composable
+fun AppBottomNavItem(
+    modifier: Modifier = Modifier,
+    active: Boolean,
+    title: String,
+    icon: Int,
+    onRouteClicked: () -> Unit,
+) {
+    Box(
+        modifier = modifier
+            .clickable { onRouteClicked() }
+            .padding(10.dp)
+            .width(IntrinsicSize.Min),
+        contentAlignment = Alignment.Center
     ) {
-        Box(
-            modifier = modifier
-                .clickable { onRouteClicked() }
-                .padding(10.dp)
-                .width(IntrinsicSize.Min),
-            contentAlignment = Alignment.Center
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-            ) {
 
 
-                Icon(
-                    painter = painterResource(id = icon),
-                    contentDescription = title,
-                    tint = if (active) PrimaryPink else TextBlack.copy(alpha = 1f),
-                    modifier = Modifier.size(18.dp)
-                )
+            Icon(
+                painter = painterResource(id = icon),
+                contentDescription = title,
+                tint = if (active) PrimaryPink else TextBlack.copy(alpha = 1f),
+                modifier = Modifier.size(18.dp)
+            )
 
-                Spacer(
-                    modifier = Modifier
-                        .padding(top = Dimension.sm)
-                        .fillMaxWidth()
-                        .height(2.dp)
-                        .clip(MaterialTheme.shapes.medium)
-                        .background(if (active) PrimaryPink else Color.Transparent)
-                )
-            }
+            Spacer(
+                modifier = Modifier
+                    .padding(top = Dimension.sm)
+                    .fillMaxWidth()
+                    .height(2.dp)
+                    .clip(MaterialTheme.shapes.medium)
+                    .background(if (active) PrimaryPink else Color.Transparent)
+            )
         }
     }
 }
-
-//Plz fix the code
