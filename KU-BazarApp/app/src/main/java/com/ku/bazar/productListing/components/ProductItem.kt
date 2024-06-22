@@ -39,8 +39,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import coil.compose.AsyncImage
 import com.ku.bazar.R
-import com.ku.bazar.mainScreen.FavoriteItem
-import com.ku.bazar.mainScreen.FavoriteItemsViewModel
+
 import com.ku.bazar.productpage.models.Product
 import com.ku.bazar.ui.theme.PrimaryPink
 import com.ku.bazar.ui.theme.SecondaryPink

@@ -8,8 +8,8 @@ data class Product(
     val Item_desc: String,
     val Item_price: Int,
     val Item_seller: String,
-    //val category: String,
-    @SerializedName("Image_url") val Image_url: List<String>?,
-    val category: Category
+    val category: String,
+    @SerializedName("Image_url") val Image_url: List<String>?
+//    val category: Category
 //    var isFavorite: Boolean = false
 )
