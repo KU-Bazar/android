@@ -29,7 +29,7 @@ fun HomeScreen(
     userName: String
 ) {
     val searchQuery by remember { homeViewModel.searchQuery }
-    val productsListState = remember { mutableStateOf<List<Product>>(emptyList()) }
+    val productsListState by homeViewModel.products
 
     val currentRoute = remember { mutableStateOf(MainScreen.Home.route) }
     val cartOffset = remember { mutableStateOf(IntOffset.Zero) }
@@ -88,13 +88,13 @@ fun HomeScreen(
                 ) {
                     ProductSection(
                         sectionTitle = "Recently Added",
-                        products = productsListState.value,
+                        products = productsListState,
                         favoriteItemsViewModel = favoriteItemsViewModel
                     )
                 }
 
-                items(productsListState.value.size) { index ->
-                    val product = productsListState.value[index]
+                items(productsListState.size) { index ->
+                    val product = productsListState[index]
                     ProductItem(
                         product = product,
                         favoriteItemsViewModel = favoriteItemsViewModel
@@ -111,7 +111,7 @@ fun HomeScreen(
             modifier = Modifier.align(Alignment.BottomCenter),
             activeRoute = currentRoute.value,
             bottomNavDestinations = listOf(MainScreen.Home, MainScreen.Favorite, MainScreen.Chat, MainScreen.Profile),
-            backgroundColor = Color(0xF8F8FF),
+            backgroundColor = Color.Black,
             onCartOffsetMeasured = { cartOffset.value = it },
             onActiveRouteChange = { newRoute -> currentRoute.value = newRoute },
             navHostController

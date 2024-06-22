@@ -70,7 +70,8 @@ fun ProductSection(
         }
         LazyVerticalGrid(
             columns = GridCells.Fixed(2), // 2 items per row
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize()
                 .weight(1f)
                 .padding(bottom = 56.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp),
@@ -117,8 +118,8 @@ fun ProductItem(
         shape = RoundedCornerShape(8.dp),
         modifier = Modifier
             .fillMaxWidth()
-            .aspectRatio(1f) //square aspect ratio
-            .padding(vertical = 8.dp),
+            .aspectRatio(1f) // square aspect ratio
+            .padding(8.dp), // Add padding here
     ) {
         Box(
             modifier = Modifier
@@ -194,7 +195,7 @@ fun ProductItem(
                     overflow = TextOverflow.Ellipsis
                 )
                 Text(
-                    text = "$${product.Item_price}", // Assuming Item_price is in dollars
+                    text = "Rs.${product.Item_price}", // Assuming Item_price is in dollars
                     style = TextStyle(color = Color.White, fontWeight = FontWeight.Bold, fontSize = 16.sp),
                 )
                 Button(
