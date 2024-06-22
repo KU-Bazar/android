@@ -7,7 +7,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -29,15 +28,12 @@ import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowBack
 
 import androidx.compose.material.icons.filled.MailOutline
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import coil.compose.rememberImagePainter
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -46,14 +42,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
 import com.ku.bazar.R
 
 import com.ku.bazar.ui.theme.PrimaryPink
-import com.ku.bazar.ui.theme.TextBlack
 import com.ku.bazar.ui.theme.White
 import com.ku.bazar.productpage.models.Product
 import retrofit2.Call
@@ -61,20 +56,14 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.create
-import java.util.Locale
-
-import com.ku.bazar.productpage.BASE_URL
-
-
 
 
 @Composable
-fun Description() {
+fun Description(navController: NavHostController, productId: Int) {
     val productState = remember { mutableStateOf<Product?>(null) }
 
     LaunchedEffect(Unit) {
-        getProductDetails { result ->
+        getProductDetails(productId) { result ->
             if (result != null) {
                 productState.value = result
             } else {
@@ -344,7 +333,7 @@ fun Description() {
         }
     }
 
-private fun getProductDetails(onResult: (Product?) -> Unit
+private fun getProductDetails(productId: Int, onResult: (Product?) -> Unit
 ) {
     val retrofitBuilder = Retrofit.Builder()
         .addConverterFactory(GsonConverterFactory.create())
@@ -352,7 +341,7 @@ private fun getProductDetails(onResult: (Product?) -> Unit
         .build()
         .create(ApiService::class.java)
 
-    val retrofitData = retrofitBuilder.getProduct(213163)
+    val retrofitData = retrofitBuilder.getProduct(productId)
 
     retrofitData.enqueue(object : Callback<com.ku.bazar.productpage.models.Product> {
         override fun onResponse(call: Call<com.ku.bazar.productpage.models.Product>, response: Response<com.ku.bazar.productpage.models.Product>) {

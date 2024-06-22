@@ -2,6 +2,7 @@ package com.ku.bazar.mainScreen.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -42,6 +43,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
+import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.ku.bazar.R
 import com.ku.bazar.mainScreen.data.data.getDescriptionForItem
@@ -52,12 +54,16 @@ import com.ku.bazar.ui.theme.PrimaryPink
 import com.ku.bazar.ui.theme.SecondaryPink
 import com.ku.bazar.ui.theme.TextBlack
 import com.ku.bazar.ui.theme.White
+import com.ku.bazar.navigation.Nav
+import com.ku.bazar.navigation.Screen
+
 
 @Composable
 fun ProductSection(
     sectionTitle: String,
     products: List<Product>,
-    favoriteItemsViewModel: FavoriteItemsViewModel
+    favoriteItemsViewModel: FavoriteItemsViewModel,
+    navController: NavController
 ) {
     Column(modifier = Modifier.padding(vertical = 5.dp)) {
         Row(
@@ -80,7 +86,8 @@ fun ProductSection(
             items(products) { product ->
                 ProductItem(
                     product = product,
-                    favoriteItemsViewModel = favoriteItemsViewModel
+                    favoriteItemsViewModel = favoriteItemsViewModel,
+                    navController = navController
                 )
             }
         }
@@ -90,7 +97,9 @@ fun ProductSection(
 @Composable
 fun ProductItem(
     product: Product,
-    favoriteItemsViewModel: FavoriteItemsViewModel
+    favoriteItemsViewModel: FavoriteItemsViewModel,
+    navController: NavController
+
 ) {
     val isFavorite by remember {
         derivedStateOf {
@@ -119,7 +128,11 @@ fun ProductItem(
         modifier = Modifier
             .fillMaxWidth()
             .aspectRatio(1f) // square aspect ratio
-            .padding(8.dp), // Add padding here
+            .padding(8.dp) // Add padding here
+            .clickable {
+                navController.navigate(Screen.Description.createRoute(product.Item_id))
+
+            }
     ) {
         Box(
             modifier = Modifier
@@ -195,7 +208,7 @@ fun ProductItem(
                     overflow = TextOverflow.Ellipsis
                 )
                 Text(
-                    text = "Rs.${product.Item_price}", // Assuming Item_price is in dollars
+                    text = "Rs. ${product.Item_price}", // Assuming Item_price is in dollars
                     style = TextStyle(color = Color.White, fontWeight = FontWeight.Bold, fontSize = 16.sp),
                 )
                 Button(
