@@ -65,21 +65,21 @@ fun ProductSection(
     favoriteItemsViewModel: FavoriteItemsViewModel,
     navController: NavController
 ) {
-    Column(modifier = Modifier.padding(vertical = 5.dp)) {
+    Column(modifier = Modifier.padding(vertical = 5.dp, horizontal = 24.dp)) {
         Row(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 5.dp),
+//                .fillMaxWidth()
+                .padding(vertical = 1.dp),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Text(text = sectionTitle, fontWeight = FontWeight.Bold, fontSize = 16.sp, modifier = Modifier.padding(bottom = 10.dp))
+            Text(text = sectionTitle, fontWeight = FontWeight.Bold, fontSize = 16.sp)
         }
         LazyVerticalGrid(
             columns = GridCells.Fixed(2), // 2 items per row
             modifier = Modifier
                 .fillMaxSize()
-                .weight(1f)
-                .padding(bottom = 56.dp),
+                .weight(1f),
+//                .padding(start = 100.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp),
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {

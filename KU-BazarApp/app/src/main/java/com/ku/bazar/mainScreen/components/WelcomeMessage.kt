@@ -6,9 +6,11 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.ku.bazar.ui.theme.TextBlack
 
 @Composable
 fun Welcome(userName: String) {
@@ -23,6 +25,7 @@ fun Welcome(userName: String) {
         ) {
             Text(
                 text = "Hi, $userName",
+                color = TextBlack,
                 style = MaterialTheme.typography.h5.copy(
                     fontSize = 24.sp,
                     fontWeight = FontWeight.Bold
@@ -39,12 +42,14 @@ fun Welcome(userName: String) {
         Spacer(modifier = Modifier.height(8.dp))
         Text(
             text = "Find Desired Products Near",
+            color = TextBlack,
             style = MaterialTheme.typography.body1.copy(
                 fontSize = 15.sp
             )
         )
         Text(
             text = "Kathmandu University",
+            color = TextBlack,
             style = MaterialTheme.typography.body1.copy(
                 fontSize = 25.sp,
                 fontWeight = FontWeight.Bold

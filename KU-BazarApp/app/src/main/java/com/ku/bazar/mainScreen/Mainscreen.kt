@@ -75,6 +75,7 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.platform.LocalContext
 import coil.compose.rememberAsyncImagePainter
+import com.ku.bazar.mainScreen.components.CategoriesSection
 
 import com.ku.bazar.ui.theme.PrimaryPink
 import com.ku.bazar.ui.theme.SecondaryPink
@@ -307,7 +308,7 @@ fun SearchBarWithButton(
 
 
 @Composable
-fun CategoriesSection() {
+fun CategoriesSectionOld() {
     Box(
         modifier = Modifier
             .fillMaxWidth()

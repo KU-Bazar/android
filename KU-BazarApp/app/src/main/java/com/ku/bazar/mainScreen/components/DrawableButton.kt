@@ -24,7 +24,7 @@ import com.ku.bazar.ui.theme.PrimaryPink
 fun DrawableButton(
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    backgroundColor: Color = Color(0xF8F8FF),
+    backgroundColor: Color = Color(0xFFF8F8FF),
     iconTint: Color = Color.Unspecified,
     onButtonClicked: () -> Unit,
     painter: Painter,
