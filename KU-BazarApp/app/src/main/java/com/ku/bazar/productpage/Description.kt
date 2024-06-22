@@ -292,29 +292,29 @@ fun Description() {
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
-                        productState.value?.let { product ->
-                            val category = product.category.capitalize(Locale.ROOT)
-                            val iconResId = categoryIcons[category]
-                            iconResId?.let { resourceId ->
-                                Image(
-                                    painter = painterResource(id = resourceId),
-                                    contentDescription = "Category Icon",
-                                    modifier = Modifier
-                                        .size(26.dp)
-                                        .clip(CircleShape)
-                                        .background(PrimaryPink)
-                                        .padding(4.dp),
-                                    contentScale = ContentScale.Crop
-                                )
-                            }
-                            Spacer(modifier = Modifier.width(8.dp))
-                            Text(
-                                text = category,
-                                fontSize = 14.sp,
-                                fontWeight = FontWeight.Normal,
-                                color = TextBlack
-                            )
-                        }
+//                        productState.value?.let { product ->
+//                            val category = product.category.capitalize(Locale.ROOT)
+//                            val iconResId = categoryIcons[category]
+//                            iconResId?.let { resourceId ->
+//                                Image(
+//                                    painter = painterResource(id = resourceId),
+//                                    contentDescription = "Category Icon",
+//                                    modifier = Modifier
+//                                        .size(26.dp)
+//                                        .clip(CircleShape)
+//                                        .background(PrimaryPink)
+//                                        .padding(4.dp),
+//                                    contentScale = ContentScale.Crop
+//                                )
+//                            }
+//                            Spacer(modifier = Modifier.width(8.dp))
+//                            Text(
+//                                text = category,
+//                                fontSize = 14.sp,
+//                                fontWeight = FontWeight.Normal,
+//                                color = TextBlack
+//                            )
+//                        }
                     }
                 }
             }

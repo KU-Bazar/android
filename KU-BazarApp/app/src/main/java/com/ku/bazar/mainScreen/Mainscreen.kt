@@ -962,5 +962,3 @@ fun MainScreen(
 }
 
 
-
->>>>>>> 2a22f75a910c8b57173329f170aac05a5491cc92

@@ -36,19 +36,23 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.IntOffset
-import com.ku.bazar.mainScreen.data.Screen
+import androidx.navigation.NavHostController
+import com.ku.bazar.mainScreen.data.MainScreen
+import com.ku.bazar.navigation.Screen
 import kotlin.math.roundToInt
 import com.ku.bazar.ui.theme.Dimension
+import com.ku.bazar.ui.theme.PrimaryPink
 
 
 @Composable
 fun AppBottomNav(
     modifier: Modifier = Modifier,
     activeRoute: String,
-    bottomNavDestinations: List<Screen>,
+    bottomNavDestinations: List<MainScreen>,
     backgroundColor: Color,
     onCartOffsetMeasured: (offset: IntOffset) -> Unit,
     onActiveRouteChange: (route: String) -> Unit,
+    navHostController: NavHostController
 ) {
     Box(
         modifier = modifier
@@ -105,12 +109,15 @@ fun AppBottomNav(
                         x = 0,
                     )
                 }
-                .border(width = Dimension.sm / 2, color = MaterialTheme.colors.primary, shape = CircleShape),
+                .border(width = Dimension.sm / 2, color = PrimaryPink, shape = CircleShape),
             painter = painterResource(id = R.drawable.ic_shopping_bag),
-            backgroundColor = if (activeRoute == Screen.Cart.route) MaterialTheme.colors.primary else MaterialTheme.colors.background,
+            backgroundColor = if (activeRoute == MainScreen.Cart.route) PrimaryPink else Color(0xF8F8FF),
             iconSize = Dimension.mdIcon * 0.8f,
-            iconTint = if (activeRoute == Screen.Cart.route) MaterialTheme.colors.onPrimary else MaterialTheme.colors.onSurface.copy(alpha = 0.5f),
-            onButtonClicked = { onActiveRouteChange(Screen.Cart.route) },
+            iconTint = if (activeRoute == MainScreen.Cart.route) Color(0xF8F8FF) else Color.Gray.copy(alpha = 0.5f),
+            onButtonClicked = {
+                onActiveRouteChange(MainScreen.Cart.route)
+                navHostController.navigate(Screen.Sell.route)
+                              },
             shape = CircleShape,
             paddingValue = PaddingValues(Dimension.md)
         )
@@ -137,12 +144,12 @@ fun AppBottomNavItem(
                 .fillMaxWidth()
                 .height(Dimension.sm)
                 .clip(MaterialTheme.shapes.medium)
-                .background(if (active) MaterialTheme.colors.primary else Color.Transparent)
+                .background(if (active) PrimaryPink else Color.Transparent)
         )
         Icon(
             painter = painterResource(id = icon),
             contentDescription = title,
-            tint = if (active) MaterialTheme.colors.primary else MaterialTheme.colors.onSurface.copy(alpha = 0.5f),
+            tint = if (active) PrimaryPink else Color.Gray.copy(alpha = 0.5f),
             modifier = Modifier.size(Dimension.smIcon)
         )
     }

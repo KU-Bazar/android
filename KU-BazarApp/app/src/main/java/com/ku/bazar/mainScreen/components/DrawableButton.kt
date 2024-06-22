@@ -18,12 +18,13 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.unit.Dp
 import com.ku.bazar.ui.theme.Dimension
+import com.ku.bazar.ui.theme.PrimaryPink
 
 @Composable
 fun DrawableButton(
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    backgroundColor: Color = MaterialTheme.colors.primary,
+    backgroundColor: Color = Color(0xF8F8FF),
     iconTint: Color = Color.Unspecified,
     onButtonClicked: () -> Unit,
     painter: Painter,

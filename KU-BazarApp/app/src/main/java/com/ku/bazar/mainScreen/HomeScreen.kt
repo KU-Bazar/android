@@ -11,16 +11,19 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.ku.bazar.mainScreen.components.*
-import com.ku.bazar.mainScreen.data.Screen
+import com.ku.bazar.mainScreen.data.MainScreen
 import com.ku.bazar.mainScreen.models.Product
 import com.ku.bazar.mainScreen.viewModel.FavoriteItemsViewModel
 import com.ku.bazar.mainScreen.viewModel.HomeViewModel
 
 @Composable
 fun HomeScreen(
+    navHostController: NavHostController,
     homeViewModel: HomeViewModel,
     favoriteItemsViewModel: FavoriteItemsViewModel,
     userName: String
@@ -28,7 +31,7 @@ fun HomeScreen(
     val searchQuery by remember { homeViewModel.searchQuery }
     val productsListState = remember { mutableStateOf<List<Product>>(emptyList()) }
 
-    val currentRoute = remember { mutableStateOf(Screen.Home.route) }
+    val currentRoute = remember { mutableStateOf(MainScreen.Home.route) }
     val cartOffset = remember { mutableStateOf(IntOffset.Zero) }
 
     Box(modifier = Modifier.fillMaxSize()) {
@@ -99,7 +102,7 @@ fun HomeScreen(
                 }
 
                 item(span = { GridItemSpan(2) }) {
-                    Spacer(modifier = Modifier.height(56.dp)) // Adjust height to make space for the bottom nav
+                    Spacer(modifier = Modifier.height(56.dp))
                 }
             }
         }
@@ -107,10 +110,11 @@ fun HomeScreen(
         AppBottomNav(
             modifier = Modifier.align(Alignment.BottomCenter),
             activeRoute = currentRoute.value,
-            bottomNavDestinations = listOf(Screen.Home, Screen.Favorite, Screen.Chat, Screen.Profile),
-            backgroundColor = MaterialTheme.colors.surface,
+            bottomNavDestinations = listOf(MainScreen.Home, MainScreen.Favorite, MainScreen.Chat, MainScreen.Profile),
+            backgroundColor = Color(0xF8F8FF),
             onCartOffsetMeasured = { cartOffset.value = it },
-            onActiveRouteChange = { newRoute -> currentRoute.value = newRoute }
+            onActiveRouteChange = { newRoute -> currentRoute.value = newRoute },
+            navHostController
         )
     }
 }

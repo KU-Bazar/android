@@ -38,7 +38,7 @@ import com.ku.bazar.mainScreen.HomeScreen
 
 import com.ku.bazar.mainScreen.viewModel.HomeViewModel
 import com.ku.bazar.mainScreen.viewModel.FavoriteItemsViewModel
-
+import com.ku.bazar.navigation.Nav
 
 
 import com.ku.bazar.ui.theme.KUBazarTheme
@@ -56,37 +56,10 @@ class MainActivity : ComponentActivity() {
                     color = Color.White
                 ) {
 
-<<<<<<< HEAD
-                    HomeScreen(homeViewModel = HomeViewModel(),
-                        favoriteItemsViewModel = FavoriteItemsViewModel(),
-                        userName = "Bipul") // for now mani please change it
- //                   MyApp()
-=======
-
-//                    MyApp()
-
->>>>>>> 2a22f75a910c8b57173329f170aac05a5491cc92
-//                    Description()
-                    addProduct(navController = navController)
-                    Description()
-
-//                    ChatAppNavGraph(navController = navController)
-//                    chatScreen( "d9b2d63d-a233-4123-847a-7ac9b47c4f44","4e3b5e7a-93e1-4f8b-9c1c-5b6d7e8a2d4f")
-//                    mainScreen(BASE_USER)
-//                    MyApp()
-
-
-//                    MyApp()
-//                     mainProdcutListingScreen(Category.OTHER)
-
-
-//                    val scrollState= rememberScrollState()
-                    //MyApp()
-                    //Description()
-                   // register()
-//                Product(scrollState=scrollState)
-
-//                    Description()
+//                    HomeScreen(homeViewModel = HomeViewModel(),
+//                        favoriteItemsViewModel = FavoriteItemsViewModel(),
+//                        userName = "Bipul") // for now mani please change it
+                    Nav()
 
 
                 }

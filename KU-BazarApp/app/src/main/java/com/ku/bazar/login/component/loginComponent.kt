@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ku.bazar.R
 import com.ku.bazar.login.util.login
+import com.ku.bazar.navigation.Screen
 
 @Composable
 fun logo(
@@ -36,77 +37,84 @@ fun logo(
 }
 
 @Composable
-fun loginButton(modifier : Modifier){
+fun loginButton(modifier : Modifier, onClick: () -> Unit){
     Box(
         modifier = Modifier
-            .size(20.dp)
+            .size(height = 50.dp, width = 120.dp)
             .clip(RoundedCornerShape(50.dp))
             .background(color = Color.Red)
-            .clickable {  }
+            .clickable (
+                onClick = onClick
+            )
     ){
         Text(
             text = "Login",
-            fontSize = 10.sp,
+            fontSize = 20.sp,
             fontWeight = FontWeight.Bold,
-            color = Color.White
+            color = Color.White,
+            modifier = Modifier.align(Alignment.Center)
         )
     }
 }
 
 @Composable
-fun loginBigButton(modifier : Modifier){
+fun loginBigButton(modifier : Modifier , onClick: () -> Unit){
     Box(
         modifier = Modifier
-            .size(80.dp)
+            .size(height = 50.dp, width = 280.dp)
             .clip(RoundedCornerShape(50.dp))
             .background(color = Color.Red)
-            .clickable {  }
+            .clickable ( onClick = onClick )
     ){
         Text(
             text = "Login",
             fontSize = 30.sp,
             fontWeight = FontWeight.Bold,
-            color = Color.White
+            color = Color.White,
+            modifier = Modifier.align(Alignment.Center)
         )
     }
 }
 
 @Composable
 fun registerButton(
-    modifier : Modifier
+    modifier : Modifier , onClick: () -> Unit
 ){
     Box(
         modifier = Modifier
-            .size(20.dp)
+            .size(height = 50.dp, width = 120.dp)
             .clip(RoundedCornerShape(50.dp))
             .background(color = Color.White)
-            .border(width = 10.dp, color = Color.Red)
-            .clickable {  }
+            .border(width = 2.dp, color = Color.Red)
+            .clickable (
+                onClick = onClick
+            )
     ){
         Text(
             text = "Register",
-            fontSize = 10.sp,
+            fontSize = 20.sp,
             fontWeight = FontWeight.Bold,
             color = Color.Red,
-            textAlign = TextAlign.Center
+            modifier = Modifier.align(Alignment.Center)
         )
     }
 }
 
 @Composable
-fun registerBigButton(modifier : Modifier){
+fun registerBigButton(modifier : Modifier, onClick: () -> Unit){
     Box(
         modifier = Modifier
-            .size(width = 180.dp, height = 70.dp)
+            .size(height = 50.dp, width = 280.dp)
             .clip(RoundedCornerShape(50.dp))
             .background(color = Color.Red)
-            .clickable {  }
+            .clickable ( onClick = onClick )
     ){
         Text(
             text = "Register",
             fontSize = 30.sp,
             fontWeight = FontWeight.Bold,
-            color = Color.White
+            color = Color.White,
+            modifier = Modifier.align(Alignment.Center)
         )
     }
 }

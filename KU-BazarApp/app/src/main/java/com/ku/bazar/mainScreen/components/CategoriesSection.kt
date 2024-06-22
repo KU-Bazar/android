@@ -58,7 +58,7 @@ fun CategoriesSection() {
                     Pair("Books ", R.drawable.ic_book_photo),
                     Pair("Instruments", R.drawable.ic_instruments),
                     Pair("Electronics", R.drawable.ic_electronics),
-                    Pair("Clothes", R.drawable.ic_clothes)
+                    Pair("Clothes", R.drawable.ic_clothing)
                 )
                 items(categories.size) { index ->
                     CategoryItem(name = categories[index].first, imageResId = categories[index].second)
