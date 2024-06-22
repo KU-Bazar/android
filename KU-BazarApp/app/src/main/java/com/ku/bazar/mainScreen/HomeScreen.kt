@@ -25,7 +25,7 @@ import com.ku.bazar.mainScreen.data.MainScreen
 import com.ku.bazar.mainScreen.models.Product
 import com.ku.bazar.mainScreen.viewModel.FavoriteItemsViewModel
 import com.ku.bazar.mainScreen.viewModel.HomeViewModel
-import com.ku.bazar.ui.theme.White
+
 
 
 
@@ -97,7 +97,7 @@ fun HomeScreen(
                     span = { GridItemSpan(2) }
                 ) {
                     SearchBar(
-                        value = homeViewModel.searchQuery.toString(),
+                        value =searchQuery, //homeViewModel.searchQuery.toString(),
                         onValueChange = { homeViewModel.updateSearchInputValue(it) },
                         onFocusChange = {},
                         onImeActionClicked = { /* We should run the search now */ }
