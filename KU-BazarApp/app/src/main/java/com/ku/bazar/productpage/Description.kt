@@ -6,7 +6,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -51,11 +53,13 @@ import com.ku.bazar.R
 import com.ku.bazar.ui.theme.PrimaryPink
 import com.ku.bazar.ui.theme.White
 import com.ku.bazar.productpage.models.Product
+import com.ku.bazar.ui.theme.TextBlack
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.Locale
 
 
 @Composable
@@ -64,13 +68,10 @@ fun Description(navController: NavHostController, productId: Int) {
 
     LaunchedEffect(Unit) {
         getProductDetails(productId) { result ->
-            if (result != null) {
-                productState.value = result
-            } else {
-                productState.value = null
-            }
+            productState.value = result
         }
     }
+
     val images = productState.value?.Image_url ?: emptyList()
 
 
@@ -281,58 +282,57 @@ fun Description(navController: NavHostController, productId: Int) {
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
-//                        productState.value?.let { product ->
-//                            val category = product.category.capitalize(Locale.ROOT)
-//                            val iconResId = categoryIcons[category]
-//                            iconResId?.let { resourceId ->
-//                                Image(
-//                                    painter = painterResource(id = resourceId),
-//                                    contentDescription = "Category Icon",
-//                                    modifier = Modifier
-//                                        .size(26.dp)
-//                                        .clip(CircleShape)
-//                                        .background(PrimaryPink)
-//                                        .padding(4.dp),
-//                                    contentScale = ContentScale.Crop
-//                                )
-//                            }
-//                            Spacer(modifier = Modifier.width(8.dp))
-//                            Text(
-//                                text = category,
-//                                fontSize = 14.sp,
-//                                fontWeight = FontWeight.Normal,
-//                                color = TextBlack
-//                            )
-//                        }
+                        productState.value?.let { product ->
+                            val category = product.category.capitalize(Locale.ROOT)
+                            val iconResId = categoryIcons[category]
+                            iconResId?.let { resourceId ->
+                                Image(
+                                    painter = painterResource(id = resourceId),
+                                    contentDescription = "Category Icon",
+                                    modifier = Modifier
+                                        .size(26.dp)
+                                        .clip(CircleShape)
+                                        .background(PrimaryPink)
+                                        .padding(4.dp),
+                                    contentScale = ContentScale.Crop
+                                )
+                            }
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Text(
+                                text = category,
+                                fontSize = 14.sp,
+                                fontWeight = FontWeight.Normal,
+                                color = TextBlack
+                            )
+                        }
                     }
                 }
             }
         }
-
-            // Product Description and Seller
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .align(Alignment.Center)
-                    .offset(y = 240.dp, x = 10.dp)
-            ) {
-                productState.value?.let { product ->
-                    Text(
-                        text = product.Item_desc,
-                        fontSize = 16.sp,
-                        modifier = Modifier.padding(top = 30.dp)
-                    )
-                    Text(
-                        text = "Seller: ${product.Item_seller}",
-                        fontSize = 12.sp,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier.padding(top = 5.dp)
-                    )
-                }
+        // Product Description and Seller
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.Center)
+                .offset(y = 240.dp, x = 10.dp)
+        ) {
+            productState.value?.let { product ->
+                Text(
+                    text = product.Item_desc,
+                    fontSize = 16.sp,
+                    modifier = Modifier.padding(top = 30.dp)
+                )
+                Text(
+                    text = "Seller: ${product.Item_seller}",
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(top = 5.dp)
+                )
             }
         }
     }
 
+}
 private fun getProductDetails(productId: Int, onResult: (Product?) -> Unit
 ) {
     val retrofitBuilder = Retrofit.Builder()
