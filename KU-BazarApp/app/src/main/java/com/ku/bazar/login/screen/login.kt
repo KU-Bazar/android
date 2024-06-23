@@ -1,18 +1,17 @@
-
 package com.ku.bazar.login.screen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.Text
-import androidx.compose.material.TextButton
-import androidx.compose.material.TextField
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -54,13 +53,19 @@ fun login(navHostController: NavHostController){
             horizontalAlignment = Alignment.Start
         ) {
             Text(
-                text = loginMain.first.title,
-                fontSize = 30.sp
+                text = "Login into KU-Bazar",
+                fontSize = 30.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color.Black
             )
 
             Spacer(modifier = Modifier.height(30.dp))
 
-            loginMain.first.username?.let { Text(text = it , fontWeight = FontWeight.Bold) }
+            Text(
+                text = "E-mail/Username",
+                fontWeight = FontWeight.Bold,
+                color = Color.Black
+            )
 
             Spacer(modifier = Modifier.height(2.dp))
 
@@ -71,16 +76,24 @@ fun login(navHostController: NavHostController){
                     Text(text = "E-mail")
                 },
                 placeholder = {
-                    Text(text = "neerrn2552@gmail.com")
+                    Text(text = "neern2552@gmail.com")
                 },
-                modifier = Modifier.background(color = SearchBarGray)
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(color = Color.White, shape = RoundedCornerShape(10.dp)),
+                colors = TextFieldDefaults.textFieldColors(
+                    backgroundColor = Color.White,
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent
+                )
             )
 
             Spacer(modifier = Modifier.height(20.dp))
 
             Text(
-                text = loginMain.first.password,
-                fontWeight = FontWeight.Bold
+                text = "Password",
+                fontWeight = FontWeight.Bold,
+                color = Color.Black
             )
 
             Spacer(modifier = Modifier.height(2.dp))
@@ -94,29 +107,39 @@ fun login(navHostController: NavHostController){
                 placeholder = {
                     Text(text = "**************")
                 },
-                modifier = Modifier.background(color = SearchBarGray,),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(color = Color.White, shape = RoundedCornerShape(10.dp)),
                 visualTransformation = PasswordVisualTransformation(),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password )
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password ),
+                colors = TextFieldDefaults.textFieldColors(
+                    backgroundColor = Color.White,
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent
+                )
             )
 
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(10.dp))
 
-            Row {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.fillMaxWidth()
+            ) {
                 Box(modifier = Modifier
-                    .offset(y = 8.dp)
-                    .size(width = 130.dp, height = 2.dp)
+                    .height(1.dp)
+                    .weight(0.6f)
                     .background(color = Color.Gray)
-
                 )
 
                 Text(
                     text = "or",
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(horizontal = 8.dp)
                 )
 
                 Box(modifier = Modifier
-                    .offset(y = 8.dp)
-                    .size(width = 130.dp, height = 2.dp)
+                    .height(1.dp)
+                    .weight(0.6f)
                     .background(color = Color.Gray)
                 )
             }
@@ -124,13 +147,13 @@ fun login(navHostController: NavHostController){
             Spacer(modifier = Modifier.height(5.dp))
 
             Row(
-                horizontalArrangement = Arrangement.Center
+                modifier = Modifier.fillMaxWidth()
             ){
                 Image(
                     painter = painterResource(id = R.drawable.google_icon),
                     contentDescription = null
                 )
-                Spacer(modifier = Modifier.padding(horizontal = 3.dp))
+                Spacer(modifier = Modifier.width(3.dp))
 
                 Text(text = loginMain.second.oauth)
             }
@@ -138,32 +161,34 @@ fun login(navHostController: NavHostController){
             Spacer(modifier = Modifier.height(20.dp))
 
             loginBigButton(
-                modifier = Modifier, onClick =  {
-//                    navHostController.navigate(Screen.Login.route)
+                modifier = Modifier.fillMaxWidth(), onClick =  {
+                    //navHostController.navigate(Screen.Login.route)
                 }
             )
 
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(30.dp))
 
             Row (
-                horizontalArrangement = Arrangement.Center
+                modifier = Modifier.fillMaxWidth()
             ){
                 Text(
                     text = loginMain.first.account,
                     fontWeight = FontWeight.Bold
                 )
 
-                Spacer(modifier = Modifier.height(9.dp))
+                Spacer(modifier = Modifier.width(9.dp))
 
                 Text(
                     text = "Register Now",
                     color = Color.Red,
                     modifier = Modifier
-                        .clickable { },
+                        .clickable {
+                            navHostController.navigate(Screen.Register.route)
+                        },
                     textDecoration = TextDecoration.Underline
                 )
             }
         }
     }
-
 }
+

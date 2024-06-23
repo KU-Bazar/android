@@ -78,18 +78,17 @@ fun loginBigButton(modifier : Modifier , onClick: () -> Unit){
 
 @Composable
 fun registerButton(
-    modifier : Modifier , onClick: () -> Unit
-){
+    modifier: Modifier = Modifier, 
+    onClick: () -> Unit
+) {
     Box(
-        modifier = Modifier
+        modifier = modifier
             .size(height = 50.dp, width = 120.dp)
+            .background(color = Color.White, shape = RoundedCornerShape(50.dp))
+            .border(width = 2.dp, color = Color.Red, shape = RoundedCornerShape(50.dp))
             .clip(RoundedCornerShape(50.dp))
-            .background(color = Color.White)
-         .border(width = 2.dp, color=Color.Red )
-            .clickable (
-                onClick = onClick
-            )
-    ){
+            .clickable(onClick = onClick)
+    ) {
         Text(
             text = "Register",
             fontSize = 20.sp,
@@ -99,6 +98,7 @@ fun registerButton(
         )
     }
 }
+
 
 @Composable
 fun registerBigButton(modifier : Modifier, onClick: () -> Unit){

@@ -7,8 +7,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.Text
-import androidx.compose.material.TextField
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -92,172 +91,172 @@ fun register(navHostController: NavHostController){
     Box(
         modifier = Modifier
             .fillMaxHeight()
-            .width(400.dp)
+            .width(400.dp),
+        contentAlignment = Alignment.Center
     ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .offset(x = 60.dp, y = 170.dp),
+                .offset(x = 40.dp, y = 100.dp),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.Start
         ) {
             Text(
-                text = loginMain.second.title,
-                fontSize = 27.sp
+                text = "Register into KU-Bazar",
+                fontSize = 28.sp,
+                fontWeight = FontWeight.Bold
             )
 
             Spacer(modifier = Modifier.height(30.dp))
 
-            Row() {
-                loginMain.second.fullName?.let { Text(text = it , fontWeight = FontWeight.Bold) }
-
-                Spacer(modifier = Modifier.padding(horizontal = 5.dp))
-
-                loginMain.second.username?.let { Text(text = it , fontWeight = FontWeight.Bold) }
-            }
-
-            Spacer(modifier = Modifier.height(2.dp))
-
-            Row() {
-                TextField(
-                    value = fullname,
-                    onValueChange = {fullname = it},
-                    label = {
-                        Text(text = "Full Name")
-                    },
-                    modifier = Modifier
-                        .background(color = Color.Gray)
-                        .size(height = 40.dp, width = 140.dp)
-                )
-
-                Spacer(modifier = Modifier.padding(horizontal = 5.dp))
-
-                TextField(
-                    value = username,
-                    onValueChange = {username = it},
-                    label = {
-                        Text(text = "Username")
-                    },
-                    modifier = Modifier
-                        .background(color = Color.Gray)
-                        .size(height = 40.dp, width = 140.dp)
-                )
-
-            }
+            TextField(
+                value = fullname,
+                onValueChange = { fullname = it },
+                label = { Text(text = "Full Name") },
+                placeholder = { Text(text = "Neery Aryan Bhatt") },
+                colors = TextFieldDefaults.textFieldColors(
+                    backgroundColor = Color.White,
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent
+                ),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(color = Color.LightGray, shape = MaterialTheme.shapes.small)
+            )
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            loginMain.second.email?.let {
-                Text(
-                    text = it,
-                    fontWeight = FontWeight.Bold
-                )
-            }
+            TextField(
+                value = username,
+                onValueChange = { username = it },
+                label = { Text(text = "Username") },
+                placeholder = { Text(text = "neern2552") },
+                colors = TextFieldDefaults.textFieldColors(
+                    backgroundColor = Color.White,
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent
+                ),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(color = Color.LightGray, shape = MaterialTheme.shapes.small)
+            )
 
-            Spacer(modifier = Modifier.height(2.dp))
+            Spacer(modifier = Modifier.height(20.dp))
 
             TextField(
                 value = email,
-                onValueChange = {email = it},
-                label = {
-                    Text(text = "E-mail")
-                },
+                onValueChange = { email = it },
+                label = { Text(text = "Email") },
+                placeholder = { Text(text = "neern2552@gmail.com") },
+                colors = TextFieldDefaults.textFieldColors(
+                    backgroundColor = Color.White,
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent
+                ),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
                 modifier = Modifier
-                    .background(color = Color.Gray)
-                    .size(height = 40.dp, width = 280.dp)
+                    .fillMaxWidth()
+                    .background(color = Color.LightGray, shape = MaterialTheme.shapes.small)
             )
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            Text(
-                text = loginMain.second.password,
-                fontWeight = FontWeight.Bold
-            )
-
-            Spacer(modifier = Modifier.height(2.dp))
-
             TextField(
                 value = password,
-                onValueChange = {password = it},
-                label = {
-                    Text(text = "Password")
-                },
+                onValueChange = { password = it },
+                label = { Text(text = "Password") },
+                placeholder = { Text(text = "**************") },
+                colors = TextFieldDefaults.textFieldColors(
+                    backgroundColor = Color.White,
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent
+                ),
                 visualTransformation = PasswordVisualTransformation(),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password ),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                 modifier = Modifier
-                    .background(color = Color.Gray)
-                    .size(height = 40.dp, width = 280.dp)
+                    .fillMaxWidth()
+                    .background(color = Color.LightGray, shape = MaterialTheme.shapes.small)
             )
 
-            Spacer(modifier = Modifier.height(10.dp))
+            Spacer(modifier = Modifier.height(20.dp))
 
-            Row {
-                Box(modifier = Modifier
-                    .offset(y = 8.dp)
-                    .size(width = 130.dp, height = 2.dp)
-                    .background(color = Color.Gray)
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Divider(
+                    color = Color.Gray,
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(1.dp)
                 )
-
                 Text(
                     text = "or",
+                    modifier = Modifier.padding(horizontal = 8.dp),
                     fontWeight = FontWeight.Bold
                 )
-
-                Box(modifier = Modifier
-                    .offset(y = 8.dp)
-                    .size(width = 130.dp, height = 2.dp)
-                    .background(color = Color.Gray)
+                Divider(
+                    color = Color.Gray,
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(1.dp)
                 )
             }
 
             Spacer(modifier = Modifier.height(10.dp))
 
             Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center,
                 modifier = Modifier
+                    .fillMaxWidth()
                     .clickable {
-                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+
+                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://humorous-admittedly-mongoose.ngrok-free.app/"))
                         context.startActivity(intent)
                     }
-            ){
+            ) {
                 Image(
                     painter = painterResource(id = R.drawable.google_icon),
-                    contentDescription = null
+                    contentDescription = null,
+                    modifier = Modifier.size(24.dp)
                 )
-
-                Spacer(modifier = Modifier.padding(horizontal = 3.dp))
-
-                Text(text = loginMain.second.oauth)
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    text = "Login via Google",
+                    color = Color.Black,
+                    fontWeight = FontWeight.Bold
+                )
             }
 
             Spacer(modifier = Modifier.height(20.dp))
 
             registerBigButton(
-                modifier = Modifier, onClick = {
+                modifier = Modifier.fillMaxWidth(),
+                onClick = {
                     registerUser()
                     navHostController.navigate(Screen.Home.route)
-                    }
+                }
             )
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            Row {
+            Row(
+                modifier = Modifier.fillMaxWidth()
+            ) {
                 Text(
-                    text = loginMain.second.account,
+                    text = "Already have an account?",
                     fontWeight = FontWeight.Bold
                 )
-
-                Spacer(modifier = Modifier.height(9.dp))
-
+                Spacer(modifier = Modifier.width(4.dp))
                 Text(
                     text = "Login Now",
                     color = Color.Red,
-                    modifier = Modifier
-                        .clickable { },
+                    modifier = Modifier.clickable { /* Navigate to login screen */ },
                     textDecoration = TextDecoration.Underline
                 )
             }
-
         }
     }
 }
