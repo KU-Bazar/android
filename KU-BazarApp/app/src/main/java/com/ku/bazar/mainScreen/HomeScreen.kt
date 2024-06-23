@@ -20,15 +20,13 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.ku.bazar.R
+import com.ku.bazar.addProduct.addProduct
 import com.ku.bazar.mainScreen.components.*
 import com.ku.bazar.mainScreen.data.MainScreen
 import com.ku.bazar.mainScreen.models.Product
 import com.ku.bazar.mainScreen.viewModel.FavoriteItemsViewModel
 import com.ku.bazar.mainScreen.viewModel.HomeViewModel
-
-
-
-
+import com.ku.bazar.chat.screen.mainScreen
 
 @Composable
 fun BackgroundPatterns(modifier: Modifier = Modifier) {
@@ -42,7 +40,6 @@ fun BackgroundPatterns(modifier: Modifier = Modifier) {
             contentScale = ContentScale.Crop,
         )
     }
-
 }
 
 @Composable
@@ -61,81 +58,90 @@ fun HomeScreen(
 
     Box(modifier = Modifier.fillMaxSize()) {
            BackgroundPatterns()
-
         Column(modifier = Modifier.fillMaxSize()) {
-            LazyVerticalGrid(
-                modifier = Modifier.weight(1f),
-                columns = GridCells.Fixed(2)
-            ) {
-                item(
-                    span = { GridItemSpan(2) }
+            if (currentRoute.value == "home") {
+
+
+                LazyVerticalGrid(
+                    modifier = Modifier.weight(1f),
+                    columns = GridCells.Fixed(2)
                 ) {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp, vertical = 8.dp),
-                        verticalAlignment = Alignment.CenterVertically
+                    item(
+                        span = { GridItemSpan(2) }
                     ) {
-                        Profile()
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp, vertical = 8.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Profile()
+                        }
+                    }
+
+                    item(
+                        span = { GridItemSpan(2) }
+                    ) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp, vertical = 8.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Welcome(userName)
+                        }
+                    }
+
+                    item(
+                        span = { GridItemSpan(2) }
+                    ) {
+                        SearchBar(
+                            navController = navController,
+                            value = searchQuery, //homeViewModel.searchQuery.toString(),
+                            onValueChange = { homeViewModel.updateSearchInputValue(it) },
+                            onFocusChange = {},
+                            onImeActionClicked = { /* We should run the search now */ }
+                        )
+                    }
+
+                    item(
+                        span = { GridItemSpan(2) }
+                    ) {
+                        CategoriesSection(navHostController)
+                    }
+
+                    item(
+                        span = { GridItemSpan(2) }
+                    ) {
+                        ProductSection(
+                            sectionTitle = "Recently Added",
+                            products = productsListState,
+                            favoriteItemsViewModel = favoriteItemsViewModel,
+                            navController = navController
+                        )
+                    }
+
+                    items(productsListState.size) { index ->
+                        val product = productsListState[index]
+                        ProductItem(
+                            product = product,
+                            favoriteItemsViewModel = favoriteItemsViewModel,
+                            navController = navController
+                        )
+                    }
+
+                    item(span = { GridItemSpan(2) }) {
+                        Spacer(modifier = Modifier.height(56.dp))
                     }
                 }
-
-                item(
-                    span = { GridItemSpan(2) }
-                ) {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp, vertical = 8.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Welcome(userName)
-                    }
-                }
-
-                item(
-                    span = { GridItemSpan(2) }
-                ) {
-                    SearchBar(
-                        value =searchQuery, //homeViewModel.searchQuery.toString(),
-                        onValueChange = { homeViewModel.updateSearchInputValue(it) },
-                        onFocusChange = {},
-                        onImeActionClicked = { /* We should run the search now */ }
-                    )
-                }
-
-                item(
-                    span = { GridItemSpan(2) }
-                ) {
-                    CategoriesSection()
-                }
-
-                item(
-                    span = { GridItemSpan(2) }
-                ) {
-                    ProductSection(
-                        sectionTitle = "Recently Added",
-                        products = productsListState,
-                        favoriteItemsViewModel = favoriteItemsViewModel,
-                        navController = navController
-                    )
-                }
-
-                items(productsListState.size) { index ->
-                    val product = productsListState[index]
-                    ProductItem(
-                        product = product,
-                        favoriteItemsViewModel = favoriteItemsViewModel,
-                        navController = navController
-                    )
-                }
-
-                item(span = { GridItemSpan(2) }) {
-                    Spacer(modifier = Modifier.height(56.dp))
-                }
+            } else  if (currentRoute.value == "chat") {
+                //this is for chat screen
+                val BASE_USER ="4e3b5e7a-93e1-4f8b-9c1c-5b6d7e8a2d4f"
+                mainScreen(BASE_USER,navHostController)
+            } else if (currentRoute.value == "add"){
+                addProduct()
             }
         }
-
         AppBottomNav(
             modifier = Modifier
                 .align(Alignment.BottomCenter)

@@ -12,6 +12,8 @@ interface ApiService {
     fun getProduct(@Path("id") id: Int): Call<Product>
     @GET("/category/{name}")
     fun getCategoryItems(@Path("name") name:String) : Call<List<Product>>
+    @GET("/search/product/{query}")
+    fun getSearchedItems(@Path("query") query:String) : Call<List<Product>>
 
 }
 

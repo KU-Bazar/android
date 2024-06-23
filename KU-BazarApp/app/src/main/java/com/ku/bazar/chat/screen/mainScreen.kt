@@ -17,13 +17,18 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.ku.bazar.chat.ApiInterface
 import com.ku.bazar.chat.components.conversationBox
 import com.ku.bazar.chat.components.mainAppBar
 import com.ku.bazar.chat.models.Conversation
+import com.ku.bazar.mainScreen.components.AppBottomNav
+import com.ku.bazar.mainScreen.data.MainScreen
+import com.ku.bazar.navigation.Screen
 import com.ku.bazar.ui.theme.PrimaryPink
 import retrofit2.Call
 import retrofit2.Callback
@@ -37,6 +42,7 @@ const val BASE_URL = "https://special-bunny-vigorously.ngrok-free.app/"
 fun mainScreen(id:String,navController: NavHostController) {
     val conversationList = remember { mutableStateListOf<Conversation>() }
     var isLoading by remember { mutableStateOf(true) }
+
     LaunchedEffect(key1 = true) {
         getConversationData(id) { conversations ->
             conversationList.clear()
@@ -44,34 +50,36 @@ fun mainScreen(id:String,navController: NavHostController) {
             isLoading=false
         }
     }
-    Scaffold(
-        topBar = {
-            mainAppBar()
-        },
-        containerColor = Color.Transparent
-    ) { paddingValues ->
-        if (isLoading){
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                CircularProgressIndicator(color = PrimaryPink)
-            }
-
-        }else {
-
-            LazyColumn(
-                modifier = Modifier
-                    .padding(paddingValues = paddingValues)
-                    .padding(horizontal = 16.dp)
-                    .fillMaxSize()
-            ) {
-                items(conversationList) { conversation ->
-                    conversationBox(
-                        conversation,
-                        onClick = { navController.navigate("chatScreen/${id}/${conversation.id}") })
+    Box(modifier = Modifier.fillMaxSize()) {
+        Scaffold(
+            modifier = Modifier.padding(bottom = 56.dp),
+            topBar = {
+                mainAppBar()
+            },
+            containerColor = Color.Transparent
+        ) { paddingValues ->
+            if (isLoading) {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    CircularProgressIndicator(color = PrimaryPink)
                 }
 
+            } else {
+
+                LazyColumn(
+                    modifier = Modifier
+                        .padding(paddingValues = paddingValues)
+                        .padding(horizontal = 16.dp)
+                        .fillMaxSize()
+                ) {
+                    items(conversationList) { conversation ->
+                        conversationBox(
+                            conversation,
+                            onClick = { navController.navigate( Screen.Conversation.createRoute(id,conversation.id))})
+                    }
+                }
             }
         }
     }

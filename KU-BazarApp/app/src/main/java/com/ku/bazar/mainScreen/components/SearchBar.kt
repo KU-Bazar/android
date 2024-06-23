@@ -27,15 +27,16 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.ku.bazar.R
+import com.ku.bazar.navigation.Screen
 import com.ku.bazar.ui.theme.Dimension
 import com.ku.bazar.ui.theme.PrimaryPink
 import com.ku.bazar.ui.theme.White
 
 @Composable
-
-
 fun SearchBar(
+    navController: NavController,
     value: String,
     onValueChange: (value: String) -> Unit,
     onFocusChange: (hadFocus: Boolean) -> Unit,
@@ -81,7 +82,9 @@ fun SearchBar(
 
         Spacer(modifier = Modifier.padding(horizontal = 8.dp))
         IconButton(
-            onClick = {}
+            onClick = {
+                navController.navigate(Screen.Search.createRoute(value))
+            }
             ) {
             Icon(
                 imageVector = Icons.AutoMirrored.Outlined.Send,

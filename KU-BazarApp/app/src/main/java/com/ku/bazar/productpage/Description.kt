@@ -49,6 +49,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
 import com.ku.bazar.R
+import com.ku.bazar.navigation.Screen
 
 import com.ku.bazar.ui.theme.PrimaryPink
 import com.ku.bazar.ui.theme.White
@@ -231,10 +232,8 @@ fun Description(navController: NavHostController, productId: Int) {
             }
 
             Row(modifier = Modifier.padding(top = 110.dp)) {
-
-
                 Button(
-                    onClick = { /* TODO: Handle buy now click */ },
+                    onClick = { navController.navigate( Screen.Conversation.createRoute("4e3b5e7a-93e1-4f8b-9c1c-5b6d7e8a2d4f","d9b2d63d-a233-4123-847a-7ac9b47c4f44"))},
                     colors = ButtonDefaults.buttonColors(
                         backgroundColor = PrimaryPink,
                         contentColor = Color.White

@@ -57,7 +57,6 @@ import com.ku.bazar.ui.theme.White
 import com.ku.bazar.navigation.Nav
 import com.ku.bazar.navigation.Screen
 
-
 @Composable
 fun ProductSection(
     sectionTitle: String,
@@ -69,7 +68,7 @@ fun ProductSection(
         Row(
             modifier = Modifier
 //                .fillMaxWidth()
-                .padding(vertical = 1.dp),
+                .padding(top= 10.dp),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(text = sectionTitle, fontWeight = FontWeight.Bold, fontSize = 16.sp)
@@ -212,7 +211,7 @@ fun ProductItem(
                     style = TextStyle(color = Color.White, fontWeight = FontWeight.Bold, fontSize = 16.sp),
                 )
                 Button(
-                    onClick = { /* TODO: Handle buy now click */ },
+                    onClick =  { navController.navigate( Screen.Conversation.createRoute("4e3b5e7a-93e1-4f8b-9c1c-5b6d7e8a2d4f","d9b2d63d-a233-4123-847a-7ac9b47c4f44"))},
                     colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFF5F5F5), contentColor = TextBlack),
                     shape = RoundedCornerShape(5.dp),
                     modifier = Modifier.padding(top = 8.dp)

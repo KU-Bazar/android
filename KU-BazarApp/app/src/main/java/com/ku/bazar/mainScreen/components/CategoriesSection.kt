@@ -27,12 +27,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.ku.bazar.R
+import com.ku.bazar.navigation.Screen
 import com.ku.bazar.ui.theme.PrimaryPink
 import com.ku.bazar.ui.theme.TextBlack
 
 @Composable
-fun CategoriesSection() {
+fun CategoriesSection(navHostController: NavHostController) {
     Box(
         modifier = Modifier
             .padding(vertical = 4.dp, horizontal =24.dp)
@@ -62,7 +64,7 @@ fun CategoriesSection() {
                     Pair("Other", R.drawable.ic_other)
                 )
                 items(categories.size) { index ->
-                    CategoryItem(name = categories[index].first, imageResId = categories[index].second)
+                    CategoryItem(name = categories[index].first, imageResId = categories[index].second,onClick = { navHostController.navigate(Screen.Category.createRoute(categories[index].first))})
                 }
             }
         }
@@ -70,9 +72,8 @@ fun CategoriesSection() {
 }
 
 
-
 @Composable
-fun CategoryItem(name: String, imageResId: Int) {
+fun CategoryItem(name: String, imageResId: Int, onClick:() -> Unit) {
 
     Box(
         modifier= Modifier
@@ -83,7 +84,7 @@ fun CategoryItem(name: String, imageResId: Int) {
                 color = Color(0xFFF5F5F5),
                 shape = RoundedCornerShape(20.dp)
             )
-            .clickable { }
+            .clickable { onClick()}
     ) {
         Row(
             modifier = Modifier

@@ -107,6 +107,7 @@ fun AppBottomNav(
                     onRouteClicked = {
                         if (!isActive) {
                             onActiveRouteChange(screen.route)
+//                            navHostController.navigate(Screen.Chat.route)
                         }
                     }
                 )
@@ -140,8 +141,9 @@ fun AppBottomNav(
             iconSize = 18.dp,
             iconTint = if (activeRoute == MainScreen.Cart.route) Color(0xFFF8F8FF) else TextBlack.copy(alpha = 1f),
             onButtonClicked = {
-                onActiveRouteChange(MainScreen.Cart.route)
-                navHostController.navigate(Screen.Sell.route)
+
+                onActiveRouteChange(MainScreen.Add.route)
+//                navHostController.navigate(Screen.Add.route)
 
             },
 

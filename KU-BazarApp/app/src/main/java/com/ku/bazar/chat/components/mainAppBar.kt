@@ -40,27 +40,5 @@ fun mainAppBar(){
                 )
             )
         },
-        navigationIcon = {
-            IconButton(onClick = {  }) {
-                Icon(
-                    painter = painterResource(id = R.drawable.back),
-                    contentDescription = null,
-                    tint = Color(0xFFCCCCCC),
-                    modifier = Modifier.size(10.dp)
-
-                )
-            }
-        },
-        actions = {
-            IconButton(onClick = {  }) {
-                Icon(
-                    painter = painterResource(id = R.drawable.search),
-                    contentDescription = null,
-                    tint = Color(0xFFCCCCCC),
-                    modifier = Modifier.size(10.dp)
-
-                )
-            }
-        }
     )
 }

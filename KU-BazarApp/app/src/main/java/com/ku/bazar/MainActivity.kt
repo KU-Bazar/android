@@ -60,13 +60,10 @@ class MainActivity : ComponentActivity() {
 //                        favoriteItemsViewModel = FavoriteItemsViewModel(),
 //                        userName = "Bipul") // for now mani please change it
                     Nav()
-
-
                 }
             }
         }
     }
-
 }
 
 @Composable
